@@ -21,140 +21,124 @@
 </head>
 <body>
 @section('main-parent')
-    <div class="sidebar">
-        <div class="logopanel">
-            <h1>
-                {{--<a href="#">MVH - UET</a>--}}
-            </h1>
-        </div>
-        <div class="sidebar-inner">
-            <div class="sidebar-top big-img">
-                <div class="user-image">
-                    {{--@if(Auth::user()->image)--}}
-                    {{--<img src="public/uploads/admin_img/{{Auth::user()->image}}" class="img-responsive img-circle" alt="friend 8">--}}
-                    {{--@else--}}
-                    <img src="public/assets/Admin/images/default.png" class="img-responsive img-circle" alt="friend 8">
-                    {{--@endif--}}
-                </div>
-                <h4></h4>
-                {{--{{Auth::user()->username}}--}}
-                <div class="dropdown user-login">
-                    <form action="searchemployee" method="get" class="searchform" id="search-results">
-                        <input class="form-control" name="name" placeholder="Search employee..." type="text">
-                        {!! csrf_field() !!}
-                    </form>
-                </div>
+        <div class="sidebar">
+            <div class="logopanel">
+                <h1>
+                    {{--<a href="#">MVH - UET</a>--}}
+                </h1>
             </div>
+            <div class="sidebar-inner">
+                <div class="sidebar-top big-img">
+                    <div class="user-image">
+                        {{--@if(Auth::user()->image)--}}
+                        {{--<img src="public/uploads/admin_img/{{Auth::user()->image}}" class="img-responsive img-circle" alt="friend 8">--}}
+                        {{--@else--}}
+                        <img src="public/assets/Admin/images/default.png" class="img-responsive img-circle" alt="friend 8">
+                        {{--@endif--}}
+                    </div>
+                    <h4></h4>
+                    {{--{{Auth::user()->username}}--}}
+                    <div class="dropdown user-login">
+                        <form action="searchemployee" method="get" class="searchform" id="search-results">
+                            <input class="form-control" name="name" placeholder="Search employee..." type="text">
+                            {!! csrf_field() !!}
+                        </form>
+                    </div>
+                </div>
 
-            <ul class="nav nav-sidebar">
+                <ul class="nav nav-sidebar">
 
-                <li class="nav-parent">
-                    <a href="{{ URL::to('formdiem') }}" class="test_"><i class="icon-puzzle"></i><span> Xem Điểm </span> </a>
-                </li>
-                <li class="nav-parent">
-                    <a href="{{ URL::to('newclass') }}" class="test_"><i class="icon-puzzle"></i><span> Xem Thông Tin </span> </a>
-                </li>
-                <li class="nav-parent">
-                    <a href="{{ URL::to('listclass') }}" class="test_"><i class="icon-puzzle"></i><span> Chỉnh Sửa Thông Tin </span> </a>
-                </li>
-                <li class="nav-parent">
-                    <a href="{{ URL::to('listclass') }}" class="test_"><i class="icon-puzzle"></i><span> Phản Hồi </span> </a>
-                </li>
+                    <li class="nav-parent">
+                        <a href="{{ URL::to('formdiem') }}" class="test_"><i class="icon-puzzle"></i><span> Xem Điểm </span> </a>
+                    </li>
+                    <li class="nav-parent">
+                        <a href="{{ URL::to('newclass') }}" class="test_"><i class="icon-puzzle"></i><span> Xem Thông Tin </span> </a>
+                    </li>
+                    <li class="nav-parent">
+                        <a href="{{ URL::to('listclass') }}" class="test_"><i class="icon-puzzle"></i><span> Chỉnh Sửa Thông Tin </span> </a>
+                    </li>
+                    <li class="nav-parent">
+                        <a href="{{ URL::to('listclass') }}" class="test_"><i class="icon-puzzle"></i><span> Phản Hồi </span> </a>
+                    </li>
 
 
+                    {{--<li class="nav-parent">--}}
+                    {{--<a href="{{URL::to('adstudents')}}"><i class="icon-bulb"></i><span> Thêm danh sách cán bộ lớp </span> </a>--}}
+                    {{--</li>--}}
+
+                </ul>
+
+                {{--<ul class="nav nav-sidebar">--}}
+                {{--<li class=" nav-active active"><a href="javascript:void(0)"><i class="icon-home"></i><span>Department management </span></a></li>--}}
+                {{--<li class="nav-parent ">--}}
+                {{--<a href="{{URL::to('newdepartment')}}"><i class="icon-puzzle "></i><span class="menu_active_border" >Add department</span> </a>--}}
+                {{--</li>--}}
                 {{--<li class="nav-parent">--}}
-                {{--<a href="{{URL::to('adstudents')}}"><i class="icon-bulb"></i><span> Thêm danh sách cán bộ lớp </span> </a>--}}
+                {{--<a href="{{URL::to('listdepartment')}}"><i class="icon-bulb"></i><span> List departments</span> </a>--}}
                 {{--</li>--}}
 
-            </ul>
 
-            {{--<ul class="nav nav-sidebar">--}}
-            {{--<li class=" nav-active active"><a href="javascript:void(0)"><i class="icon-home"></i><span>Department management </span></a></li>--}}
-            {{--<li class="nav-parent ">--}}
-            {{--<a href="{{URL::to('newdepartment')}}"><i class="icon-puzzle "></i><span class="menu_active_border" >Add department</span> </a>--}}
-            {{--</li>--}}
-            {{--<li class="nav-parent">--}}
-            {{--<a href="{{URL::to('listdepartment')}}"><i class="icon-bulb"></i><span> List departments</span> </a>--}}
-            {{--</li>--}}
+                {{--</ul>--}}
 
+                {{--<ul class="nav nav-sidebar">--}}
+                {{--<li class=" nav-active active"><a href="javascript:void(0)"><i class="icon-home"></i><span>Employee management  </span></a></li>--}}
+                {{--<li class="nav-parent">--}}
+                {{--<a href="newemployee"><i class="icon-puzzle"></i><span>New employee</span> </a>--}}
+                {{--</li>--}}
+                {{--<li class="nav-parent">--}}
+                {{--<a href="{{URL::to('listemployee')}}"><i class="icon-bulb"></i><span> List Employee</span> </a>--}}
+                {{--</li>--}}
 
-            {{--</ul>--}}
-
-            {{--<ul class="nav nav-sidebar">--}}
-            {{--<li class=" nav-active active"><a href="javascript:void(0)"><i class="icon-home"></i><span>Employee management  </span></a></li>--}}
-            {{--<li class="nav-parent">--}}
-            {{--<a href="newemployee"><i class="icon-puzzle"></i><span>New employee</span> </a>--}}
-            {{--</li>--}}
-            {{--<li class="nav-parent">--}}
-            {{--<a href="{{URL::to('listemployee')}}"><i class="icon-bulb"></i><span> List Employee</span> </a>--}}
-            {{--</li>--}}
-
-            {{--</ul>--}}
-        </div>
-    </div>
-
-    <div class="main-content">
-        <!-- BEGIN TOPBAR -->
-        <div class="topbar">
-            {{--<div class="header-left">--}}
-            {{--<div class="topnav">--}}
-            {{--<a class="menutoggle" href="#" data-toggle="sidebar-collapsed"><span class="menu__handle"><span>Menu</span></span></a>--}}
-            {{--<ul class="nav nav-icons">--}}
-            {{--<li><a href="#" class="toggle-sidebar-top"><span class="icon-user-following"></span></a></li>--}}
-            {{--<li><a href="mailbox.html"><span class="octicon octicon-mail-read"></span></a></li>--}}
-            {{--<li><a href="#"><span class="octicon octicon-flame"></span></a></li>--}}
-            {{--<li><a href="builder-page.html"><span class="octicon octicon-rocket"></span></a></li>--}}
-            {{--</ul>--}}
-            {{--</div>--}}
-            {{--</div>--}}
-            <div class="header-right">
-                <ul class="header-menu nav navbar-nav">
-                    <li class="dropdown" id="user-header">
-                        {{--<a href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">--}}
-                        {{--@if(Auth::user()->image)--}}
-                        {{--<img src="public/uploads/admin_img/{{Auth::user()->image}}" alt="user image">--}}
-                        {{--@else--}}
-                        {{--<img src="public/assets/Admin/images/default.png" alt="user image">--}}
-                        {{--@endif--}}
-
-                        {{--<span class="username">Hi, {{Auth::user()->username}}</span>--}}
-                        {{--</a>--}}
-                    </li>
-                    <li class="logout_Admin">
-                        <a href="{{ URL::to('logout') }}"><i class="icon-logout"></i><span>Logout</span></a>
-                    </li>
-                </ul>
+                {{--</ul>--}}
             </div>
-            <!-- header-right -->
         </div>
-        <div class="page-content page-thin ">
-            <div class="col-md-12">
-                {{--@if($errors->any())--}}
-                {{--<div class="alert auto-hide alert-waring">--}}
-                {{--something went wrong here!--}}
+        <div class="main-content">
+            <!-- BEGIN TOPBAR -->
+            <div class="topbar">
+                {{--<div class="header-left">--}}
+                {{--<div class="topnav">--}}
+                {{--<a class="menutoggle" href="#" data-toggle="sidebar-collapsed"><span class="menu__handle"><span>Menu</span></span></a>--}}
+                {{--<ul class="nav nav-icons">--}}
+                {{--<li><a href="#" class="toggle-sidebar-top"><span class="icon-user-following"></span></a></li>--}}
+                {{--<li><a href="mailbox.html"><span class="octicon octicon-mail-read"></span></a></li>--}}
+                {{--<li><a href="#"><span class="octicon octicon-flame"></span></a></li>--}}
+                {{--<li><a href="builder-page.html"><span class="octicon octicon-rocket"></span></a></li>--}}
+                {{--</ul>--}}
                 {{--</div>--}}
-                {{--@endif--}}
-                {{--<div class="col-md-8 col-md-offset-3">--}}
-                {{--@if(Session::has('flash_message'))--}}
-                {{--<div class="alert auto-hide alert-{!! Session::has('flash_level')?Session::get('flash_level'):'default'--}}
-                {{--!!}">--}}
-                {{--{!! Session::get('flash_message') !!}--}}
                 {{--</div>--}}
-                {{--@endif--}}
-                {{--</div>--}}
-                <div class="row">
-                    @yield('content')
+                <div class="header-right">
+                    <ul class="header-menu nav navbar-nav">
+                        <li class="dropdown" id="user-header">
+                            {{--<a href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">--}}
+                            {{--@if(Auth::user()->image)--}}
+                            {{--<img src="public/uploads/admin_img/{{Auth::user()->image}}" alt="user image">--}}
+                            {{--@else--}}
+                            {{--<img src="public/assets/Admin/images/default.png" alt="user image">--}}
+                            {{--@endif--}}
+
+                            {{--<span class="username">Hi, {{Auth::user()->username}}</span>--}}
+                            {{--</a>--}}
+                        </li>
+                        <li class="logout_Admin">
+                            <a href="{{ URL::to('logout') }}"><i class="icon-logout"></i><span>Logout</span></a>
+                        </li>
+                    </ul>
                 </div>
-            </div> <!-- end .page-content-->
-        </div> <!-- end .main-content-->
-        {{--<footer>--}}
-        {{--<div class="F_infor">--}}
-        {{--<h4 class="text-center"> Developed by MVH Team!</h4>--}}
-        {{--<h5 class="text-center"> Contact us: luk.mink@gmail.com </h5>--}}
-        {{--<h5 class="text-center"> Phone: 0972 114 187</h5>--}}
-        {{--</div>--}}
-        {{--</footer>--}}
-    </div>
+                <!-- header-right -->
+            </div>
+
+                    <div class="col-md-12">
+                        @yield('content')
+                    </div>
+
+            {{--<footer>--}}
+            {{--<div class="F_infor">--}}
+            {{--<h4 class="text-center"> Developed by MVH Team!</h4>--}}
+            {{--<h5 class="text-center"> Contact us: luk.mink@gmail.com </h5>--}}
+            {{--<h5 class="text-center"> Phone: 0972 114 187</h5>--}}
+            {{--</div>--}}
+            {{--</footer>--}}
+        </div>
 
 </body>
 

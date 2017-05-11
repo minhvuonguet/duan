@@ -61,7 +61,7 @@ class AdminControler extends Controller {
         return view('admin.adminManager');
     }
     public function ViewUser() {
-        return view('layouts.sinh_vien');
+        return view('students.diem');
     }
 
 
