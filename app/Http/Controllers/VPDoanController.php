@@ -63,7 +63,8 @@ class VPDoanController extends Controller  {
     //  ds dang vien
 
     public function dangvien() {
-        $sinhvien = P_Doan::all();
+        $sinhvien = Sinh_Vien::all();
+        $dang_vien = P_Doan::all();
         $diem = Points::all();
         $listClass = [];
         for($i = 0; $i < count($sinhvien); $i++){
@@ -73,12 +74,22 @@ class VPDoanController extends Controller  {
                     $sinhvien[$i]->point = $diem[$j]->point_total;
                 }
             }
-            $listClass[$i] = $sinhvien[$i]->class;
+         //   $listClass[$i] = $sinhvien[$i]->class;
+        }
+        for($i = 0; $i < count($dang_vien); $i++){
+            $dang_vien[$i]->point = 0;
+            for($j = 0; $j < count($diem)-1 ; $j++) {
+                if($diem[$j]->mssv == $dang_vien[$i]->mssv){
+                    $dang_vien[$i]->point = $diem[$j]->point_total;
+                }
+            }
+            $listClass[$i] = $dang_vien[$i]->class;
         }
         $listClass = array_unique($listClass);
 
         return View('admin.dangvien')->with([
             'list_sinh_vien' =>$sinhvien,
+            'list_sinh_vien' =>$dang_vien,
             'list_diem_ren_luyen' =>$diem,
             'list_class' =>$listClass
         ]);

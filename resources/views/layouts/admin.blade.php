@@ -131,6 +131,9 @@
                     <li class="nav-parent">
                         <a href="{{URL::to('doanVien.khen_thuong')}}"><i class="icon-screen-desktop"></i><span>Khen thuong doan vien </span> </a>
                     </li>
+                    <li class="nav-parent">
+                        <a href="{{URL::to('dangvien')}}"><i class="icon-screen-desktop"></i><span>Xem Dang Vien </span> </a>
+                    </li>
 
                 @endif
 
@@ -141,6 +144,9 @@
                     </li>
                     <li class="nav-parent">
                         <a href="{{URL::to('vanPhongKhoa.xem_diem')}}"><i class="icon-screen-desktop"></i><span>Xem Diem </span> </a>
+                    </li>
+                    <li class="nav-parent">
+                        <a href="{{URL::to('vanPhongKhoa.vi_pham')}}"><i class="icon-screen-desktop"></i><span>Xem Danh Sach VP  </span> </a>
                     </li>
 
 

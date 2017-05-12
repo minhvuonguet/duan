@@ -54,6 +54,7 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('phongDaoTao.xem_diem', ['as' => 'phongDaoTao.xem_diem', 'uses' => 'DaoTaoController@xem_diem']);
 
+        Route::get('dangvien', ['as'=>'dangvien', 'uses'=>'VPDoanController@dangvien']);
 
         Route::get('doanvien', ['as'=>'doanvien', 'uses'=>'VPDoanController@demo']);
 
@@ -67,6 +68,7 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('vanPhongKhoa.xem_diem', ['as' => 'vanPhongKhoa.xem_diem', 'uses' => 'vanphongkhoa@xem_diem']);
 
+        Route::get('vanPhongKhoa.vi_pham', ['as' => 'vanPhongKhoa.xem_diem', 'uses' => 'vanphongkhoa@vi_pham']);
 
         Route::post('listofclass/{class}', ['as'=>'listofclass', 'uses'=>'AdminControler@listofclass']);
 
