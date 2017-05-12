@@ -151,7 +151,7 @@
                 @if(Auth::user()->id_role == 4)
 
                     <li class="nav-parent">
-                        <a href="{{URL::to('newclass')}}"><i class="icon-screen-desktop"></i><span>Thêm danh sách vi phạm sinh hoạt lớp </span> </a>
+                        <a href="{{URL::to('newclass')}}"><i class="icon-screen-desktop"></i><span>Thêm DS vi phạm sinh hoạt lớp </span> </a>
                     </li>
                     <li class="nav-parent">
                         <a href="{{URL::to('coVanHocTap.listclass')}}"><i class="icon-screen-desktop"></i><span>xem danh sách  </span> </a>
