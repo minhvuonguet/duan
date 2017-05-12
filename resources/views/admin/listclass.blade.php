@@ -55,7 +55,7 @@
                     <td >{{$sinh_vien->class}} </td>
                     <td >{{$sinh_vien->chuc_vu}} </td>
                     <td >{{$sinh_vien->birthday}} </td>
-                    {{--<td >{{$sinh_vien->email}} </td>--}}
+                    <td >{{$sinh_vien->email}} </td>
                     <td> {{$sinh_vien->point}} </td>
                     {{--<td >{{$sinh_vien->khen_thuong}} </td>--}}
                     {{--<td >{{$sinh_vien->trung_binh}} </td>--}}

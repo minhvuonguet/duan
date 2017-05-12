@@ -26,16 +26,16 @@ class CreatePointsTable extends Migration
           $table->integer('point_co_van_hoc_tap');//y thuc cong dan
           $table->timestamps();
     //      $table->primary('id_point');
-          $table->foreign('mssv')
-          ->references('mssv')
-          ->on('sinh_vien')
-          ->onDelete('cascade')
-          ->onUpdate('cascade');
-          $table->foreign('id_hoc_ky')
-          ->references('id_hoc_ky')
-          ->on('hoc_ky')
-          ->onDelete('cascade')
-          ->onUpdate('cascade');
+//          $table->foreign('mssv')
+//          ->references('mssv')
+//          ->on('sinh_vien')
+//          ->onDelete('cascade')
+//          ->onUpdate('cascade');
+//          $table->foreign('id_hoc_ky')
+//          ->references('id_hoc_ky')
+//          ->on('hoc_ky')
+//          ->onDelete('cascade')
+//          ->onUpdate('cascade');
         });
     }
 

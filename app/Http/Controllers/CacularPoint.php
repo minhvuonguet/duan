@@ -16,7 +16,7 @@ use App\Models\P_Khoa;
 use App\Models\Points;
 use App\Models\Sinh_Vien;
 use App\Models\Form_Diem;
-
+use App\Http\Controllers\DB;
 
 class CacularPoint extends Controller
 {
@@ -36,11 +36,11 @@ class CacularPoint extends Controller
         $P_khoa = new P_Khoa();
 
         $this->diem($covan, 'covan');
-        $this->diem($P_ctsv, 'ctsv');
-        $this->diem($P_daotao,'daotao');
-        $this->diem($P_doan, 'doan');
-        $this->diem($P_khcn, 'khcn');
-        $this->diem($P_khoa, 'khoa');
+//        $this->diem($P_ctsv, 'ctsv');
+//        $this->diem($P_daotao,'daotao');
+//        $this->diem($P_doan, 'doan');
+//        $this->diem($P_khcn, 'khcn');
+//        $this->diem($P_khoa, 'khoa');
 
      //   return Redirect()->route('listclass');
     }
@@ -48,52 +48,55 @@ class CacularPoint extends Controller
         // neu khong co thi ghi vao dong moi. neu co roi thi update.
         $hocky = Hoc_Ky::all();
         $present_term = Hoc_Ky::where('term_present','=',  '1')->get();
-        echo $present_term;
+
+      //  echo $present_term;
         $Point = new Points();
+        $point_instance = $Point::all();
         $instanceTable = $table::all();
 
         switch ($type) {
             case "covan" :
                 for($i = 0; $i < count($instanceTable); $i++) {
-                    $Point::updateOrCreate(
-                        [
-                            'mssv'=>$instanceTable[$i]->mssv,
-                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
-                        ],
-                        [
-                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
-                            'point_co_van_hoc_tap' => $instanceTable[$i]->point_co_van_hoc_tap,
-                        ]
-                    );
+                //    echo $instanceTable[$i]->mssv;
+                    for($j = 0; $j < count($point_instance); $i++) {
+//                        if($instanceTable[$i]->mssv == $point_instance[$j]->mssv ) {
+//                            echo $instanceTable[$i]->mssv;
+//                        //    break;
+//                        }
+                    }
+
                 }
                 break;
             case "ctsv" :
 
                 for($i = 0; $i < count($instanceTable); $i++) {
 
-                    echo ($instanceTable[$i]->mssv);
+
+
                     $Point::updateOrCreate(
+//                        [
+//                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
+//
+//                        ],
                         [
+                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
                             'mssv'=>$instanceTable[$i]->mssv,
-                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
-                        ],
-                        [
-                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
                             'point_cong_tac_sv' =>  $instanceTable[$i]->point_cong_tac_sv,
                         ]
                     );
-                    echo $instanceTable[$i]->point_cong_tac_sv;
+
                 }
                 break;
             case "daotao" :
                 for($i = 0; $i < count($instanceTable); $i++) {
                     $Point::updateOrCreate(
+//                        [
+//
+//                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
+//                        ],
                         [
+                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
                             'mssv'=>$instanceTable[$i]->mssv,
-                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
-                        ],
-                        [
-                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
                             'point_dao_tao' => $instanceTable[$i]->point_dao_tao,
                         ]
                     );
@@ -103,12 +106,12 @@ class CacularPoint extends Controller
                 for($i = 0; $i < count($instanceTable); $i++) {
 
                     $Point::updateOrCreate(
+//                        [
+//                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
+//                        ],
                         [
+                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
                             'mssv'=>$instanceTable[$i]->mssv,
-                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
-                        ],
-                        [
-                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
                             'point_doan' => $instanceTable[$i]->point_doan,
 
                         ]
@@ -119,12 +122,13 @@ class CacularPoint extends Controller
                 for($i = 0; $i < count($instanceTable); $i++) {
 
                     $Point::updateOrCreate(
+//                        [
+//
+//                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
+//                        ],
                         [
+                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
                             'mssv'=>$instanceTable[$i]->mssv,
-                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
-                        ],
-                        [
-                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
                             'point_khoa_hoc_cn' => $instanceTable[$i]->point_khoa_hoc_cn,
 
                         ]
@@ -135,12 +139,13 @@ class CacularPoint extends Controller
                 for($i = 0; $i < count($instanceTable); $i++) {
 
                     $Point::updateOrCreate(
+//                        [
+//
+//                            'id_hoc_ky' => $hocky[0]->id_hoc_ky,
+//                        ],
                         [
+                            'id_hoc_ky' => $present_term[0]->id_hoc_ky,
                             'mssv'=>$instanceTable[$i]->mssv,
-                            'id_hoc_ky' => $hocky[0]->id_hoc_ky,
-                        ],
-                        [
-                            'id_hoc_ky' => $hocky[0]->id_hoc_ky,
                             'point_khoa' => $instanceTable[$i]->point_khoa,
                         ]
                     );
@@ -154,6 +159,7 @@ class CacularPoint extends Controller
             $total_point = 0;
          //   echo ($instancePoint[$i]->point_total );
             $total_point =
+
                 $instancePoint[$i]->point_total +
                 $instancePoint[$i]->point_co_van_hoc_tap +
                 $instancePoint[$i]->point_cong_tac_sv +

@@ -107,12 +107,6 @@ class UserTableSeeder extends Seeder
             'avatar' => 13000003,
             'id_role'=>3,
         ]);
-        User::create([
-            'username'=>'phuongdd_58',
-            'password'=>Hash::make('phuongdd_58'),
-            'mssv' => 13020553,
-            'avatar' => 13020553,
-            'id_role'=>3,
-        ]);
+
     }
 }

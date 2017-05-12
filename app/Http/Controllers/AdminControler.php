@@ -28,7 +28,7 @@ use App\Models\P_Dao_Tao;
 use App\Models\P_Doan;
 use App\Models\P_Khoa_Hoc_CN;
 use App\Models\P_Khoa;
-
+use App\Http\Controllers\Hash;
 
 class AdminControler extends Controller {
 
@@ -41,6 +41,7 @@ class AdminControler extends Controller {
     public function postLogin(Request $request){ 
 
         if (Auth::attempt([ 'username' => $request->username, 'password' => $request->password,'id_role'=>2 ]) ||
+            Auth::attempt([ 'username' => $request->username, 'password' => $request->password,'id_role'=>4 ]) ||
             Auth::attempt([ 'username' => $request->username, 'password' => $request->password,'id_role'=>1 ]) ) {
             $this->use_ = new User();
             return redirect()->route('list');
@@ -61,7 +62,10 @@ class AdminControler extends Controller {
         return view('admin.adminManager');
     }
     public function ViewUser() {
-        return view('students.diem');
+        $mssv = Auth::user()->mssv;
+        return view('students.statistical')->with([
+            'students'=>$mssv
+        ]);
     }
 
 
@@ -247,12 +251,31 @@ class AdminControler extends Controller {
     public function newclass(){
         return View('admin.newclass');
     }
+
+    public function stripUnicode($str){
+        if(!$str) return false;
+
+        $unicode = array(
+            'a'=>'á|à|ả|ã|ạ|ă|ắ|ặ|ằ|ẳ|ẵ|â|ấ|ầ|ẩ|ẫ|ậ',
+            'd'=>'đ|Đ',
+            'e'=>'é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ',
+            'i'=>'í|ì|ỉ|ĩ|ị',
+            'o'=>'ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ',
+            'u'=>'ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự',
+            'y'=>'ý|ỳ|ỷ|ỹ|ỵ',
+        );
+        foreach($unicode as $nonUnicode=>$uni) $str = preg_replace("/($uni)/i",$nonUnicode,$str);
+        $str = strtolower($str);
+        $str = str_replace(" ", "", $str);
+        return $str;
+    }
+
     public function postnewclass (Request $request) {
 
         $classname = $request->clasname;
         $sinh_vien= new Sinh_Vien();
 
-        echo $this->use_;
+
         if($request->type_file == 'list_class'){
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
@@ -260,7 +283,7 @@ class AdminControler extends Controller {
 
                 $Point = new Points();
                 $form_diem = Form_Diem::all();
-                $hocky = Hoc_Ky::all();
+                $hocky = Hoc_Ky::where('term_present','=',  '1')->get();
                 $point_base = $form_diem[0]->tong_hoc_tap + $form_diem[0]->tong_chap_hanh + $form_diem[0]->tong_pham_chat;
                 foreach ($results as $key=>$value) {
 
@@ -269,6 +292,7 @@ class AdminControler extends Controller {
                             $sinh_vien_new = new Sinh_Vien();
                             $sinh_vien_new->mssv = $value->mssv;
                             $sinh_vien_new->fullname = $value->name;
+
                             $sinh_vien_new->office = 'Sinh Viên';
                             $sinh_vien_new->birthday = $value->birthday;
                             $sinh_vien_new->class = $value->class;
@@ -276,15 +300,25 @@ class AdminControler extends Controller {
                         $sinh_vien_new->save();
 
 
-                            $Point::updateOrCreate(
-                                [
-                                    'mssv'=>$value->mssv
-                                ],
-                                [
-                                    'id_hoc_ky' => $hocky[0]->id_hoc_ky,
-                                    'point_total' => $point_base
-                                ]
-                            );
+                        $Point::updateOrCreate(
+                            [
+                                'mssv'=>$value->mssv
+                            ],
+                            [
+                                'id_hoc_ky' => $hocky[0]->id_hoc_ky,
+                                'point_total' => $point_base
+                            ]
+                        );
+
+                        // Tạo luôn tài khoản sinh viên mới
+                            $newUser = new User();
+                            $newUser->username = $value->mssv;
+                            $newUser->mssv = $value->mssv;
+                            $newUser->password = \Hash::make($value->mssv);
+                            $newUser->id_role = 3;
+                            $newUser->email = $this->stripUnicode($value->name) . '@vnu.edu.vn';
+
+                            $newUser->save();
                         }
                     }
                     else {
@@ -409,12 +443,30 @@ class AdminControler extends Controller {
 
                             ]
                         );
-//
-//                        $sinhvien = new Sinh_Vien();
-//                        $sinhvien::updateOrCreate(  [ 'mssv'=> $value->mssv, ], [ 'trung_binh'=> $value->trung_binh, ] );
-//                        $sinhvien::updateOrCreate(  [ 'mssv'=> $value->mssv, ], [ 'tich_luy'=> $value->tich_luy, ] );
-//                        $sinhvien::updateOrCreate(  [ 'mssv'=> $value->mssv, ], [ 'xep_loai'=> $value->xep_loai, ] );
-//
+
+                    $id = $value->mssv;
+                    $newPoint = Points::where('mssv','=',  $id)->get();
+                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+
+                            $Point = new Points();
+                            $Point::updateOrCreate(
+                                [ 'mssv'=> $value->mssv, ],
+                                [
+                                    'point_dao_tao'=> $diem_cong,
+                                ]
+                            );
+                        } else { // nếu méo có, đm
+
+                            $Point = new Points();
+                            $Point->mssv = $value->mssv;
+                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                            $Point->point_dao_tao = $diem_cong;
+
+                            $Point->save();
+                        }
+                    }
                     }
     //            }
             });
@@ -444,14 +496,33 @@ class AdminControler extends Controller {
 
                         ]
                     );
-//
- //                       $p_dao_tao = new P_Dao_Tao();
- //                       $p_dao_tao::updateOrCreate(  [ 'mssv'=> $value->mssv, ], [ 'canh_bao_hv'=> $value->canh_bao_hv, ] );
-//                        $sinhvien::updateOrCreate(  [ 'mssv'=> $value->mssv, ], [ 'tich_luy'=> $value->tich_luy, ] );
-//                        $sinhvien::updateOrCreate(  [ 'mssv'=> $value->mssv, ], [ 'xep_loai'=> $value->xep_loai, ] );
-//
+
+                    $id = $value->mssv;
+                    $newPoint = Points::where('mssv','=',  $id)->get();
+                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+
+                            $Point = new Points();
+                            $Point::updateOrCreate(
+                                [ 'mssv'=> $value->mssv, ],
+                                [
+                                    'point_dao_tao'=> $tru_diem,
+                                ]
+                            );
+                        } else { // nếu méo có, đm
+
+                            $Point = new Points();
+                            $Point->mssv = $value->mssv;
+                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                            $Point->point_dao_tao = $tru_diem;
+
+                            $Point->save();
+                        }
+                    }
+
                 }
-                //            }
+
             });
         }
 
@@ -481,6 +552,29 @@ class AdminControler extends Controller {
                         ]
                     );
 
+                    $id = $value->mssv;
+                    $newPoint = Points::where('mssv','=',  $id)->get();
+                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+
+                            $Point = new Points();
+                            $Point::updateOrCreate(
+                                [ 'mssv'=> $value->mssv, ],
+                                [
+                                    'tham_gia'=> $tru_diem,
+                                ]
+                            );
+                        } else { // nếu méo có, đm
+
+                            $Point = new Points();
+                            $Point->mssv = $value->mssv;
+                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                            $Point->tham_gia = $tru_diem;
+
+                            $Point->save();
+                        }
+                    }
 
                 }
             });
@@ -512,6 +606,29 @@ class AdminControler extends Controller {
                         ]
                     );
 
+                    $id = $value->mssv;
+                    $newPoint = Points::where('mssv','=',  $id)->get();
+                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+
+                            $Point = new Points();
+                            $Point::updateOrCreate(
+                                [ 'mssv'=> $value->mssv, ],
+                                [
+                                    'khen_thuong_doan'=> $cong_diem,
+                                ]
+                            );
+                        } else { // nếu méo có, đm
+
+                            $Point = new Points();
+                            $Point->mssv = $value->mssv;
+                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                            $Point->khen_thuong_doan = $cong_diem;
+
+                            $Point->save();
+                        }
+                    }
 
                 }
             });
@@ -543,6 +660,29 @@ class AdminControler extends Controller {
                             ]
                         );
 
+                    $id = $value->mssv;
+                    $newPoint = Points::where('mssv','=',  $id)->get();
+                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+
+                            $Point = new Points();
+                            $Point::updateOrCreate(
+                                [ 'mssv'=> $value->mssv, ],
+                                [
+                                    'point_cong_tac_sv'=> $tru_diem,
+                                ]
+                            );
+                        } else { // nếu méo có, đm
+
+                            $Point = new Points();
+                            $Point->mssv = $value->mssv;
+                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                            $Point->point_cong_tac_sv = $tru_diem;
+
+                            $Point->save();
+                        }
+                    }
 
                 }
             });
@@ -555,8 +695,6 @@ class AdminControler extends Controller {
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
                 foreach ($results as $key=>$value) {
-
-
                     $p_khoa = new P_Khoa();
                     $form_diem = Form_Diem::all();
                     $tru_diem = $form_diem[0]->tru_phe_binh;
@@ -568,20 +706,93 @@ class AdminControler extends Controller {
                             //     'mssv'=> $value->mssv,
                             'vi_pham_sh_khoa' => $value-> vi_pham_sh_khoa,
 
-
-
                         ]
                     );
 
+                    $id = $value->mssv;
+                    $newPoint = Points::where('mssv','=',  $id)->get();
+                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+
+                            $Point = new Points();
+                            $Point::updateOrCreate(
+                                [ 'mssv'=> $value->mssv, ],
+                                [
+                                    'vi_pham_sh_khoa'=> $tru_diem,
+                                ]
+                            );
+                        } else { // nếu méo có, đm
+
+                            $Point = new Points();
+                            $Point->mssv = $value->mssv;
+                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                            $Point->vi_pham_sh_khoa = $tru_diem;
+
+                            $Point->save();
+                        }
+                    }
 
                 }
             });
         }
 
+        else if($request->type_file == 'danh_sach_sh_lop') {
+
+            Excel::load($request->fileExcels, function($reader){
+                $results = $reader->all();
 
 
+                foreach ($results as $key=>$value) {
 
-        return Redirect()->route('listclass');
+
+                    $covan = new Co_Van_Hoc_Tap();
+                    $form_diem = Form_Diem::all();
+                    $tru_diem = $form_diem[0]->tru_khong_tham_gia;
+
+                    $covan::updateOrCreate(
+                        [ 'mssv'=> $value->mssv, ],
+                        [
+                            'point_co_van_hoc_tap'=> $tru_diem,
+                        ]
+                    );
+                   /*
+                    * lay ra ma sinh vien va id hoc ky.
+                    * neu ton tai mssv va id hoc ky thi update.
+                    *
+                    * neu ton tai mssv nhung khong ton tai id hoc ky hoac khong ton tai ca 2 thi create thi create
+                    *
+                    */
+                    $id = $value->mssv;
+                    $newPoint = Points::where('mssv','=',  $id)->get();
+                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                        echo $term;
+                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+
+                            $Point = new Points();
+                            $Point::updateOrCreate(
+                                [ 'mssv'=> $value->mssv, ],
+                                [
+                                    'point_co_van_hoc_tap'=> $tru_diem,
+                                ]
+                            );
+                        } else { // nếu méo có, đm
+
+                            $Point = new Points();
+                            $Point->mssv = $value->mssv;
+                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                            $Point->point_co_van_hoc_tap = $tru_diem;
+
+                            $Point->save();
+                        }
+                    }
+                }
+            });
+        }
+
+
+     //   return Redirect()->route('listclass');
     }
     public function listclass() {
         $sinhvien = Sinh_Vien::all();
@@ -783,96 +994,99 @@ class AdminControler extends Controller {
 
        // return View('admin.themhocky');
     }
-    public function postnewterm (Request $request){
+    public function postnewterm (Request $request)
+    {
         $namhoc = $request->ten_hoc_ky;
-        $tmp = str_replace(' ', '',$namhoc);
+        $tmp = str_replace(' ', '', $namhoc);
         $hoc_ky = '';
         $name = '';
-        switch ($request->hoc_ky){
+        switch ($request->hoc_ky) {
             case '10' :
                 $name = "Học kỳ 1" . $request->ten_hoc_ky;
-                $hoc_ky = "10" . str_replace(' ', '',$namhoc);
+                $hoc_ky = "10" . str_replace(' ', '', $namhoc);
                 break;
 
             case '11' :
                 $name = 'Học kỳ 1 phụ ' . $request->ten_hoc_ky;
-                $hoc_ky = '11' . str_replace(' ', '',$namhoc);
+                $hoc_ky = '11' . str_replace(' ', '', $namhoc);
                 break;
 
             case '20' :
                 $name = 'Học kỳ 2 ' . $request->ten_hoc_ky;
-                $hoc_ky = '20' . str_replace(' ', '',$namhoc);
+                $hoc_ky = '20' . str_replace(' ', '', $namhoc);
                 break;
 
             case '21' :
                 $name = 'Học kỳ 2 phụ ' . $request->ten_hoc_ky;
-                $hoc_ky = '21' . str_replace(' ', '',$namhoc);
+                $hoc_ky = '21' . str_replace(' ', '', $namhoc);
                 break;
 
             case '31' :
                 $name = 'Học kỳ hè ' . $request->ten_hoc_ky;
-                $hoc_ky = '31' . str_replace(' ', '',$namhoc);
+                $hoc_ky = '31' . str_replace(' ', '', $namhoc);
                 break;
         }
         $note = $name;
         $new_hoc_ky = new Hoc_Ky();
         $new_form_diem = new Form_Diem();
 
-        $present_term = Hoc_Ky::where('term_present','=',  '1')->get();
-        $form_diem = Form_Diem::where('ma_hk','=',  $present_term[0]->id_hoc_ky)->get();
+        $present_term = Hoc_Ky::where('term_present', '=', '1')->get();
+
+        $form_diem = Form_Diem::where('ma_hk', '=', $present_term[0]->id_hoc_ky)->get();
 
         $new_form_diem->ma_hk = $hoc_ky;
-        $new_form_diem ->tong_hoc_tap = $form_diem[0]->tong_hoc_tap;
-        $new_form_diem ->tru_hoc_luc_yeu = $form_diem[0]->tru_hoc_luc_yeu;
-        $new_form_diem ->tru_canh_bao_hoc_vu = $form_diem[0]->tru_canh_bao_hoc_vu;
-        $new_form_diem ->tru_khong_du_tin_chi = $form_diem[0]->tru_khong_du_tin_chi;
-        $new_form_diem ->tru_ngien_cuu_kh = $form_diem[0]->tru_ngien_cuu_kh;
-        $new_form_diem ->tru_khong_thi = $form_diem[0]->tru_khong_thi;
+        if ($form_diem) {
+            $new_form_diem->tong_hoc_tap = $form_diem[0]->tong_hoc_tap;
+            $new_form_diem->tru_hoc_luc_yeu = $form_diem[0]->tru_hoc_luc_yeu;
+            $new_form_diem->tru_canh_bao_hoc_vu = $form_diem[0]->tru_canh_bao_hoc_vu;
+            $new_form_diem->tru_khong_du_tin_chi = $form_diem[0]->tru_khong_du_tin_chi;
+            $new_form_diem->tru_ngien_cuu_kh = $form_diem[0]->tru_ngien_cuu_kh;
+            $new_form_diem->tru_khong_thi = $form_diem[0]->tru_khong_thi;
 
-        $new_form_diem ->tru_khien_trach_thi = $form_diem[0]->tru_khien_trach_thi;
-        $new_form_diem ->tru_canh_cao_thi = $form_diem[0]->tru_canh_cao_thi;
-        $new_form_diem ->tru_dinh_chi_thi = $form_diem[0]->tru_dinh_chi_thi;
+            $new_form_diem->tru_khien_trach_thi = $form_diem[0]->tru_khien_trach_thi;
+            $new_form_diem->tru_canh_cao_thi = $form_diem[0]->tru_canh_cao_thi;
+            $new_form_diem->tru_dinh_chi_thi = $form_diem[0]->tru_dinh_chi_thi;
 
-        // 2. ý thức và kết quả chấp hành nội quy,quy chế trong nhà trường
-        $new_form_diem ->tong_chap_hanh = $form_diem[0]->tong_chap_hanh;
-        $new_form_diem ->tru_nop_hoc_phi = $form_diem[0]->tru_nop_hoc_phi;
-        $new_form_diem ->tru_dang_ky_hoc_qua_han = $form_diem[0]->tru_dang_ky_hoc_qua_han;
-        $new_form_diem ->tru_khong_di_trieu_tap = $form_diem[0]->tru_khong_di_trieu_tap;
-        $new_form_diem ->tru_tra_qua_han_ho_so = $form_diem[0]->tru_tra_qua_han_ho_so;
-        $new_form_diem ->tru_khong_tham_gia_bao_hiem = $form_diem[0]->tru_khong_tham_gia_bao_hiem;
-        $new_form_diem ->tru_vi_pham_cu_tru = $form_diem[0]->tru_vi_pham_cu_tru;
+            // 2. ý thức và kết quả chấp hành nội quy,quy chế trong nhà trường
+            $new_form_diem->tong_chap_hanh = $form_diem[0]->tong_chap_hanh;
+            $new_form_diem->tru_nop_hoc_phi = $form_diem[0]->tru_nop_hoc_phi;
+            $new_form_diem->tru_dang_ky_hoc_qua_han = $form_diem[0]->tru_dang_ky_hoc_qua_han;
+            $new_form_diem->tru_khong_di_trieu_tap = $form_diem[0]->tru_khong_di_trieu_tap;
+            $new_form_diem->tru_tra_qua_han_ho_so = $form_diem[0]->tru_tra_qua_han_ho_so;
+            $new_form_diem->tru_khong_tham_gia_bao_hiem = $form_diem[0]->tru_khong_tham_gia_bao_hiem;
+            $new_form_diem->tru_vi_pham_cu_tru = $form_diem[0]->tru_vi_pham_cu_tru;
 
-        $new_form_diem ->tru_phe_binh = $form_diem[0]->tru_phe_binh;
-        $new_form_diem ->tru_khien_trach = $form_diem[0]->tru_khien_trach;
-        $new_form_diem ->tru_canh_cao = $form_diem[0]->tru_canh_cao;
+            $new_form_diem->tru_phe_binh = $form_diem[0]->tru_phe_binh;
+            $new_form_diem->tru_khien_trach = $form_diem[0]->tru_khien_trach;
+            $new_form_diem->tru_canh_cao = $form_diem[0]->tru_canh_cao;
 
-        // 3. ý thức và kết quả tham gia hoạt động chínht trị xã hội văn hoá, văn nghệ...
-        $new_form_diem ->tong_tham_gia = $form_diem[0]->tong_tham_gia;
-        $new_form_diem ->cong_tham_gia_truong = $form_diem[0]->cong_tham_gia_truong;
-        $new_form_diem ->cong_tham_gia_ngoai = $form_diem[0]->cong_tham_gia_ngoai;
-        $new_form_diem ->tru_khong_tham_gia = $form_diem[0]->tru_khong_tham_gia;
+            //         3. ý thức và kết quả tham gia hoạt động chínht trị xã hội văn hoá, văn nghệ...
+            $new_form_diem->tong_tham_gia = $form_diem[0]->tong_tham_gia;
+            $new_form_diem->cong_tham_gia_truong = $form_diem[0]->cong_tham_gia_truong;
+            $new_form_diem->cong_tham_gia_ngoai = $form_diem[0]->cong_tham_gia_ngoai;
+            $new_form_diem->tru_khong_tham_gia = $form_diem[0]->tru_khong_tham_gia;
 
-        // 4. phẩm chất công dân và quan hệ cộng đồng
-        $new_form_diem ->tong_pham_chat = $form_diem[0]->tong_pham_chat;
-        $new_form_diem ->tru_khong_chap_hanh = $form_diem[0]->tru_khong_chap_hanh;
-        $new_form_diem ->tru_khong_tinh_than = $form_diem[0]->tru_khong_tinh_than;
+            // 4. phẩm chất công dân và quan hệ cộng đồng
+            $new_form_diem->tong_pham_chat = $form_diem[0]->tong_pham_chat;
+            $new_form_diem->tru_khong_chap_hanh = $form_diem[0]->tru_khong_chap_hanh;
+            $new_form_diem->tru_khong_tinh_than = $form_diem[0]->tru_khong_tinh_than;
 
-        //5.  ý thức và kết quả tham gia công tác phụ trách lớp, đoàn thể...
-        $new_form_diem ->tong_cong_tac = $form_diem[0]->tong_cong_tac;
-        $new_form_diem ->cong_giu_chuc_vu = $form_diem[0]->cong_giu_chuc_vu;
-        $new_form_diem ->cong_hoc_luc = $form_diem[0]->cong_hoc_luc;
-        $new_form_diem ->cong_tham_gia_thi_chuyen_mon = $form_diem[0]->cong_tham_gia_thi_chuyen_mon;
-        $new_form_diem ->cong_nckh = $form_diem[0]->cong_nckh;
-        $new_form_diem ->cong_dat_giai = $form_diem[0]->cong_dat_giai;
-        $new_form_diem ->cong_ket_nap_dang = $form_diem[0]->cong_ket_nap_dang;
+            //5.  ý thức và kết quả tham gia công tác phụ trách lớp, đoàn thể...
+            $new_form_diem->tong_cong_tac = $form_diem[0]->tong_cong_tac;
+            $new_form_diem->cong_giu_chuc_vu = $form_diem[0]->cong_giu_chuc_vu;
+            $new_form_diem->cong_hoc_luc = $form_diem[0]->cong_hoc_luc;
+            $new_form_diem->cong_tham_gia_thi_chuyen_mon = $form_diem[0]->cong_tham_gia_thi_chuyen_mon;
+            $new_form_diem->cong_nckh = $form_diem[0]->cong_nckh;
+            $new_form_diem->cong_dat_giai = $form_diem[0]->cong_dat_giai;
+            $new_form_diem->cong_ket_nap_dang = $form_diem[0]->cong_ket_nap_dang;
 
-        $new_form_diem->save();
-
+            $new_form_diem->save();
+        }
         $new_hoc_ky::updateOrCreate(
             [ 'id_hoc_ky'=> $hoc_ky ], [ 'note' => $note ]
         );
 
-        return  redirect()->route('newterm');
+       // return  redirect()->route('newterm');
     }
     public function change_present_term (Request $request, $id){
         $id_term = $id;

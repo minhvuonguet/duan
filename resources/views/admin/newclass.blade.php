@@ -45,7 +45,9 @@
                 <option value="list_vi_pham_quyche_thi"> Vi Phạm Quy Chế Thi </option>
                 <option value="list_ad_canh_bao_hv"> Cảnh Báo Học Vụ </option>
             @endif
-
+            @if(Auth::user()->id_role == 4))
+                <option value="danh_sach_sh_lop"> SV Không tham gia sinh hoạt lớp </option>
+            @endif
 
 
 
