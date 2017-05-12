@@ -374,12 +374,34 @@ class AdminControler extends Controller {
                         [
                             'point_khoa_hoc_cn'=> $diem_cong,
 
-                            'note' => $value-> note,
+                            'note' => $value-> note || '',
 
                         ]
                     );
 
+                    $id = $value->mssv;
+                    $newPoint = Points::where('mssv','=',  $id)->get();
+                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
 
+                            $Point = new Points();
+                            $Point::updateOrCreate(
+                                [ 'mssv'=> $value->mssv, ],
+                                [
+                                    'point_khoa_hoc_cn'=> $diem_cong,
+                                ]
+                            );
+                        } else { // nếu méo có, đm
+
+                            $Point = new Points();
+                            $Point->mssv = $value->mssv;
+                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                            $Point->point_khoa_hoc_cn = $diem_cong;
+
+                            $Point->save();
+                        }
+                    }
                 }
             });
         }
@@ -444,29 +466,29 @@ class AdminControler extends Controller {
                             ]
                         );
 
-                    $id = $value->mssv;
-                    $newPoint = Points::where('mssv','=',  $id)->get();
-                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
-                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
-                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+                        $id = $value->mssv;
+                        $newPoint = Points::where('mssv','=',  $id)->get();
+                        if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                            $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                            if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
 
-                            $Point = new Points();
-                            $Point::updateOrCreate(
-                                [ 'mssv'=> $value->mssv, ],
-                                [
-                                    'point_dao_tao'=> $diem_cong,
-                                ]
-                            );
-                        } else { // nếu méo có, đm
+                                $Point = new Points();
+                                $Point::updateOrCreate(
+                                    [ 'mssv'=> $value->mssv, ],
+                                    [
+                                        'point_dao_tao'=> $diem_cong,
+                                    ]
+                                );
+                            } else { // nếu méo có, đm
 
-                            $Point = new Points();
-                            $Point->mssv = $value->mssv;
-                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
-                            $Point->point_dao_tao = $diem_cong;
+                                $Point = new Points();
+                                $Point->mssv = $value->mssv;
+                                $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                                $Point->point_dao_tao = $diem_cong;
 
-                            $Point->save();
+                                $Point->save();
+                            }
                         }
-                    }
                     }
     //            }
             });

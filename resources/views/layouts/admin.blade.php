@@ -101,7 +101,7 @@
 
                 @endif
 
-                @if(Auth::user()->username == 'khoahoccongnghe')
+                @if(Auth::user()->username == 'phongkhcn')
 
                     <li class="nav-parent">
                         <a href="{{URL::to('newclass')}}"><i class="icon-screen-desktop"></i><span> Import Danh Sách </span> </a>

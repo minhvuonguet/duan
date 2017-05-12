@@ -33,7 +33,7 @@
 
             @endif
 
-            @if(Auth::user()->username == 'khoahoccongnghe'))
+            @if(Auth::user()->username == 'phongkhcn'))
 
                  <option value="list_nghien_cuu_khoa_hoc"> Nghiên Cứu Khoa Học </option>
 
