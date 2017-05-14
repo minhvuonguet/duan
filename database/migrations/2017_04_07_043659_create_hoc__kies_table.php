@@ -16,6 +16,8 @@ class CreateHocKiesTable extends Migration
           $table->engine = 'InnoDB';
             $table->integer('id_hoc_ky')->primary()->unique();
             $table->integer('term_present');
+            $table->integer('is_caculator');
+            $table->integer('is_reset');
             $table->string('note');
             $table->timestamps();
         });

@@ -44,7 +44,7 @@ class AdminControler extends Controller {
             Auth::attempt([ 'username' => $request->username, 'password' => $request->password,'id_role'=>4 ]) ||
             Auth::attempt([ 'username' => $request->username, 'password' => $request->password,'id_role'=>1 ]) ) {
             $this->use_ = new User();
-            return redirect()->route('list');
+            return redirect()->route('listdiem');
 
         } else if (Auth::attempt([ 'username' => $request->username, 'password' => $request->password,'id_role'=>3 ])) {
             $this->use_ = new User();
@@ -63,8 +63,11 @@ class AdminControler extends Controller {
     }
     public function ViewUser() {
         $mssv = Auth::user()->mssv;
+        $point = Points::where('mssv', '=', $mssv)->get();
+        $hocky = Hoc_Ky::all();
         return view('students.statistical')->with([
-            'students'=>$mssv
+            'students'=>$point,
+            'hocky'=>$hocky
         ]);
     }
 
@@ -351,6 +354,30 @@ class AdminControler extends Controller {
 
                         $sinhvien = new Sinh_Vien();
                         $sinhvien::updateOrCreate(  [ 'mssv'=> $value->mssv, ], [ 'chuc_vu'=> $value->office, ] );
+
+                        $id = $value->mssv;
+                        $newPoint = Points::where('mssv','=',  $id)->get();
+                        if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                            $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                            if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+
+                                $Point = new Points();
+                                $Point::updateOrCreate(
+                                    [ 'mssv'=> $value->mssv, ],
+                                    [
+                                        'point_cong_tac_sv'=> $diem_cong,
+                                    ]
+                                );
+                            } else { // nếu méo có, đm
+
+                                $Point = new Points();
+                                $Point->mssv = $value->mssv;
+                                $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                                $Point->point_cong_tac_sv = $diem_cong;
+
+                                $Point->save();
+                            }
+                        }
                     }
                 }
             });
@@ -477,6 +504,7 @@ class AdminControler extends Controller {
                                     [ 'mssv'=> $value->mssv, ],
                                     [
                                         'point_dao_tao'=> $diem_cong,
+
                                     ]
                                 );
                             } else { // nếu méo có, đm
@@ -485,7 +513,7 @@ class AdminControler extends Controller {
                                 $Point->mssv = $value->mssv;
                                 $Point->id_hoc_ky = $term[0]->id_hoc_ky;
                                 $Point->point_dao_tao = $diem_cong;
-
+                                $Point->point_total = 70;
                                 $Point->save();
                             }
                         }
@@ -538,7 +566,7 @@ class AdminControler extends Controller {
                             $Point->mssv = $value->mssv;
                             $Point->id_hoc_ky = $term[0]->id_hoc_ky;
                             $Point->point_dao_tao = $tru_diem;
-
+                            $Point->point_total = 70;
                             $Point->save();
                         }
                     }
@@ -593,7 +621,7 @@ class AdminControler extends Controller {
                             $Point->mssv = $value->mssv;
                             $Point->id_hoc_ky = $term[0]->id_hoc_ky;
                             $Point->tham_gia = $tru_diem;
-
+                            $Point->point_total = 70;
                             $Point->save();
                         }
                     }
@@ -647,7 +675,7 @@ class AdminControler extends Controller {
                             $Point->mssv = $value->mssv;
                             $Point->id_hoc_ky = $term[0]->id_hoc_ky;
                             $Point->khen_thuong_doan = $cong_diem;
-
+                            $Point->point_total = 70;
                             $Point->save();
                         }
                     }
@@ -701,7 +729,7 @@ class AdminControler extends Controller {
                             $Point->mssv = $value->mssv;
                             $Point->id_hoc_ky = $term[0]->id_hoc_ky;
                             $Point->point_cong_tac_sv = $tru_diem;
-
+                            $Point->point_total = 70;
                             $Point->save();
                         }
                     }
@@ -750,7 +778,7 @@ class AdminControler extends Controller {
                             $Point->mssv = $value->mssv;
                             $Point->id_hoc_ky = $term[0]->id_hoc_ky;
                             $Point->vi_pham_sh_khoa = $tru_diem;
-
+                            $Point->point_total = 70;
                             $Point->save();
                         }
                     }
@@ -805,7 +833,7 @@ class AdminControler extends Controller {
                             $Point->mssv = $value->mssv;
                             $Point->id_hoc_ky = $term[0]->id_hoc_ky;
                             $Point->point_co_van_hoc_tap = $tru_diem;
-
+                            $Point->point_total = 70;
                             $Point->save();
                         }
                     }
@@ -814,7 +842,7 @@ class AdminControler extends Controller {
         }
 
 
-     //   return Redirect()->route('listclass');
+        return Redirect()->route('listclass');
     }
     public function listclass() {
         $sinhvien = Sinh_Vien::all();
@@ -1105,10 +1133,14 @@ class AdminControler extends Controller {
             $new_form_diem->save();
         }
         $new_hoc_ky::updateOrCreate(
-            [ 'id_hoc_ky'=> $hoc_ky ], [ 'note' => $note ]
+            [ 'id_hoc_ky'=> $hoc_ky ],
+            [
+                'note' => $note,
+                'is_caculator'=>0
+            ]
         );
 
-       // return  redirect()->route('newterm');
+        return  redirect()->route('newterm');
     }
     public function change_present_term (Request $request, $id){
         $id_term = $id;

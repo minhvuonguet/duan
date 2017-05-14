@@ -53,7 +53,7 @@
 
 
                 @if(Auth::user()->username == 'admin1' || Auth::user()->username == 'phongctsv')
-                    <li class="nav-parent">
+                    <li class="nav-parent nav-active">
                         <a href="{{ URL::to('formdiem') }}" class="test_"><i class="icon-puzzle"></i><span> Form điểm rèn luyện </span> </a>
                     </li>
 
@@ -82,7 +82,7 @@
                     </li>
 
                     <li class="nav-parent">
-                        <a href="{{URL::to('tinhdiem')}}"><i class="icon-screen-desktop"></i><span>Tính điểm</span> </a>
+                        <a href="{{URL::to('listdiem')}}"><i class="icon-screen-desktop"></i><span>Quản lý điểm rèn luyện</span> </a>
                     </li>
                 @endif
 
@@ -204,8 +204,8 @@
 @section('script_')
     <script>
         $(document).ready(function(){
-            $('.nav-parent').click( function(){
-               console.log($(this));
+            $('li.nav-parent').click( function(){
+               console.log('asdf');
             });
         });
     </script>

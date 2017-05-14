@@ -35,7 +35,7 @@
             </tr>
             {{--*/  $dem = 1 /*--}}
             @foreach($listTerm as $terms)
-                <tr class="{{$dem}}">
+                <tr class="{{$terms->id_hoc_ky}}">
                     <td> {{$dem}} </td>
                     <td> {{$terms->note}}</td>
                     <td> {{$terms->id_hoc_ky}}</td>
@@ -61,9 +61,9 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('.glyphicon-trash').click(function(){
-                console.log($(this));
+              //  console.log($(this));
                 var id = $(this).attr('id');
-                console.log(id);
+               // console.log(id);
 
                 $.ajax({
                     headers: {
@@ -73,9 +73,7 @@
                     type: 'post',
                     dataType: 'json',
                     success: function(data){
-                        console.log(data);
-                        $(this).remove();
-                        console.log($(this));
+                        $('tr.'+id).remove();
                     }
                 });
             });

@@ -11,17 +11,17 @@ class PKhoaTableSeeder extends Seeder
      */
     public function run()
     {
-        P_Khoa::create([
-            'point_khoa' =>5,
-            'mssv' => 13000001,
-        ]);
-        P_Khoa::create([
-            'point_khoa' =>5,
-            'mssv' => 13000002,
-        ]);
-        P_Khoa::create([
-            'point_khoa' =>10,
-            'mssv' => 13000003,
-        ]);
+//        P_Khoa::create([
+//            'point_khoa' =>5,
+//            'mssv' => 13000001,
+//        ]);
+//        P_Khoa::create([
+//            'point_khoa' =>5,
+//            'mssv' => 13000002,
+//        ]);
+//        P_Khoa::create([
+//            'point_khoa' =>10,
+//            'mssv' => 13000003,
+//        ]);
     }
 }

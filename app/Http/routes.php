@@ -45,7 +45,7 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('newclass', ['as' => 'newclass', 'uses' => 'AdminControler@newclass']);
         Route::post('postnewclass', ['as'=>'postnewclass','uses'=>'AdminControler@postnewclass']);
-        Route::get('tinhdiem', ['as' => 'tinhdiem', 'uses' => 'CacularPoint@tinhdiem']);
+
         Route::post('update/{id}/{chu_de}', ['as'=>'update', 'uses'=>'AdminControler@updatePoint']);
         Route::get('listclass', ['as'=>'listclass', 'uses'=>'AdminControler@listclass']);
         Route::get('done_import', ['as'=>'done_import', 'uses'=>'AdminControler@list_sinh_vien']);
@@ -78,6 +78,14 @@ Route::group(['middleware' => ['web']], function () {
         // Route form diem
         Route::get('formdiem', ['as' => 'formdiem', 'uses' => 'AdminControler@formdiem']);
         Route::post('list_of_form/{id}', ['as' => 'list_of_form', 'uses' => 'PhongCtsvController@listOfForm']);
+
+        // tinh diem
+        Route::get('tinhdiem', ['as' => 'tinhdiem', 'uses' => 'CacularPoint@tinhdiem']);
+        Route::get('listdiem',['as' => 'listdiem', 'uses' => 'CacularPoint@listdiem']);
+        Route::get('resetpoint',['as' => 'resetpoint', 'uses' => 'CacularPoint@resetpoint']);
+
+        // sinh vien
+        Route::get('sv_detail/{id}',['as' => 'sv_detail', 'uses' => 'StudentsControler@sv_detail']);
     });
 
 });

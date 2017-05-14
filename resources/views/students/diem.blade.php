@@ -26,9 +26,9 @@
                 <tr>
                     <td> 1.1 Điểm chuẩn </td>
                     <td class="td_hoc_tap">
-                        {{--{{$tong_hoc_tap}}--}}
+                        {{$terms->tong_hoc_tap}}
                     </td>
-                    <td ><span class="glyphicon glyphicon-pencil  tong_hoc"></span> <span class="glyphicon glyphicon-floppy-disk changeID tong_hoc"></span>  </td>
+                    <td ></td>
                 </tr>
                 <tr>
                     <td> 1.2 Trừ điểm </td>
@@ -38,7 +38,7 @@
                 <tr>
                     <td >- Học lực yếu</td>
                     <td class="tru_hoc_luc_yeu">
-                        {{--{{$tru_hoc_luc_yeu}} --}}
+                        {{--{{$daotao}}--}}
                     </td>
                     <td>
                         <span class="glyphicon glyphicon-pencil tong_hoc"></span>
@@ -96,9 +96,9 @@
                 <tr>
                     <td>- 2.1 Điểm chuẩn  </td>
                     <td class="tong_chap_hanh">
-                        {{--{{$tong_chap_hanh}}--}}
+                        {{$terms->tong_chap_hanh}}
                     </td>
-                    <td><span class="glyphicon glyphicon-pencil  tong_hoc"></span> <span class="glyphicon glyphicon-floppy-disk changeID tong_hoc"> </span></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>2.2. Trừ điểm</td>
@@ -170,9 +170,9 @@
                 <tr>
                     <td>3.1. Điểm chuẩn</td>
                     <td class="tong_tham_gia">
-                        {{--{{$tong_tham_gia}}--}}
+                        {{$terms->tong_tham_gia}}
                     </td>
-                    <td> <span class="glyphicon glyphicon-pencil  tong_hoc"></span> <span class="glyphicon glyphicon-floppy-disk changeID tong_hoc"> </span></td>
+                    <td> </td>
                 </tr>
                 <tr>
                     <td>3.2. Cộng điểm</td>
@@ -219,9 +219,9 @@
                 <tr>
                     <td>4.1. Điểm chuẩn</td>
                     <td class="tong_pham_chat">
-                        {{--{{$tong_pham_chat}} --}}
+                        {{$terms->tong_pham_chat}}
                     </td>
-                    <td><span class="glyphicon glyphicon-pencil  tong_hoc"></span> <span class="glyphicon glyphicon-floppy-disk changeID tong_hoc"> </span></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>4.2. Trừ điểm</td>
@@ -255,9 +255,9 @@
                 <tr>
                     <td>5.1. Điểm chuẩn</td>
                     <td class="tong_cong_tac">
-                        {{--{{$tong_cong_tac}} --}}
+                        {{$terms->tong_cong_tac}}
                     </td>
-                    <td><span class="glyphicon glyphicon-pencil  tong_hoc"></span> <span class="glyphicon glyphicon-floppy-disk changeID tong_hoc"> </span></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>5.2. Cộng điểm</td>
@@ -267,7 +267,7 @@
                 <tr>
                     <td>- Giữ các chức vụ trong các tổ chức chính quyền, đoàn thể và được đánh giá hoàn thành tốt nhiệm vụ: +10đ</td>
                     <td class="cong_giu_chuc_vu">
-                        {{--{{$cong_giu_chuc_vu}}--}}
+                        {{$students->point_cong_tac_sv}}
                     </td>
                     <td><span class="glyphicon glyphicon-pencil  tong_hoc"></span> <span class="glyphicon glyphicon-floppy-disk changeID tong_hoc"> </span></td>
                 </tr>
@@ -317,14 +317,14 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td><strong>Tổng cộng (1.+2.+3.+4.+5.) [0, 100]</strong></td>
-                    <td > </td>
+                    <td><strong>Tổng cộng (1.+2.+3.+4.+5.) [0. 100]  </strong></td>
+                    <td > {{$students->point_total}} </td>
                     <td><a href="{{URL::to('feadback')}}"></a></td>
                 </tr>
 
                 <tr>
                     <td>Xếp loại</td>
-                    <td > </td>
+                    <td > {{$students->xeploai}} </td>
                     <td></td>
                 </tr>
             </table>

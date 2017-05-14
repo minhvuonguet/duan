@@ -79,34 +79,34 @@ class UserTableSeeder extends Seeder
             'avatar' => 7,
             'id_role'=>4,
         ]);
-        User::create([
-            'username'=>'students0',
-            'password'=>Hash::make('students0'),
-            'mssv' => 13000000,
-            'avatar' => 13000000,
-            'id_role'=>3
-        ]);
-        User::create([
-            'username'=>'students1',
-            'password'=>Hash::make('students1'),
-            'mssv' => 13000001,
-            'avatar' => 13000001,
-            'id_role'=>3
-        ]);
-        User::create([
-            'username'=>'students2',
-            'password'=>Hash::make('students2'),
-            'mssv' => 13000002,
-            'avatar' => 13000002,
-            'id_role'=>3
-        ]);
-        User::create([
-            'username'=>'students3',
-            'password'=>Hash::make('students3'),
-            'mssv' => 13000003,
-            'avatar' => 13000003,
-            'id_role'=>3,
-        ]);
+//        User::create([
+//            'username'=>'students0',
+//            'password'=>Hash::make('students0'),
+//            'mssv' => 13000000,
+//            'avatar' => 13000000,
+//            'id_role'=>3
+//        ]);
+//        User::create([
+//            'username'=>'students1',
+//            'password'=>Hash::make('students1'),
+//            'mssv' => 13000001,
+//            'avatar' => 13000001,
+//            'id_role'=>3
+//        ]);
+//        User::create([
+//            'username'=>'students2',
+//            'password'=>Hash::make('students2'),
+//            'mssv' => 13000002,
+//            'avatar' => 13000002,
+//            'id_role'=>3
+//        ]);
+//        User::create([
+//            'username'=>'students3',
+//            'password'=>Hash::make('students3'),
+//            'mssv' => 13000003,
+//            'avatar' => 13000003,
+//            'id_role'=>3,
+//        ]);
 
     }
 }

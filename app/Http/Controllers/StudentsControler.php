@@ -8,6 +8,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Co_Van_Hoc_Tap;
+use App\Models\P_Dao_Tao;
+use App\Models\Points;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -15,7 +18,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\User_Point;
 use Illuminate\Support\Facades\DB;
 use App\Models\Form_Diem;
-
+use App\Models\Hoc_Ky;
 
 class StudentsControler extends Controller {
     public function ViewUser(Request $request) {
@@ -65,5 +68,33 @@ class StudentsControler extends Controller {
         }
 
         return view ('Employee.mau_diem')->with(['sum_point' => $ad_us->diem_ren_luyen]);
+    }
+
+    public function sv_detail ($id) {
+        $term_present = Hoc_Ky::all();
+
+        $ma_hk = Hoc_Ky::where('id_hoc_ky','=',  $id)->get();
+        $id_hk = $ma_hk[0]->id_hoc_ky;
+        $data = Points::where('mssv','=',  Auth::user()->mssv)->get();
+
+        $data_covan = Co_Van_Hoc_Tap::where('mssv', '=', Auth::user()->mssv)->get();
+        $data_daotao = P_Dao_Tao::where('mssv', '=', Auth::user()->mssv)->get();
+//        if(var_dump(empty($data_daotao))){
+//            echo $data_daotao;
+//            $data_daotao = 0;
+//        }
+//        else {
+//            $data_daotao = $data_daotao[0]->point_daotao;
+//        }
+        $dataTerm = Form_Diem::where('ma_hk','=',  $id_hk)->get();
+
+
+        //  echo $data;
+        return View('students.diem')->with([
+            'students'=>$data[0],
+            'covan'=>$data_covan[0]->point_co_van_hoc_tap,
+//            'daotao'=>$data_daotao,
+            'terms'=>$dataTerm[0]
+        ]);
     }
 }

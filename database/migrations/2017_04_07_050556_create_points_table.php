@@ -18,6 +18,7 @@ class CreatePointsTable extends Migration
           $table->integer('mssv');//ma so sinh vien
           $table->integer('id_hoc_ky');//ma so hoc ky
           $table->integer('point_total');//diem tong
+          $table->string('xeploai');
           $table->integer('point_khoa_hoc_cn');//nghien cuu khoa hoc
           $table->integer('point_cong_tac_sv');//y thuc sinh vien
           $table->integer('point_dao_tao');//hoat dong doan the

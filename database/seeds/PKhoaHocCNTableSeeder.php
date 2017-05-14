@@ -11,15 +11,15 @@ class PKhoaHocCNTableSeeder extends Seeder
      */
     public function run()
     {
-        P_Khoa_Hoc_CN::create([
-            'point_khoa_hoc_cn' =>5,
-            'mssv' => 13000001,
-
-        ]);
-        P_Khoa_Hoc_CN::create([
-            'point_khoa_hoc_cn' =>10,
-            'mssv' => 13000002,
-
-        ]);
+//        P_Khoa_Hoc_CN::create([
+//            'point_khoa_hoc_cn' =>5,
+//            'mssv' => 13000001,
+//
+//        ]);
+//        P_Khoa_Hoc_CN::create([
+//            'point_khoa_hoc_cn' =>10,
+//            'mssv' => 13000002,
+//
+//        ]);
     }
 }

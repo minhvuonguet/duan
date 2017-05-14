@@ -69,40 +69,40 @@ class SinhVienTableSeeder extends Seeder
           'office' => 'Cố vấn học tập',
           'email' => 'covanhoctap@gmail.com',
         ]);
-        Sinh_Vien::create([
-          'mssv' => 13000000,
-          'fullname' => 'Sinh viên test',
-          'class' => 'K58CC',
-          'office' => 'Học Sinh',
-          'email' => 'sinhvien@gmail.com',
-        ]);
-        Sinh_Vien::create([
-            'mssv' => 13000001,
-            'fullname' => 'Sinh viên test1',
-            'class' => 'K58CC',
-            'office' => 'Học Sinh',
-            'email' => 'sinhvien@gmail.com',
-        ]);
-        Sinh_Vien::create([
-            'mssv' => 13000002,
-            'fullname' => 'Sinh viên test2',
-            'class' => 'K58CC',
-            'office' => 'Học Sinh',
-            'email' => 'sinhvien@gmail.com',
-        ]);
-        Sinh_Vien::create([
-            'mssv' => 13000003,
-            'fullname' => 'Sinh viên test3',
-            'class' => 'K58CC',
-            'office' => 'Học Sinh',
-            'email' => 'sinhvien@gmail.com',
-        ]);
-        Sinh_Vien::create([
-            'mssv' => 13020553,
-            'fullname' => 'Đăng Danh Phương',
-            'class' => 'K58CC',
-            'office' => 'Học Sinh',
-            'email' => 'yanglong.ph@gmail.com',
-        ]);
+//        Sinh_Vien::create([
+//          'mssv' => 13000000,
+//          'fullname' => 'Sinh viên test',
+//          'class' => 'K58CC',
+//          'office' => 'Học Sinh',
+//          'email' => 'sinhvien@gmail.com',
+//        ]);
+//        Sinh_Vien::create([
+//            'mssv' => 13000001,
+//            'fullname' => 'Sinh viên test1',
+//            'class' => 'K58CC',
+//            'office' => 'Học Sinh',
+//            'email' => 'sinhvien@gmail.com',
+//        ]);
+//        Sinh_Vien::create([
+//            'mssv' => 13000002,
+//            'fullname' => 'Sinh viên test2',
+//            'class' => 'K58CC',
+//            'office' => 'Học Sinh',
+//            'email' => 'sinhvien@gmail.com',
+//        ]);
+//        Sinh_Vien::create([
+//            'mssv' => 13000003,
+//            'fullname' => 'Sinh viên test3',
+//            'class' => 'K58CC',
+//            'office' => 'Học Sinh',
+//            'email' => 'sinhvien@gmail.com',
+//        ]);
+//        Sinh_Vien::create([
+//            'mssv' => 13020553,
+//            'fullname' => 'Đăng Danh Phương',
+//            'class' => 'K58CC',
+//            'office' => 'Học Sinh',
+//            'email' => 'yanglong.ph@gmail.com',
+//        ]);
     }
 }

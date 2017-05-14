@@ -20,7 +20,9 @@ class HocKyTableSeeder extends Seeder
         Hoc_Ky::create([
             'id_hoc_ky'=>2020162017,
             'note'=> "học kỳ II 2016 2017",
-            'term_present'=>1
+            'term_present'=>1,
+            'is_caculator'=>0,
+            'is_reset'=>0
         ]);
 //        Hoc_Ky::create([
 //            'id_hoc_ky'=>1120162017,
