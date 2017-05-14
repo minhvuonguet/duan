@@ -131,6 +131,9 @@
                     <li class="nav-parent">
                         <a href="{{URL::to('doanVien.khen_thuong')}}"><i class="icon-screen-desktop"></i><span>Khen thuong doan vien </span> </a>
                     </li>
+                    <li class="nav-parent">
+                        <a href="{{URL::to('dangvien')}}"><i class="icon-screen-desktop"></i><span>Xem Dang Vien </span> </a>
+                    </li>
 
                 @endif
 
@@ -142,6 +145,9 @@
                     <li class="nav-parent">
                         <a href="{{URL::to('vanPhongKhoa.xem_diem')}}"><i class="icon-screen-desktop"></i><span>Xem Diem </span> </a>
                     </li>
+                    <li class="nav-parent">
+                        <a href="{{URL::to('vanPhongKhoa.vi_pham')}}"><i class="icon-screen-desktop"></i><span>Xem Danh Sach VP  </span> </a>
+                    </li>
 
 
                 @endif
@@ -151,7 +157,7 @@
                 @if(Auth::user()->id_role == 4)
 
                     <li class="nav-parent">
-                        <a href="{{URL::to('newclass')}}"><i class="icon-screen-desktop"></i><span>Thêm danh sách vi phạm sinh hoạt lớp </span> </a>
+                        <a href="{{URL::to('newclass')}}"><i class="icon-screen-desktop"></i><span>Thêm DS vi phạm sinh hoạt lớp </span> </a>
                     </li>
                     <li class="nav-parent">
                         <a href="{{URL::to('coVanHocTap.listclass')}}"><i class="icon-screen-desktop"></i><span>xem danh sách  </span> </a>

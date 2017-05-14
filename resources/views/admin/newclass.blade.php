@@ -15,6 +15,7 @@
                 <option value="list_ad_class"> Danh sách cán bộ lớp</option>
                 <option value="list_ad_vi_pham_ytcn"> Danh Sách Sinh viên vi phạm ý thức công dân </option>
                 <option value="list_ad_class_khen_thuong"> Khen Thưởng </option>
+            <option value="list_ad_class_nop_cham_hoc_phi"> Danh sách Nộp Chậm Học Phí </option>
             @endif
 
             @if(Auth::user()->username == 'vanphongdoan'))

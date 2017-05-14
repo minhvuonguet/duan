@@ -22,7 +22,7 @@
             <th class="col-md-1"> MSSV </th>
             <th class="col-md-3"> Họ Têm</th>
             <th class="col-md-1"> Lớp </th>
-            <th class="col-md-1">  Vi Phạm  </th>
+            <th class="col-md-1"> Lan  Vi Phạm  </th>
 
 
         </tr>

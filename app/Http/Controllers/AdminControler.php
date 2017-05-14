@@ -588,12 +588,12 @@ class AdminControler extends Controller {
 
                     $p_Doan = new P_Doan();
                     $form_diem = Form_Diem::all();
-                    $tru_diem = $form_diem[0]->tru_khong_tham_gia;
+                    $cong_diem = $form_diem[0]->cong_tham_gia_truong;
 
                     $p_Doan::updateOrCreate(
                         [ 'mssv'=> $value->mssv, ],
                         [
-                            'point_doan'=> $tru_diem,
+                            'point_doan'=> $cong_diem,
                             //     'mssv'=> $value->mssv,
                             'tham_gia' => $value-> tham_gia,
 
@@ -612,7 +612,7 @@ class AdminControler extends Controller {
                             $Point::updateOrCreate(
                                 [ 'mssv'=> $value->mssv, ],
                                 [
-                                    'tham_gia'=> $tru_diem,
+                                    'point_doan'=> $cong_diem,
                                 ]
                             );
                         } else { // nếu méo có, đm
@@ -620,8 +620,13 @@ class AdminControler extends Controller {
                             $Point = new Points();
                             $Point->mssv = $value->mssv;
                             $Point->id_hoc_ky = $term[0]->id_hoc_ky;
-                            $Point->tham_gia = $tru_diem;
+
+
                             $Point->point_total = 70;
+
+                            $Point->point_doan = $cong_diem;
+
+
                             $Point->save();
                         }
                     }
@@ -665,7 +670,9 @@ class AdminControler extends Controller {
                             $Point = new Points();
                             $Point::updateOrCreate(
                                 [ 'mssv'=> $value->mssv, ],
+
                                 [
+                                    'point_doan'=> $cong_diem,
                                     'khen_thuong_doan'=> $cong_diem,
                                 ]
                             );
@@ -674,8 +681,12 @@ class AdminControler extends Controller {
                             $Point = new Points();
                             $Point->mssv = $value->mssv;
                             $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+
                             $Point->khen_thuong_doan = $cong_diem;
                             $Point->point_total = 70;
+
+                            $Point->point_doan = $cong_diem;
+
                             $Point->save();
                         }
                     }
@@ -683,6 +694,170 @@ class AdminControler extends Controller {
                 }
             });
         }
+
+
+        // dang vien
+        else if($request->type_file == 'list_ad_dang_vien') {
+
+            Excel::load($request->fileExcels, function($reader){
+                $results = $reader->all();
+                foreach ($results as $key=>$value) {
+                    //  $tmp = Sinh_Vien::find($value->mssv);
+                    //  if($tmp ) {
+
+                    $p_Doan = new P_Doan();
+                    $form_diem = Form_Diem::all();
+                    $cong_diem = $form_diem[0]->cong_ket_nap_dang;
+
+                    $p_Doan::updateOrCreate(
+                        [ 'mssv'=> $value->mssv, ],
+                        [
+                            'point_doan'=> $cong_diem,
+                            //     'mssv'=> $value->mssv,
+                            'dang_vien' => $value-> dang_vien,
+
+
+
+                        ]
+                    );
+
+                    $id = $value->mssv;
+                    $newPoint = Points::where('mssv','=',  $id)->get();
+                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+
+                            $Point = new Points();
+                            $Point::updateOrCreate(
+                                [ 'mssv'=> $value->mssv, ],
+
+                                [
+                                    'point_doan'=> $cong_diem,
+                                    'dang_vien'=> $cong_diem,
+                                ]
+                            );
+                        } else { // nếu méo có, đm
+
+                            $Point = new Points();
+                            $Point->mssv = $value->mssv;
+                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                            $Point->point_doan = $cong_diem;
+
+                            $Point->save();
+                        }
+                    }
+
+                }
+            });
+        }
+
+        // sv vi pham sh doan
+
+        else if($request->type_file == 'list_ad_vi_pham_doan') {
+
+            Excel::load($request->fileExcels, function($reader){
+                $results = $reader->all();
+                foreach ($results as $key=>$value) {
+                    //  $tmp = Sinh_Vien::find($value->mssv);
+                    //  if($tmp ) {
+
+                    $p_doan = new P_Doan();
+                    $form_diem = Form_Diem::all();
+                    $tru_diem = $form_diem[0]->tru_khong_tham_gia;
+
+                    $p_doan::updateOrCreate(
+                        [ 'mssv'=> $value->mssv, ],
+                        [
+                            'point_doan'=> $tru_diem,
+                            //     'mssv'=> $value->mssv,
+                            'vi_pham_doan' => $value-> vi_pham_doan,
+
+
+
+                        ]
+                    );
+
+                    $id = $value->mssv;
+                    $newPoint = Points::where('mssv','=',  $id)->get();
+                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+
+                            $Point = new Points();
+                            $Point::updateOrCreate(
+                                [ 'mssv'=> $value->mssv, ],
+                                [
+                                    'point_doan'=> $tru_diem,
+                                ]
+                            );
+                        } else { // nếu méo có, đm
+
+                            $Point = new Points();
+                            $Point->mssv = $value->mssv;
+                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                            $Point->point_doan = $tru_diem;
+
+                            $Point->save();
+                        }
+                    }
+
+                }
+            });
+        }
+
+        // co van hoc tap update sinh vien  vi pham sh cua  lop
+        else if($request->type_file == 'danh_sach_sh_lop') {
+
+            Excel::load($request->fileExcels, function($reader){
+                $results = $reader->all();
+                foreach ($results as $key=>$value) {
+                    //  $tmp = Sinh_Vien::find($value->mssv);
+                    //  if($tmp ) {
+
+                    $p_co_van = new Co_Van_Hoc_Tap();
+                    $form_diem = Form_Diem::all();
+                    $tru_diem = $form_diem[0]->tru_khong_tham_gia;
+
+                    $p_co_van::updateOrCreate(
+                        [ 'mssv'=> $value->mssv, ],
+                        [
+                            'point_co_van_hoc_tap'=> $tru_diem,
+                            //     'mssv'=> $value->mssv,
+                            'note' => $value-> vi_pham_shl,
+
+
+
+                        ]
+                    );
+
+                    $id = $value->mssv;
+                    $newPoint = Points::where('mssv','=',  $id)->get();
+                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+
+                            $Point = new Points();
+                            $Point::updateOrCreate(
+                                [ 'mssv'=> $value->mssv, ],
+                                [
+                                    'point_co_van_hoc_tap'=> $tru_diem,
+                                ]
+                            );
+                        } else { // nếu méo có, đm
+
+                            $Point = new Points();
+                            $Point->mssv = $value->mssv;
+                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                            $Point->point_co_van_hoc_tap = $tru_diem;
+
+                            $Point->save();
+                        }
+                    }
+
+                }
+            });
+        }
+
 
         // vi pham quy che thi
 
@@ -701,7 +876,7 @@ class AdminControler extends Controller {
                         $p_dao_tao::updateOrCreate(
                             [ 'mssv'=> $value->mssv, ],
                             [
-                                'point_cong_tac_sv'=> $tru_diem,
+                                'point_dao_tao'=> $tru_diem,
                            //     'mssv'=> $value->mssv,
                                 'mon_vi_pham' => $value-> mon_vi_pham,
                                 'ngay_vp' => $value-> ngay_vp,
@@ -730,6 +905,59 @@ class AdminControler extends Controller {
                             $Point->id_hoc_ky = $term[0]->id_hoc_ky;
                             $Point->point_cong_tac_sv = $tru_diem;
                             $Point->point_total = 70;
+                            $Point->save();
+                        }
+                    }
+
+                }
+            });
+        }
+
+        // danh sach sinh vien nop hoc phi cham
+
+        else if($request->type_file == 'list_ad_class_nop_cham_hoc_phi') {
+
+            Excel::load($request->fileExcels, function($reader){
+                $results = $reader->all();
+                foreach ($results as $key=>$value) {
+                    //  $tmp = Sinh_Vien::find($value->mssv);
+                    //  if($tmp ) {
+
+                    $p_cong_tac_sinh_vien = new P_Cong_Tac_SV();
+                    $form_diem = Form_Diem::all();
+                    $tru_diem = $form_diem[0]->tru_nop_hoc_phi;
+
+                    $p_cong_tac_sinh_vien::updateOrCreate(
+                        [ 'mssv'=> $value->mssv, ],
+                        [
+                            'point_cong_tac_sv'=> $tru_diem,
+                            //     'mssv'=> $value->mssv,
+                            'note' => $value-> nop_cham,
+
+
+                        ]
+                    );
+
+                    $id = $value->mssv;
+                    $newPoint = Points::where('mssv','=',  $id)->get();
+                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+
+                            $Point = new Points();
+                            $Point::updateOrCreate(
+                                [ 'mssv'=> $value->mssv, ],
+                                [
+                                    'point_cong_tac_sv'=> $tru_diem,
+                                ]
+                            );
+                        } else { // nếu méo có, đm
+
+                            $Point = new Points();
+                            $Point->mssv = $value->mssv;
+                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                            $Point->point_cong_tac_sv = $tru_diem;
+
                             $Point->save();
                         }
                     }
@@ -787,6 +1015,7 @@ class AdminControler extends Controller {
             });
         }
 
+        // danh sach can bo lop
         else if($request->type_file == 'danh_sach_sh_lop') {
 
             Excel::load($request->fileExcels, function($reader){
