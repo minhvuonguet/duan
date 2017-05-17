@@ -92,6 +92,7 @@ Route::group(['middleware' => ['web']], function () {
 
         // sinh vien
         Route::get('sv_detail/{id}',['as' => 'sv_detail', 'uses' => 'StudentsControler@sv_detail']);
+        Route::post('delete_student/{id}',['as' => 'delete_student', 'uses' => 'StudentsControler@delete_student']);
     });
 
 });
