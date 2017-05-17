@@ -13,7 +13,7 @@
             <option> Tất cả </option>
             @foreach($list_class as $list)
                 <option>{{$list}}</option>
-                {{--*/ $stt++ /*--}}
+                */ $stt++ /*
             @endforeach
         </select>
         <table class="table table-bordered table-sinhvien">
@@ -42,6 +42,7 @@
             @foreach($list_sinh_vien as $sinh_vien)
                 @if($sinh_vien->mssv != 1 &&
                     $sinh_vien->mssv != 2 &&
+                    $sinh_vien->mssv != 0 &&
                     $sinh_vien->mssv != 3 &&
                     $sinh_vien->mssv != 4 &&
                     $sinh_vien->mssv != 5 &&

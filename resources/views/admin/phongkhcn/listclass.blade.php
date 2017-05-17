@@ -8,14 +8,14 @@
             <input type="hidden" name="_token" value="{{ csrf_token() }}" />
             <span class="tong_sinh_vien "> Tổng số sinh viên trong danh sách này: {{count($list_sinh_vien)}} </span>
         </div>
-        <select>
+        {{--<select>--}}
             {{--*/  $stt = 1 /*--}}
-            <option> Tất cả </option>
-            @foreach($list_class as $list)
-                <option>{{$list}}</option>
+            {{--<option> Tất cả </option>--}}
+            {{--@foreach($list_class as $list)--}}
+                {{--<option>{{$list}}</option>--}}
                 {{--*/ $stt++ /*--}}
-            @endforeach
-        </select>
+            {{--@endforeach--}}
+        {{--</select>--}}
         <table class="table table-bordered table-sinhvien">
             <tr>
                 <th class="col-md-1"> STT </th>
@@ -31,18 +31,23 @@
             {{--*/  $dem = 1 /*--}}
             @foreach($list_sinh_vien as $sinh_vien)
 
-                <tr >
-                    <td>{{$dem}}</td>
-                    <td>{{$sinh_vien->mssv}}</td>
-                    <td >{{$sinh_vien->fullname}} </td>
-                    <td >{{$sinh_vien->class}} </td>
-                    <td >{{$sinh_vien->note}} </td>
-                    <td >{{$sinh_vien->giai_thuong}} </td>
+                @if($sinh_vien->note !='')
+                    <tr >
+                        <td>{{$dem}}</td>
+                        <td>{{$sinh_vien->mssv}}</td>
+                        <td >{{$sinh_vien->fullname}} </td>
+                        <td >{{$sinh_vien->class}} </td>
+                        <td >{{$sinh_vien->note}} </td>
+                        <td >{{$sinh_vien->giai_thuong}} </td>
 
 
 
 
-                </tr>
+                    </tr>
+
+                @endif
+
+
                 {{--*/ $dem++ /*--}}
 
             @endforeach

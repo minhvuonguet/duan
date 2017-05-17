@@ -283,24 +283,45 @@ class AdminControler extends Controller {
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
 
-
                 $Point = new Points();
                 $form_diem = Form_Diem::all();
                 $hocky = Hoc_Ky::where('term_present','=',  '1')->get();
                 $point_base = $form_diem[0]->tong_hoc_tap + $form_diem[0]->tong_chap_hanh + $form_diem[0]->tong_pham_chat;
+
+
                 foreach ($results as $key=>$value) {
 
-                    if( isset($value->mssv)){
-                        if($value != null && $value->id != null) {
-                            $sinh_vien_new = new Sinh_Vien();
-                            $sinh_vien_new->mssv = $value->mssv;
-                            $sinh_vien_new->fullname = $value->name;
 
-                            $sinh_vien_new->office = 'Sinh Viên';
-                            $sinh_vien_new->birthday = $value->birthday;
-                            $sinh_vien_new->class = $value->class;
-                            $sinh_vien_new->save();
+                    $tmp = Sinh_Vien::find($value->mssv);
+
+                    if ($tmp){
+
+                        $Point::updateOrCreate(
+                            [
+                                'mssv'=>$value->mssv
+                            ],
+                            [
+                                'id_hoc_ky' => $hocky[0]->id_hoc_ky,
+                                'point_total' => $point_base
+                            ]
+                        );
+
+                        $sinhvien = new Sinh_Vien();
+                        $sinhvien::updateOrCreate(  [ 'mssv'=> $value->mssv, ], [ 'fullname'=> $value->name, ] );
+                        $sinhvien::updateOrCreate(  [ 'mssv'=> $value->mssv, ], [ 'birthday'=> $value->birthday, ] );
+                        $sinhvien::updateOrCreate(  [ 'mssv'=> $value->mssv, ], [ 'class'=> $value->class, ] );
+                    }else{
+
+                        $sinh_vien_new = new Sinh_Vien();
+                        $sinh_vien_new->mssv = $value->mssv;
+                        $sinh_vien_new->fullname = $value->name;
+
+                        $sinh_vien_new->office = 'Sinh Viên';
+                        $sinh_vien_new->birthday = $value->birthday;
+                        $sinh_vien_new->class = $value->class;
                         $sinh_vien_new->save();
+                        $sinh_vien_new->save();
+
 
 
                         $Point::updateOrCreate(
@@ -314,23 +335,30 @@ class AdminControler extends Controller {
                         );
 
                         // Tạo luôn tài khoản sinh viên mới
-                            $newUser = new User();
-                            $newUser->username = $value->mssv;
-                            $newUser->mssv = $value->mssv;
-                            $newUser->password = \Hash::make($value->mssv);
-                            $newUser->id_role = 3;
-                            $newUser->email = $this->stripUnicode($value->name) . '@vnu.edu.vn';
+                        $newUser = new User();
+                        $newUser->username = $value->mssv;
+                        $newUser->mssv = $value->mssv;
+                        $newUser->password = \Hash::make($value->mssv);
+                        $newUser->id_role = 3;
+                        $newUser->email = $this->stripUnicode($value->name) . '@vnu.edu.vn';
 
-                            $newUser->save();
-                        }
-                    }
-                    else {
-                        break;
+                        $newUser->save();
+
                     }
 
+//
                 }
+
+
+
+
+
             });
         }
+
+
+
+
         else if($request->type_file == 'list_ad_class') {
 
             Excel::load($request->fileExcels, function($reader){
@@ -401,7 +429,8 @@ class AdminControler extends Controller {
                         [
                             'point_khoa_hoc_cn'=> $diem_cong,
 
-                            'note' => $value-> note || '',
+                            'note' => $value-> note,
+                            'giai_thuong' => $value-> giai_thuong,
 
                         ]
                     );
@@ -465,6 +494,7 @@ class AdminControler extends Controller {
 
 
 
+//
 
 
         // bang diem
@@ -474,8 +504,8 @@ class AdminControler extends Controller {
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
                 foreach ($results as $key=>$value) {
-//                    $tmp = Sinh_Vien::find($value->mssv);
-//                    if($tmp ) {
+                    $tmp = Sinh_Vien::find($value->mssv);
+                    if($tmp ) {
 
                         $p_dao_tao = new P_Dao_Tao();
                         $form_diem = Form_Diem::all();
@@ -518,7 +548,7 @@ class AdminControler extends Controller {
                             }
                         }
                     }
-    //            }
+                }
             });
         }
 
@@ -529,8 +559,8 @@ class AdminControler extends Controller {
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
                 foreach ($results as $key=>$value) {
-//                    $tmp = Sinh_Vien::find($value->mssv);
-//                    if($tmp ) {
+                    $tmp = Sinh_Vien::find($value->mssv);
+                    if($tmp ) {
 
                     $p_dao_tao = new P_Dao_Tao();
                     $form_diem = Form_Diem::all();
@@ -571,7 +601,7 @@ class AdminControler extends Controller {
                         }
                     }
 
-                }
+                }}
 
             });
         }
@@ -583,8 +613,8 @@ class AdminControler extends Controller {
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
                 foreach ($results as $key=>$value) {
-                    //  $tmp = Sinh_Vien::find($value->mssv);
-                    //  if($tmp ) {
+                      $tmp = Sinh_Vien::find($value->mssv);
+                      if($tmp ) {
 
                     $p_Doan = new P_Doan();
                     $form_diem = Form_Diem::all();
@@ -631,7 +661,7 @@ class AdminControler extends Controller {
                         }
                     }
 
-                }
+                }}
             });
         }
 
@@ -642,8 +672,8 @@ class AdminControler extends Controller {
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
                 foreach ($results as $key=>$value) {
-                    //  $tmp = Sinh_Vien::find($value->mssv);
-                    //  if($tmp ) {
+                      $tmp = Sinh_Vien::find($value->mssv);
+                      if($tmp ) {
 
                     $p_Doan = new P_Doan();
                     $form_diem = Form_Diem::all();
@@ -691,7 +721,7 @@ class AdminControler extends Controller {
                         }
                     }
 
-                }
+                }}
             });
         }
 
@@ -702,8 +732,8 @@ class AdminControler extends Controller {
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
                 foreach ($results as $key=>$value) {
-                    //  $tmp = Sinh_Vien::find($value->mssv);
-                    //  if($tmp ) {
+                      $tmp = Sinh_Vien::find($value->mssv);
+                      if($tmp ) {
 
                     $p_Doan = new P_Doan();
                     $form_diem = Form_Diem::all();
@@ -747,7 +777,7 @@ class AdminControler extends Controller {
                         }
                     }
 
-                }
+                }}
             });
         }
 
@@ -758,8 +788,8 @@ class AdminControler extends Controller {
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
                 foreach ($results as $key=>$value) {
-                    //  $tmp = Sinh_Vien::find($value->mssv);
-                    //  if($tmp ) {
+                      $tmp = Sinh_Vien::find($value->mssv);
+                      if($tmp ) {
 
                     $p_doan = new P_Doan();
                     $form_diem = Form_Diem::all();
@@ -801,7 +831,7 @@ class AdminControler extends Controller {
                         }
                     }
 
-                }
+                }}
             });
         }
 
@@ -811,48 +841,48 @@ class AdminControler extends Controller {
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
                 foreach ($results as $key=>$value) {
-                    //  $tmp = Sinh_Vien::find($value->mssv);
-                    //  if($tmp ) {
+                      $tmp = Sinh_Vien::find($value->mssv);
+                      if($tmp ) {
 
-                    $p_co_van = new Co_Van_Hoc_Tap();
-                    $form_diem = Form_Diem::all();
-                    $tru_diem = $form_diem[0]->tru_khong_tham_gia;
+                          $p_co_van = new Co_Van_Hoc_Tap();
+                          $form_diem = Form_Diem::all();
+                          $tru_diem = $form_diem[0]->tru_khong_tham_gia;
 
-                    $p_co_van::updateOrCreate(
-                        [ 'mssv'=> $value->mssv, ],
-                        [
-                            'point_co_van_hoc_tap'=> $tru_diem,
-                            //     'mssv'=> $value->mssv,
-                            'note' => $value-> vi_pham_shl,
+                          $p_co_van::updateOrCreate(
+                              ['mssv' => $value->mssv,],
+                              [
+                                  'point_co_van_hoc_tap' => $tru_diem,
+                                  //     'mssv'=> $value->mssv,
+                                  'note' => $value->vi_pham_shl,
 
 
+                              ]
+                          );
 
-                        ]
-                    );
+                          $id = $value->mssv;
+                          $newPoint = Points::where('mssv', '=', $id)->get();
+                          if ($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                              $term = Hoc_Ky::where('term_present', '=', '1')->get();
+                              if ($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
 
-                    $id = $value->mssv;
-                    $newPoint = Points::where('mssv','=',  $id)->get();
-                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
-                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
-                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+                                  $Point = new Points();
+                                  $Point::updateOrCreate(
+                                      ['mssv' => $value->mssv,],
+                                      [
+                                          'point_co_van_hoc_tap' => $tru_diem,
+                                      ]
+                                  );
+                              } else { // nếu méo có, đm
 
-                            $Point = new Points();
-                            $Point::updateOrCreate(
-                                [ 'mssv'=> $value->mssv, ],
-                                [
-                                    'point_co_van_hoc_tap'=> $tru_diem,
-                                ]
-                            );
-                        } else { // nếu méo có, đm
+                                  $Point = new Points();
+                                  $Point->mssv = $value->mssv;
+                                  $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                                  $Point->point_co_van_hoc_tap = $tru_diem;
 
-                            $Point = new Points();
-                            $Point->mssv = $value->mssv;
-                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
-                            $Point->point_co_van_hoc_tap = $tru_diem;
-
-                            $Point->save();
-                        }
-                    }
+                                  $Point->save();
+                              }
+                          }
+                      }
 
                 }
             });
@@ -866,8 +896,8 @@ class AdminControler extends Controller {
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
                 foreach ($results as $key=>$value) {
-                  //  $tmp = Sinh_Vien::find($value->mssv);
-                  //  if($tmp ) {
+                    $tmp = Sinh_Vien::find($value->mssv);
+                    if($tmp ) {
 
                         $p_dao_tao = new P_Dao_Tao();
                         $form_diem = Form_Diem::all();
@@ -909,7 +939,7 @@ class AdminControler extends Controller {
                         }
                     }
 
-                }
+                }}
             });
         }
 
@@ -920,8 +950,8 @@ class AdminControler extends Controller {
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
                 foreach ($results as $key=>$value) {
-                    //  $tmp = Sinh_Vien::find($value->mssv);
-                    //  if($tmp ) {
+                      $tmp = Sinh_Vien::find($value->mssv);
+                      if($tmp ) {
 
                     $p_cong_tac_sinh_vien = new P_Cong_Tac_SV();
                     $form_diem = Form_Diem::all();
@@ -962,7 +992,7 @@ class AdminControler extends Controller {
                         }
                     }
 
-                }
+                }}
             });
         }
 
@@ -1069,6 +1099,7 @@ class AdminControler extends Controller {
                 }
             });
         }
+
 
 
         return Redirect()->route('listclass');
@@ -1264,6 +1295,8 @@ class AdminControler extends Controller {
         }
 
     }
+
+
     public  function newterm () {
         $term = Hoc_Ky::all();
 

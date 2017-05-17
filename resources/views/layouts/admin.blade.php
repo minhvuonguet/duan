@@ -98,6 +98,9 @@
                     <li class="nav-parent">
                         <a href="{{URL::to('phongDaoTao.vi_pham_quyche')}}"><i class="icon-screen-desktop"></i><span>Xem DS Vi Pham QC thi </span> </a>
                     </li>
+                    <li class="nav-parent">
+                        <a href="{{URL::to('phongDaoTao.canh_bao_hv')}}"><i class="icon-screen-desktop"></i><span>Cảnh Báo Học Vụ </span> </a>
+                    </li>
 
                 @endif
 
@@ -126,7 +129,7 @@
                         <a href="{{URL::to('newclass')}}"><i class="icon-screen-desktop"></i><span>import sv khen thưởng </span> </a>
                     </li>
                     <li class="nav-parent">
-                        <a href="{{URL::to('doanvien')}}"><i class="icon-screen-desktop"></i><span>khen thưởng </span> </a>
+                        <a href="{{URL::to('doanVien.vi_pham')}}"><i class="icon-screen-desktop"></i><span> DS Vi Pham Doan </span> </a>
                     </li>
                     <li class="nav-parent">
                         <a href="{{URL::to('doanVien.khen_thuong')}}"><i class="icon-screen-desktop"></i><span>Khen thuong doan vien </span> </a>

@@ -28,66 +28,72 @@
         </tr>
         {{--*/  $dem = 1 /*--}}
         @foreach($list_sinh_vien as $sinh_vien)
-
-            <tr >
-                <td>{{$dem}}</td>
-                <td>{{$sinh_vien->mssv}}</td>
-                <td >{{$sinh_vien->fullname}} </td>
-                <td >{{$sinh_vien->class}} </td>
-                <td >{{$sinh_vien->vi_pham_doan}} </td>
+            @if($sinh_vien->vi_pham_doan == 'khong tham gia')
 
 
+                <tr >
+                    <td>{{$dem}}</td>
+                    <td>{{$sinh_vien->mssv}}</td>
+                    <td >{{$sinh_vien->fullname}} </td>
+                    <td >{{$sinh_vien->class}} </td>
+                    <td >{{$sinh_vien->vi_pham_doan}} </td>
 
 
-            </tr>
-            {{--*/ $dem++ /*--}}
 
-        @endforeach
-    </table>
+
+                </tr>
+
+            @endif
+
+
+           {{--*/ $dem++ /*--}}
+
+       @endforeach
+   </table>
 
 @stop
 @section('script_')
-    @parent
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('select').on('change', function(){
-                var classname = this.value.trim();
-                if(classname == 'Tất cả') {
-                    classname = 'tatca';
-                }
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: 'listofclass/'+classname,
-                    type: 'post',
-                    dataType: 'json',
-                    success: function(data){
+   @parent
+   <script type="text/javascript">
+       $(document).ready(function() {
+           $('select').on('change', function(){
+               var classname = this.value.trim();
+               if(classname == 'Tất cả') {
+                   classname = 'tatca';
+               }
+               $.ajax({
+                   headers: {
+                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                   },
+                   url: 'listofclass/'+classname,
+                   type: 'post',
+                   dataType: 'json',
+                   success: function(data){
 
-                        $('.table-sinhvien tr:gt(0)').remove();
-                        var table = $('.table-sinhvien');
-                        var length = 0;
-                        $.map(data.list_sinh_vien, function (value, index) {
-                            length++;
-                            table.append(
-                                    '<tr>' +
-                                    '<td>' + index  + '</td>' +
-                                    '<td>' + value.mssv + '</td>' +
-                                    '<td>' + value.fullname + '</td>' +
-                                    '<td>' + value.class + '</td>' +
-                                    '<td>' + value.vi_pham_doan + '</td>' +
+                       $('.table-sinhvien tr:gt(0)').remove();
+                       var table = $('.table-sinhvien');
+                       var length = 0;
+                       $.map(data.list_sinh_vien, function (value, index) {
+                           length++;
+                           table.append(
+                                   '<tr>' +
+                                   '<td>' + index  + '</td>' +
+                                   '<td>' + value.mssv + '</td>' +
+                                   '<td>' + value.fullname + '</td>' +
+                                   '<td>' + value.class + '</td>' +
+                                   '<td>' + value.vi_pham_doan + '</td>' +
 
 
-                                    '</tr>' );
-                        });
-                        $('.tong_sinh_vien').text('Tổng số sinh viên trong danh sách này:' +length);
+                                   '</tr>' );
+                       });
+                       $('.tong_sinh_vien').text('Tổng số sinh viên trong danh sách này:' +length);
 //                        for(i = 0; i < data.list_sinh_vien.length; i++ ){
 ////
 //                            console.log(data.list_sinh_vien[i]);
 //                        }
-                    }
-                });
-            });
-        });
-    </script>
+                   }
+               });
+           });
+       });
+   </script>
 @stop

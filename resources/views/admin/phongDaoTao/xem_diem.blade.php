@@ -31,18 +31,23 @@
         {{--*/  $dem = 1 /*--}}
         @foreach($list_sinh_vien as $sinh_vien)
 
-            <tr >
-                <td>{{$dem}}</td>
-                <td>{{$sinh_vien->mssv}}</td>
-                <td >{{$sinh_vien->fullname}} </td>
-                <td >{{$sinh_vien->class}} </td>
-                <td >{{$sinh_vien->birthday}} </td>
+            @if($sinh_vien->trung_binh != '')
 
-                <td> {{$sinh_vien->trung_binh}} </td>
-                <td> {{$sinh_vien->tich_luy}} </td>
-                <td> {{$sinh_vien->xep_loai}} </td>
+                <tr >
+                    <td>{{$dem}}</td>
+                    <td>{{$sinh_vien->mssv}}</td>
+                    <td >{{$sinh_vien->fullname}} </td>
+                    <td >{{$sinh_vien->class}} </td>
+                    <td >{{$sinh_vien->birthday}} </td>
 
-            </tr>
+                    <td> {{$sinh_vien->trung_binh}} </td>
+                    <td> {{$sinh_vien->tich_luy}} </td>
+                    <td> {{$sinh_vien->xep_loai}} </td>
+
+                </tr>
+            @endif
+
+
             {{--*/ $dem++ /*--}}
 
         @endforeach

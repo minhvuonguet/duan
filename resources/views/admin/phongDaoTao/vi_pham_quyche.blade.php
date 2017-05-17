@@ -31,8 +31,7 @@
         </tr>
         {{--*/  $dem = 1 /*--}}
         @foreach($list_sinh_vien as $sinh_vien)
-
-            <tr >
+            @if($sinh_vien->mon_vi_pham != '')
                 <td>{{$dem}}</td>
                 <td>{{$sinh_vien->mssv}}</td>
                 <td >{{$sinh_vien->fullname}} </td>
@@ -44,7 +43,14 @@
 
 
 
-            </tr>
+                </tr>
+
+
+            @endif
+                <tr >
+
+
+
             {{--*/ $dem++ /*--}}
 
         @endforeach

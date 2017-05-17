@@ -56,13 +56,16 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('dangvien', ['as'=>'dangvien', 'uses'=>'VPDoanController@dangvien']);
 
-        Route::get('doanvien', ['as'=>'doanvien', 'uses'=>'VPDoanController@demo']);
+        Route::get('doanvien', ['as'=>'doanvien', 'uses'=>'VPDoanController@khen_thuong']);
 
         Route::get('doanVien.khen_thuong', ['as'=>'doanVien.khen_thuong', 'uses'=>'VPDoanController@khen_thuong']);
+        Route::get('doanVien.vi_pham', ['as'=>'doanVien.vi_pham', 'uses'=>'VPDoanController@vi_pham']);
 
         Route::get('coVanHocTap.listclass', ['as' => 'coVanHocTap.listclass', 'uses' => 'covanController@listclass']);
 
         Route::get('phongDaoTao.vi_pham_quyche', ['as' => 'phongDaoTao.vi_pham_quyche', 'uses' => 'DaoTaoController@vi_pham_quyche']);
+
+        Route::get('phongDaoTao.canh_bao_hv', ['as' => 'phongDaoTao.canh_bao_hv', 'uses' => 'DaoTaoController@canh_bao_hv']);
 
         Route::get('phongkhcn.listclass', ['as' => 'phongkhcn.listclass', 'uses' => 'PhongkhcnController@listclass']);
 
@@ -85,6 +88,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('tinhdiem', ['as' => 'tinhdiem', 'uses' => 'CacularPoint@tinhdiem']);
         Route::get('listdiem',['as' => 'listdiem', 'uses' => 'CacularPoint@listdiem']);
         Route::get('resetpoint',['as' => 'resetpoint', 'uses' => 'CacularPoint@resetpoint']);
+        Route::get('checkImport', ['as' => 'checkImport', 'uses' => 'CacularPoint@checkImport']);
 
         // sinh vien
         Route::get('sv_detail/{id}',['as' => 'sv_detail', 'uses' => 'StudentsControler@sv_detail']);

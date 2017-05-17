@@ -7,5 +7,6 @@
 
         <a  href="{{URL::to('tinhdiem')}}"> Tính điểm học kỳ này. </a>
         <a  href="{{URL::to('resetpoint')}}"> reset điểm học kỳ này </a>
+        <a  href="{{URL::to('checkImport')}}"> check. </a>
     </div>
 @stop

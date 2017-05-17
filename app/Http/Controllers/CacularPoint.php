@@ -36,6 +36,8 @@ class CacularPoint extends Controller
         $sum = 0;
         if ($current_term[0]->is_caculator ==  $current_term[0]->is_reset ) {
             for ($i = 0; $i < count($currentPoint); $i++) {
+
+
                 $total_point =
 
                     $currentPoint[$i]->point_total +
@@ -96,5 +98,12 @@ class CacularPoint extends Controller
         $current_term[0]->is_reset = $current_term[0]->is_reset + 1;
         $current_term[0]->save();
         return Redirect()->route('listdiem');
+    }
+
+    public function checkImport(){
+
+
+
+
     }
 }

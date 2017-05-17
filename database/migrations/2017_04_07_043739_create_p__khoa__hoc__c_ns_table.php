@@ -21,6 +21,7 @@ class CreatePKhoaHocCNsTable extends Migration
             $table->string('fullname');
             $table->string('class');
           $table->string('note');
+            $table->string('giai_thuong');
      //     $table->primary('id_khoa_hoc_cn');
 //          $table->foreign('mssv')
 //          ->references('mssv')

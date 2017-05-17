@@ -40,13 +40,13 @@ class VPDoanController extends Controller  {
     // demo new
     public function demo() {
         $sinhvien = P_Doan::all();
-        $diem = Points::all();
+        $dang_vien = Points::all();
         $listClass = [];
         for($i = 0; $i < count($sinhvien); $i++){
             $sinhvien[$i]->point = 0;
-            for($j = 0; $j < count($diem)-1 ; $j++) {
-                if($diem[$j]->mssv == $sinhvien[$i]->mssv){
-                    $sinhvien[$i]->point = $diem[$j]->point_total;
+            for($j = 0; $j < count($dang_vien)-1 ; $j++) {
+                if($dang_vien[$j]->mssv == $sinhvien[$i]->mssv){
+                    $sinhvien[$i]->point = $dang_vien[$j]->xeploai;
                 }
             }
             $listClass[$i] = $sinhvien[$i]->class;
@@ -55,7 +55,7 @@ class VPDoanController extends Controller  {
 
         return View('admin.doanvien')->with([
             'list_sinh_vien' =>$sinhvien,
-            'list_diem_ren_luyen' =>$diem,
+           // 'list_diem_ren_luyen' =>$diem,
             'list_class' =>$listClass
         ]);
     }
@@ -63,52 +63,50 @@ class VPDoanController extends Controller  {
     //  ds dang vien
 
     public function dangvien() {
+
         $sinhvien = Sinh_Vien::all();
+
         $dang_vien = P_Doan::all();
-        $diem = Points::all();
         $listClass = [];
         for($i = 0; $i < count($sinhvien); $i++){
-            $sinhvien[$i]->point = 0;
-            for($j = 0; $j < count($diem)-1 ; $j++) {
-                if($diem[$j]->mssv == $sinhvien[$i]->mssv){
-                    $sinhvien[$i]->point = $diem[$j]->point_total;
+            for($j = 0; $j < count($dang_vien)-1 ; $j++) {
+                if($dang_vien[$j]->mssv == $sinhvien[$i]->mssv){
+                    $sinhvien[$i]->dang_vien = $dang_vien[$j]->dang_vien;
                 }
+
+
             }
-         //   $listClass[$i] = $sinhvien[$i]->class;
+            $listClass[$i] = $sinhvien[$i]->dang_vien;
         }
-        for($i = 0; $i < count($dang_vien); $i++){
-            $dang_vien[$i]->point = 0;
-            for($j = 0; $j < count($diem)-1 ; $j++) {
-                if($diem[$j]->mssv == $dang_vien[$i]->mssv){
-                    $dang_vien[$i]->point = $diem[$j]->point_total;
-                }
-            }
-            $listClass[$i] = $dang_vien[$i]->class;
-        }
+
+
         $listClass = array_unique($listClass);
+
+
 
         return View('admin.dangvien')->with([
             'list_sinh_vien' =>$sinhvien,
-            'list_sinh_vien' =>$dang_vien,
-            'list_diem_ren_luyen' =>$diem,
+            'list_diem_ren_luyen' =>$dang_vien,
             'list_class' =>$listClass
         ]);
+
+
     }
 
     // hoat dong doan
 
     public function hoat_dong_doan() {
-        $sinhvien = P_Doan::all();
-        $diem = Points::all();
+        $sinhvien = Sinh_Vien::all();
+        $diem = P_Doan::all();
         $listClass = [];
         for($i = 0; $i < count($sinhvien); $i++){
             $sinhvien[$i]->point = 0;
             for($j = 0; $j < count($diem)-1 ; $j++) {
-                if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                if($diem[$j]->mssv != $sinhvien[$i]->mssv){
                     $sinhvien[$i]->point = $diem[$j]->point_total;
                 }
             }
-            $listClass[$i] = $sinhvien[$i]->class;
+        //    $listClass[$i] = $sinhvien[$i]->class;
         }
         $listClass = array_unique($listClass);
 
@@ -119,14 +117,16 @@ class VPDoanController extends Controller  {
         ]);
     }
     public function khen_thuong() {
-        $sinhvien = P_Doan::all();
-        $diem = Points::all();
+        $sinhvien = Sinh_Vien::all();
+        $diem = P_Doan::all();
         $listClass = [];
         for($i = 0; $i < count($sinhvien); $i++){
-            $sinhvien[$i]->point = 0;
+          //  $sinhvien[$i]->point = 0;
+
             for($j = 0; $j < count($diem)-1 ; $j++) {
                 if($diem[$j]->mssv == $sinhvien[$i]->mssv){
-                    $sinhvien[$i]->point = $diem[$j]->point_total;
+                    $sinhvien[$i]->khen_thuong_doan = $diem[$j]->khen_thuong_doan;
+
                 }
             }
             $listClass[$i] = $sinhvien[$i]->class;
@@ -140,23 +140,23 @@ class VPDoanController extends Controller  {
         ]);
     }
     public function vi_pham() {
-        $sinhvien = P_Doan::all();
-        $diem = Points::all();
+        $sinhvien = Sinh_Vien::all();
+        $vi_pham = P_Doan::all();
         $listClass = [];
         for($i = 0; $i < count($sinhvien); $i++){
-            $sinhvien[$i]->point = 0;
-            for($j = 0; $j < count($diem)-1 ; $j++) {
-                if($diem[$j]->mssv == $sinhvien[$i]->mssv){
-                    $sinhvien[$i]->point = $diem[$j]->point_total;
+
+            for($j = 0; $j < count($vi_pham)-1 ; $j++) {
+                if($vi_pham[$j]->mssv == $sinhvien[$i]->mssv){
+                    $sinhvien[$i]->vi_pham_doan = $vi_pham[$j]->vi_pham_doan;
                 }
             }
-            $listClass[$i] = $sinhvien[$i]->class;
+
         }
         $listClass = array_unique($listClass);
 
         return View('admin.doanVien.vi_pham')->with([
             'list_sinh_vien' =>$sinhvien,
-            'list_diem_ren_luyen' =>$diem,
+            'list_diem_ren_luyen' =>$vi_pham,
             'list_class' =>$listClass
         ]);
     }
@@ -165,6 +165,7 @@ class VPDoanController extends Controller  {
     public function newclass(){
         return View('admin.doanVien.newClass');
     }
+
 
 
 

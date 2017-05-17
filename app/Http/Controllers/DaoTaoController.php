@@ -67,14 +67,16 @@ class DaoTaoController extends Controller  {
     // danh sách vi pham
 
     public function vi_pham_quyche() {
-        $sinhvien = P_Dao_Tao::all();
-        $diem = Points::all();
+        $sinhvien = Sinh_Vien::all();
+        $vi_pham_quyche = P_Dao_Tao::all();
         $listClass = [];
         for($i = 0; $i < count($sinhvien); $i++){
             $sinhvien[$i]->point = 0;
-            for($j = 0; $j < count($diem)-1 ; $j++) {
-                if($diem[$j]->mssv == $sinhvien[$i]->mssv){
-                    $sinhvien[$i]->point = $diem[$j]->point_total;
+            for($j = 0; $j < count($vi_pham_quyche)-1 ; $j++) {
+                if($vi_pham_quyche[$j]->mssv == $sinhvien[$i]->mssv){
+                    $sinhvien[$i]->mon_vi_pham = $vi_pham_quyche[$j]->mon_vi_pham;
+                    $sinhvien[$i]->ngay_vp = $vi_pham_quyche[$j]->ngay_vp;
+
                 }
             }
             $listClass[$i] = $sinhvien[$i]->class;
@@ -83,20 +85,24 @@ class DaoTaoController extends Controller  {
 
         return View('admin.phongDaoTao.vi_pham_quyche')->with([
             'list_sinh_vien' =>$sinhvien,
-            'list_diem_ren_luyen' =>$diem,
+            'list_diem_ren_luyen' =>$vi_pham_quyche,
             'list_class' =>$listClass
         ]);
     }
 
     public function xem_diem() {
-        $sinhvien = P_Dao_Tao::all();
-        $diem = Points::all();
+        $sinhvien = Sinh_Vien::all();
+        $diem = P_Dao_Tao::all();
         $listClass = [];
         for($i = 0; $i < count($sinhvien); $i++){
             $sinhvien[$i]->point = 0;
             for($j = 0; $j < count($diem)-1 ; $j++) {
                 if($diem[$j]->mssv == $sinhvien[$i]->mssv){
-                    $sinhvien[$i]->point = $diem[$j]->point_total;
+                    $sinhvien[$i]->trung_binh = $diem[$j]->trung_binh;
+                    $sinhvien[$i]->tich_luy = $diem[$j]->tich_luy;
+                    $sinhvien[$i]->xep_loai = $diem[$j]->xep_loai;
+
+
                 }
             }
             $listClass[$i] = $sinhvien[$i]->class;
@@ -111,13 +117,13 @@ class DaoTaoController extends Controller  {
     }
     public function canh_bao_hv() {
         $sinhvien = Sinh_Vien::all();
-        $diem = Points::all();
+        $canh_bao = P_Dao_Tao::all();
         $listClass = [];
         for($i = 0; $i < count($sinhvien); $i++){
             $sinhvien[$i]->point = 0;
-            for($j = 0; $j < count($diem)-1 ; $j++) {
-                if($diem[$j]->mssv == $sinhvien[$i]->mssv){
-                    $sinhvien[$i]->point = $diem[$j]->point_total;
+            for($j = 0; $j < count($canh_bao)-1 ; $j++) {
+                if($canh_bao[$j]->mssv == $sinhvien[$i]->mssv){
+                    $sinhvien[$i]->canh_bao_hv = $canh_bao[$j]->canh_bao_hv;
                 }
             }
             $listClass[$i] = $sinhvien[$i]->class;
@@ -126,7 +132,7 @@ class DaoTaoController extends Controller  {
 
         return View('admin.phongDaoTao.canh_bao_hv')->with([
             'list_sinh_vien' =>$sinhvien,
-            'list_diem_ren_luyen' =>$diem,
+            'list_diem_ren_luyen' =>$canh_bao,
             'list_class' =>$listClass
         ]);
     }

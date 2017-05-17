@@ -42,14 +42,15 @@ class PhongKHCNController extends Controller  {
 //  danh sach sinh vien
 
     public function listclass() {
-        $sinhvien = P_Khoa_Hoc_CN::all();
-        $diem = Points::all();
+        $sinhvien = Sinh_Vien::all();
+        $nghien_cuu = P_Khoa_Hoc_CN::all();
         $listClass = [];
         for($i = 0; $i < count($sinhvien); $i++){
             $sinhvien[$i]->point = 0;
-            for($j = 0; $j < count($diem)-1 ; $j++) {
-                if($diem[$j]->mssv == $sinhvien[$i]->mssv){
-                    $sinhvien[$i]->point = $diem[$j]->point_total;
+            for($j = 0; $j < count($nghien_cuu)-1 ; $j++) {
+                if($nghien_cuu[$j]->mssv == $sinhvien[$i]->mssv){
+                    $sinhvien[$i]->note = $nghien_cuu[$j]->note;
+                    $sinhvien[$i]->giai_thuong = $nghien_cuu[$j]->giai_thuong;
                 }
             }
             $listClass[$i] = $sinhvien[$i]->class;
@@ -58,7 +59,7 @@ class PhongKHCNController extends Controller  {
 
         return View('admin.phongkhcn.listclass')->with([
             'list_sinh_vien' =>$sinhvien,
-            'list_diem_ren_luyen' =>$diem,
+            'list_diem_ren_luyen' =>$nghien_cuu,
             'list_class' =>$listClass
         ]);
     }
