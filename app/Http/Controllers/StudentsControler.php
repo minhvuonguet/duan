@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 use App\Models\Co_Van_Hoc_Tap;
 use App\Models\P_Dao_Tao;
 use App\Models\Points;
+use App\Models\Sinh_Vien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -79,13 +80,7 @@ class StudentsControler extends Controller {
 
         $data_covan = Co_Van_Hoc_Tap::where('mssv', '=', Auth::user()->mssv)->get();
         $data_daotao = P_Dao_Tao::where('mssv', '=', Auth::user()->mssv)->get();
-//        if(var_dump(empty($data_daotao))){
-//            echo $data_daotao;
-//            $data_daotao = 0;
-//        }
-//        else {
-//            $data_daotao = $data_daotao[0]->point_daotao;
-//        }
+
         $dataTerm = Form_Diem::where('ma_hk','=',  $id_hk)->get();
 
 
@@ -97,4 +92,15 @@ class StudentsControler extends Controller {
             'terms'=>$dataTerm[0]
         ]);
     }
+
+    public function delete_student ($id) {
+
+        if(Auth::user()->username == 'admin1' || Auth::user()->username == 'phongctsv' ){
+            $id_students = Sinh_Vien::find($id);
+            $id_students->delete();
+
+            return $id;
+        }
+    }
+
 }
