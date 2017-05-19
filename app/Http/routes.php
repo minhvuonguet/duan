@@ -11,11 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('Employee.indexStudents');
+Route::get('/', ['as' => 'home', 'uses' => 'HomeController@gotoHome']);
 
-});
-
+Route::get('home', ['as' => 'home', 'uses' => 'HomeController@gotoHome']);
 
 Route::get('/ctsv', function () {
     return view('');

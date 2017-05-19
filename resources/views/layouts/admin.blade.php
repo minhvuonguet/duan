@@ -49,7 +49,13 @@
 
             <ul class="nav nav-sidebar">
 
-                <li class=" nav-active active"><a href="javascript:void(0)"><i class="icon-home"></i><span>Admin Manager</span></a></li>
+                <!-- <li class=" nav-active active"><a href="javascript:void(0)"><i class="icon-home"></i><span>Home</span></a>
+                </li> -->
+                <li class=" nav-active active">
+                        <a href="{{ URL::to('home') }}" class="test_"><i class="icon-home">
+                            </i><span>Home</span>
+                        </a>
+                </li>
 
 
                 @if(Auth::user()->username == 'admin1' || Auth::user()->username == 'phongctsv')

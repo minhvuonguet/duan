@@ -37,7 +37,6 @@ class AdminControler extends Controller {
     public function getLogin() {
         return view('admin.login');
     }
-    
     public function postLogin(Request $request){ 
 
         if (Auth::attempt([ 'username' => $request->username, 'password' => $request->password,'id_role'=>2 ]) ||

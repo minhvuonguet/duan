@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Models\Form_Diem;
+use Auth;
 
 
 class HomeController extends Controller
@@ -28,60 +29,30 @@ class HomeController extends Controller
 
     public function goToHome(Request $request)
     {
-        $user= $request->session()->get('user');
-        $sinhvien = $request->session()->get('sinhvien');
-        switch ($user->id_role) {
-            case '4':
-                return view('layouts.admin')->With([
-                    'user' => $user,
-                    'sinhvien' => $sinhvien
-                ]);
-                break;
-            case '3':
-                $data = Form_Diem::all();
-                return View('layouts.admin')->With([
-                    'data' => $data,
-                    'user' => $user,
-                    'sinhvien' => $sinhvien
-                ]);
-                break;
-            case '2':
-                switch ($user->username) {
-                    case 'phongdaotao':
-                        return view('layouts.admin')->With([
-                            'user' => $user,
-                            'sinhvien' => $sinhvien
-                        ]);
-                        break;
-                    case 'phongkhcn':
-                        return view('layouts.admin')->With([
-                            'user' => $user,
-                            'sinhvien' => $sinhvien
-                        ]);
-                        break;
-                    case 'vanphongdoan':
-                        return view('layouts.admin')->With([
-                            'user' => $user,
-                            'sinhvien' => $sinhvien
-                        ]);
-                        break;
-                    case 'vanphongkhoa':
-                        return view('layouts.admin')->With([
-                            'user' => $user,
-                            'sinhvien' => $sinhvien
-                        ]);
-                        break;
-                }
-                break;
-            case '1':
-                return view('layouts.admin')->With([
-                    'user' => $user,
-                    'sinhvien' => $sinhvien
-                ]);
-                break;
-            default:
-                return redirect()->route('login');
-                break;
+        // $user= $request->session()->get('user');
+        // $sinhvien = $request->session()->get('sinhvien');
+        if (isset(Auth::user()->id_role)) {
+            switch (Auth::user()->id_role) {
+                case '4':
+                    return redirect()->route('listdiem');
+                    break;
+                case '3':
+                    // $data = Form_Diem::all();
+                    return redirect()->route('ViewUser');
+                    break;
+                case '2':
+                    return redirect()->route('listdiem');
+                case '1':
+                    return redirect()->route('listdiem');
+                // case 'null':
+                //     return redirect()->route('login');
+                //     break;
+                // default:
+                //     return redirect()->route('login');
+                //     break;
+            }
+        }else{
+            return redirect()->route('login');
         }
     }
 }
