@@ -69,13 +69,13 @@
                     </li>
 
                     {{--Danh sách sinh viên vi phạm ý thức công dân và vi phạm ý thức sinh viên--}}
-                    <li class="nav-parent">
-                        <a href="{{ URL::to('newclass') }}" class="test_"><i class="icon-puzzle"></i><span>Thêm Danh sách vi phạm </span> </a>
-                    </li>
+                    {{--<li class="nav-parent">--}}
+                        {{--<a href="{{ URL::to('danhsachvipham') }}" class="test_"><i class="icon-puzzle"></i><span>Thêm Danh sách vi phạm </span> </a>--}}
+                    {{--</li>--}}
 
-                    <li class="nav-parent">
-                        <a href="{{ URL::to('khenThuong.khen_thuong') }}" class="test_"><i class="icon-puzzle"></i><span>Danh sách khen thưởng</span> </a>
-                    </li>
+                    {{--<li class="nav-parent">--}}
+                        {{--<a href="{{ URL::to('khenThuong.khen_thuong') }}" class="test_"><i class="icon-puzzle"></i><span>Danh sách khen thưởng</span> </a>--}}
+                    {{--</li>--}}
 
                     <li class="nav-parent">
                         <a href="{{ URL::to('newclass') }}" class="test_"><i class="icon-puzzle"></i><span>Phản hồi từ sinh viên </span> </a>
@@ -199,8 +199,8 @@
                 @yield('content')
 
             </div> <!-- end .page-content-->
-        </div> <!-- end .main-content-->
 
+        </div> <!-- end .main-content-->
     </div>
 
 </body>

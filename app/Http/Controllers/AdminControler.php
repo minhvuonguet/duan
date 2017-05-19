@@ -33,7 +33,7 @@ use App\Http\Controllers\Hash;
 class AdminControler extends Controller {
 
     public $use_ = null;
-
+    public $isErr = false;
     public function getLogin() {
         return view('admin.login');
     }
@@ -278,8 +278,9 @@ class AdminControler extends Controller {
         $classname = $request->clasname;
         $sinh_vien= new Sinh_Vien();
 
-
+        echo ($request);
         if($request->type_file == 'list_class'){
+
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
 
@@ -288,41 +289,54 @@ class AdminControler extends Controller {
                 $form_diem = Form_Diem::all();
                 $hocky = Hoc_Ky::where('term_present','=',  '1')->get();
                 $point_base = $form_diem[0]->tong_hoc_tap + $form_diem[0]->tong_chap_hanh + $form_diem[0]->tong_pham_chat;
+
                 foreach ($results as $key=>$value) {
-
+                    echo $value;
                     if( isset($value->mssv)){
+
                         if($value != null && $value->id != null) {
-                            $sinh_vien_new = new Sinh_Vien();
-                            $sinh_vien_new->mssv = $value->mssv;
-                            $sinh_vien_new->fullname = $value->name;
+                            $exitStudent = 0;
+                            $exitStudent = Sinh_Vien::find($value->mssv);
 
-                            $sinh_vien_new->office = 'Sinh Viên';
-                            $sinh_vien_new->birthday = $value->birthday;
-                            $sinh_vien_new->class = $value->class;
-                            $sinh_vien_new->save();
-                        $sinh_vien_new->save();
+                            if($exitStudent) {
+                                echo $exitStudent;
+                                $this->isErr = true;
+                                break;
+                            } else {
+                                $sinh_vien_new = new Sinh_Vien();
+                                $sinh_vien_new->mssv = $value->mssv;
+                                $sinh_vien_new->fullname = $value->name;
+                                $sinh_vien_new->email = $this->stripUnicode($value->name) . '@vnu.edu.vn';
+                                $sinh_vien_new->office = 'Sinh Viên';
+                                $sinh_vien_new->birthday = $value->birthday;
+                                $sinh_vien_new->class = $value->class;
+                                echo $sinh_vien_new;
+                                $sinh_vien_new->save();
 
 
-                        $Point::updateOrCreate(
-                            [
-                                'mssv'=>$value->mssv
-                            ],
-                            [
-                                'id_hoc_ky' => $hocky[0]->id_hoc_ky,
-                                'point_total' => $point_base
-                            ]
-                        );
+                                $Point::updateOrCreate(
+                                    [
+                                        'mssv'=>$value->mssv
+                                    ],
+                                    [
+                                        'id_hoc_ky' => $hocky[0]->id_hoc_ky,
+                                        'point_total' => $point_base
+                                    ]
+                                );
 
-                        // Tạo luôn tài khoản sinh viên mới
-                            $newUser = new User();
-                            $newUser->username = $value->mssv;
-                            $newUser->mssv = $value->mssv;
-                            $newUser->password = \Hash::make($value->mssv);
-                            $newUser->id_role = 3;
-                            $newUser->email = $this->stripUnicode($value->name) . '@vnu.edu.vn';
+                                // Tạo luôn tài khoản sinh viên mới
+                                $newUser = new User();
+                                $newUser->username = $value->mssv;
+                                $newUser->mssv = $value->mssv;
+                                $newUser->password = \Hash::make($value->mssv);
+                                $newUser->id_role = 3;
+                                $newUser->email = $this->stripUnicode($value->name) . '@vnu.edu.vn';
 
-                            $newUser->save();
+                                $newUser->save();
+                            }
                         }
+
+
                     }
                     else {
                         break;
@@ -330,6 +344,52 @@ class AdminControler extends Controller {
 
                 }
             });
+//            $sinhvien = Sinh_Vien::all();
+//            $diem = Points::all();
+//            $listClass = [];
+//            for($i = 0; $i < count($sinhvien); $i++){
+//                $sinhvien[$i]->point = 0;
+//                for($j = 0; $j < count($diem)-1 ; $j++) {
+//                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+//                        $sinhvien[$i]->point = $diem[$j]->point_total;
+//                    }
+//                }
+//
+//                if( $sinhvien[$i]->mssv != 0 &&
+//                    $sinhvien[$i]->mssv != 1 &&
+//                    $sinhvien[$i]->mssv != 2 &&
+//                    $sinhvien[$i]->mssv != 3 &&
+//                    $sinhvien[$i]->mssv != 4 &&
+//                    $sinhvien[$i]->mssv != 5 &&
+//                    $sinhvien[$i]->mssv != 6 &&
+//                    $sinhvien[$i]->mssv != 7
+//                ){
+//                    $listClass[$i] = $sinhvien[$i]->class;
+//
+//                }
+//
+//            }
+//            $listClass = array_unique($listClass);
+//
+//            if($this->isErr) {
+//                return View('admin.listclass')->with([
+//                    'list_sinh_vien' =>$sinhvien,
+//                    'list_diem_ren_luyen' =>$diem,
+//                    'list_class' =>$listClass,
+//                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+//                    'flash_level' =>'danger'
+//                ]);
+//            } else {
+//                return View('admin.listclass')->with([
+//                    'list_sinh_vien' =>$sinhvien,
+//                    'list_diem_ren_luyen' =>$diem,
+//                    'list_class' =>$listClass,
+//                    'flash_message'=>'Thêm mới thành công',
+//                    'flash_level' =>'success'
+//                ]);
+//            }
+
+
         }
         else if($request->type_file == 'list_ad_class') {
 
@@ -337,7 +397,7 @@ class AdminControler extends Controller {
                 $results = $reader->all();
                 foreach ($results as $key=>$value) {
                     $tmp = Sinh_Vien::find($value->mssv);
-                    if($tmp ) {
+                    if($tmp) {
 
                         $ctsv = new P_Cong_Tac_SV();
                         $form_diem = Form_Diem::all();
@@ -382,9 +442,8 @@ class AdminControler extends Controller {
                 }
             });
         }
-
-        // nghien cuu khoa hoc
-        else if($request->type_file == 'list_nghien_cuu_khoa_hoc') {
+           // nghien cuu khoa hoc
+    else if($request->type_file == 'list_nghien_cuu_khoa_hoc') {
             echo ($request->type_file );
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
@@ -477,48 +536,48 @@ class AdminControler extends Controller {
 //                    $tmp = Sinh_Vien::find($value->mssv);
 //                    if($tmp ) {
 
-                        $p_dao_tao = new P_Dao_Tao();
-                        $form_diem = Form_Diem::all();
-                        $diem_cong = $form_diem[0]->cong_hoc_luc;
+                    $p_dao_tao = new P_Dao_Tao();
+                    $form_diem = Form_Diem::all();
+                    $diem_cong = $form_diem[0]->cong_hoc_luc;
 
-                        $p_dao_tao::updateOrCreate(
-                            [ 'mssv'=> $value->mssv, ],
-                            [
-                                'point_dao_tao'=> $diem_cong,
-                              //  'mssv'=> $value->mssv,
-                                'trung_binh' => $value-> trung_binh,
-                                'tich_luy' => $value-> tich_luy,
-                                'xep_loai' => $value-> xep_loai,
+                    $p_dao_tao::updateOrCreate(
+                        [ 'mssv'=> $value->mssv, ],
+                        [
+                            'point_dao_tao'=> $diem_cong,
+                            //  'mssv'=> $value->mssv,
+                            'trung_binh' => $value-> trung_binh,
+                            'tich_luy' => $value-> tich_luy,
+                            'xep_loai' => $value-> xep_loai,
 
-                            ]
-                        );
+                        ]
+                    );
 
-                        $id = $value->mssv;
-                        $newPoint = Points::where('mssv','=',  $id)->get();
-                        if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
-                            $term = Hoc_Ky::where('term_present','=',  '1')->get();
-                            if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
+                    $id = $value->mssv;
+                    $newPoint = Points::where('mssv','=',  $id)->get();
+                    if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
+                        $term = Hoc_Ky::where('term_present','=',  '1')->get();
+                        if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
 
-                                $Point = new Points();
-                                $Point::updateOrCreate(
-                                    [ 'mssv'=> $value->mssv, ],
-                                    [
-                                        'point_dao_tao'=> $diem_cong,
+                            $Point = new Points();
+                            $Point::updateOrCreate(
+                                [ 'mssv'=> $value->mssv, ],
+                                [
+                                    'point_dao_tao'=> $diem_cong,
 
-                                    ]
-                                );
-                            } else { // nếu méo có, đm
+                                ]
+                            );
+                        } else { // nếu méo có, đm
 
-                                $Point = new Points();
-                                $Point->mssv = $value->mssv;
-                                $Point->id_hoc_ky = $term[0]->id_hoc_ky;
-                                $Point->point_dao_tao = $diem_cong;
-                                $Point->point_total = 70;
-                                $Point->save();
-                            }
+                            $Point = new Points();
+                            $Point->mssv = $value->mssv;
+                            $Point->id_hoc_ky = $term[0]->id_hoc_ky;
+                            $Point->point_dao_tao = $diem_cong;
+                            $Point->point_total = 70;
+                            $Point->save();
                         }
                     }
-    //            }
+                }
+                //            }
             });
         }
 
@@ -540,7 +599,7 @@ class AdminControler extends Controller {
                         [ 'mssv'=> $value->mssv, ],
                         [
                             'point_dao_tao'=> $tru_diem,
-                              //'mssv'=> $value->mssv,
+                            //'mssv'=> $value->mssv,
                             'canh_bao_hv' => $value-> canh_bao_hv,
 
 
@@ -866,24 +925,24 @@ class AdminControler extends Controller {
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
                 foreach ($results as $key=>$value) {
-                  //  $tmp = Sinh_Vien::find($value->mssv);
-                  //  if($tmp ) {
+                    //  $tmp = Sinh_Vien::find($value->mssv);
+                    //  if($tmp ) {
 
-                        $p_dao_tao = new P_Dao_Tao();
-                        $form_diem = Form_Diem::all();
-                        $tru_diem = $form_diem[0]->tru_khien_trach_thi;
+                    $p_dao_tao = new P_Dao_Tao();
+                    $form_diem = Form_Diem::all();
+                    $tru_diem = $form_diem[0]->tru_khien_trach_thi;
 
-                        $p_dao_tao::updateOrCreate(
-                            [ 'mssv'=> $value->mssv, ],
-                            [
-                                'point_dao_tao'=> $tru_diem,
-                           //     'mssv'=> $value->mssv,
-                                'mon_vi_pham' => $value-> mon_vi_pham,
-                                'ngay_vp' => $value-> ngay_vp,
+                    $p_dao_tao::updateOrCreate(
+                        [ 'mssv'=> $value->mssv, ],
+                        [
+                            'point_dao_tao'=> $tru_diem,
+                            //     'mssv'=> $value->mssv,
+                            'mon_vi_pham' => $value-> mon_vi_pham,
+                            'ngay_vp' => $value-> ngay_vp,
 
 
-                            ]
-                        );
+                        ]
+                    );
 
                     $id = $value->mssv;
                     $newPoint = Points::where('mssv','=',  $id)->get();
@@ -1040,8 +1099,8 @@ class AdminControler extends Controller {
                     * neu ton tai mssv va id hoc ky thi update.
                     *
                     * neu ton tai mssv nhung khong ton tai id hoc ky hoac khong ton tai ca 2 thi create thi create
-                    *
                     */
+
                     $id = $value->mssv;
                     $newPoint = Points::where('mssv','=',  $id)->get();
                     if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
@@ -1070,9 +1129,54 @@ class AdminControler extends Controller {
             });
         }
 
+//        $sinhvien = Sinh_Vien::all();
+//        $diem = Points::all();
+//        $listClass = [];
+//        for($i = 0; $i < count($sinhvien); $i++){
+//            $sinhvien[$i]->point = 0;
+//            for($j = 0; $j < count($diem)-1 ; $j++) {
+//                if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+//                    $sinhvien[$i]->point = $diem[$j]->point_total;
+//                }
+//            }
+//
+//            if( $sinhvien[$i]->mssv != 0 &&
+//                $sinhvien[$i]->mssv != 1 &&
+//                $sinhvien[$i]->mssv != 2 &&
+//                $sinhvien[$i]->mssv != 3 &&
+//                $sinhvien[$i]->mssv != 4 &&
+//                $sinhvien[$i]->mssv != 5 &&
+//                $sinhvien[$i]->mssv != 6 &&
+//                $sinhvien[$i]->mssv != 7
+//            ){
+//                $listClass[$i] = $sinhvien[$i]->class;
+//
+//            }
+//
+//        }
+//        $listClass = array_unique($listClass);
+//
+//        if($this->isErr) {
+//            return View('admin.listclass')->with([
+//                'list_sinh_vien' =>$sinhvien,
+//                'list_diem_ren_luyen' =>$diem,
+//                'list_class' =>$listClass,
+//                'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+//                'flash_level' =>'danger'
+//            ]);
+//        } else {
+//            return View('admin.listclass')->with([
+//                'list_sinh_vien' =>$sinhvien,
+//                'list_diem_ren_luyen' =>$diem,
+//                'list_class' =>$listClass,
+//                'flash_message'=>'Thêm mới thành công',
+//                'flash_level' =>'success'
+//            ]);
+//        }
 
-        return Redirect()->route('listclass');
     }
+
+
     public function listclass() {
         $sinhvien = Sinh_Vien::all();
         $diem = Points::all();
@@ -1084,7 +1188,20 @@ class AdminControler extends Controller {
                     $sinhvien[$i]->point = $diem[$j]->point_total;
                 }
             }
-            $listClass[$i] = $sinhvien[$i]->class;
+
+            if( $sinhvien[$i]->mssv != 0 &&
+                $sinhvien[$i]->mssv != 1 &&
+                $sinhvien[$i]->mssv != 2 &&
+                $sinhvien[$i]->mssv != 3 &&
+                $sinhvien[$i]->mssv != 4 &&
+                $sinhvien[$i]->mssv != 5 &&
+                $sinhvien[$i]->mssv != 6 &&
+                $sinhvien[$i]->mssv != 7
+            ){
+                $listClass[$i] = $sinhvien[$i]->class;
+
+            }
+
         }
         $listClass = array_unique($listClass);
 
@@ -1092,7 +1209,8 @@ class AdminControler extends Controller {
         return View('admin.listclass')->with([
             'list_sinh_vien' =>$sinhvien,
             'list_diem_ren_luyen' =>$diem,
-            'list_class' =>$listClass
+            'list_class' =>$listClass,
+
         ]);
     }
 

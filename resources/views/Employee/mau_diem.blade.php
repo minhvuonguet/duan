@@ -1,6 +1,24 @@
 @extends('layouts.admin')
 @section('title',' form điểm rèn luyện')
 @section('content')
+    <style>
+        h2.term_present {
+            padding: 50px;
+            color: #2196F3;
+            font-weight: bold;
+        }
+        .select_hoc_ky {
+            padding : 15px;
+            margin-bottom: 30px;
+            font-size:18px;
+            font-weight: 500;
+            color : #2196F3
+        }
+        .select_hoc_ky option {
+
+            font-size: 18px;
+        }
+    </style>
     <h2 class="text-center term_present">
         FORM ĐIỂM RÈN LUYỆN
         @foreach($term_present as $term)
@@ -16,7 +34,7 @@
         {{csrf_field()}}
         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
 
-        <select name="hoc_ky" class="form-control select_hoc_ky" >
+        <select name="hoc_ky" class="form-control select_hoc_ky " >
             @foreach($term_present as $term)
                 <option value="{{$term->id_hoc_ky}}" data="{{$term->note}}" > {{$term->note}} </option>
             @endforeach

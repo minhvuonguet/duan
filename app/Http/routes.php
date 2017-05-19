@@ -43,7 +43,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('newterm', ['as' => 'newterm', 'uses' => 'AdminControler@newterm']);
         Route::post('postnewterm', ['as' => 'postnewterm', 'uses' => 'AdminControler@postnewterm']);
 
-        Route::get('newclass', ['as' => 'newclass', 'uses' => 'AdminControler@newclass']);
+
         Route::post('postnewclass', ['as'=>'postnewclass','uses'=>'AdminControler@postnewclass']);
 
         Route::post('update/{id}/{chu_de}', ['as'=>'update', 'uses'=>'AdminControler@updatePoint']);
@@ -89,6 +89,12 @@ Route::group(['middleware' => ['web']], function () {
         // sinh vien
         Route::get('sv_detail/{id}',['as' => 'sv_detail', 'uses' => 'StudentsControler@sv_detail']);
         Route::post('delete_student/{id}',['as' => 'delete_student', 'uses' => 'StudentsControler@delete_student']);
+        Route::post('change_students',['as' => 'change_students', 'uses' => 'StudentsControler@change_students']);
+        Route::post('new_student',['as' => 'new_student', 'uses' => 'StudentsControler@new_student']);
+
+        //Dao tao || Admin
+        Route::get('newclass', ['as' => 'newclass', 'uses' => 'AdminControler@newclass']);
+
     });
 
 });

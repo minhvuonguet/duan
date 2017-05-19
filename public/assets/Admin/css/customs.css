@@ -48,3 +48,18 @@ span.glyphicon:hover {
     margin: 0px auto;
     display: table;
 }
+.modal-content {
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    border-radius:5px;
+}
+.modal-content h4.modal-title {
+    text-align: center;
+    padding : 10px;
+    font-size : 24px;
+    font-width: bold;
+
+}
+.modal-content form {
+    padding : 20px;
+}
