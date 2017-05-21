@@ -34,6 +34,7 @@
         </div>
 
 
+
             <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#addNewStudents" > + Thêm Sinh viên </button>
 
         <div class="col-md-12">
@@ -48,6 +49,7 @@
                 @yield('content')
             </div>
         </div> <!-- end .page-content-->
+
 
 
         <table class="table table-bordered table-sinhvien">
@@ -68,6 +70,7 @@
                 @if($sinh_vien->mssv != 0 &&
                     $sinh_vien->mssv != 1 &&
                     $sinh_vien->mssv != 2 &&
+                    $sinh_vien->mssv != 0 &&
                     $sinh_vien->mssv != 3 &&
                     $sinh_vien->mssv != 4 &&
                     $sinh_vien->mssv != 5 &&
@@ -355,6 +358,7 @@
             });
 
             $('select.choseClass').on('change', function(){
+                console.log('is change');
                 var classname = this.value.trim();
                 if(classname == 'Tất cả') {
                     classname = 'tatca';

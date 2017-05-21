@@ -12,12 +12,12 @@
     <link href="{!! url('public/assets/Admin/css/ui.css') !!}" rel="stylesheet">
     <link href="{!! url('public/assets/Admin/css/customs.css') !!}" rel="stylesheet">
 
-    <script type="text/javascript" src="public/assets/Admin/js/jquery-1.9.1.js"></script>
-    <script type="text/javascript" src="public/assets/Admin/js/bootstrap.js"></script>
-    <script type="text/javascript" src="public/assets/Admin/js/jquery.validate.js"></script>
-    <script type="text/javascript" src="public/assets/Admin/js/jquery.cookie.js"></script>
-    <script type="text/javascript" src="public/assets/Admin/plugins/noty/jquery.noty.packaged.min.js"></script>
-    <script type="text/javascript" src="public/assets/Admin/js/main.js"></script>
+    <script type="text/javascript" src="{!! url('public/assets/Admin/js/jquery-1.9.1.js') !!}"></script>
+    <script type="text/javascript" src="{!! url('public/assets/Admin/js/bootstrap.js ') !!}"></script>
+    <script type="text/javascript" src="{!! url('public/assets/Admin/js/jquery.validate.js') !!}"></script>
+    <script type="text/javascript" src="{!! url('public/assets/Admin/js/jquery.cookie.js ') !!}"></script>
+    <script type="text/javascript" src="{!! url('public/assets/Admin/plugins/noty/jquery.noty.packaged.min.js ') !!}"></script>
+    <script type="text/javascript" src="{!! url('public/assets/Admin/js/main.js ') !!}"></script>
 </head>
 <body>
 @section('main-parent')
@@ -49,7 +49,13 @@
 
             <ul class="nav nav-sidebar">
 
-                <li class=" nav-active active"><a href="javascript:void(0)"><i class="icon-home"></i><span>Admin Manager</span></a></li>
+                <!-- <li class=" nav-active active"><a href="javascript:void(0)"><i class="icon-home"></i><span>Home</span></a>
+                </li> -->
+                <li class=" nav-active active">
+                        <a href="{{ URL::to('home') }}" class="test_"><i class="icon-home">
+                            </i><span>Home</span>
+                        </a>
+                </li>
 
 
                 @if(Auth::user()->username == 'admin1' || Auth::user()->username == 'phongctsv')
@@ -62,7 +68,7 @@
                     </li>
 
                     <li class="nav-parent">
-                        <a href="{{ URL::to('newclass') }}" class="test_"><i class="icon-puzzle"></i><span>Thêm danh sách lớp</span> </a>
+                        <a href="{{ URL::to('newclass') }}" class="test_"><i class="icon-puzzle"></i><span>Thêm danh sách </span> </a>
                     </li>
                     <li class="nav-parent">
                         <a href="{{ URL::to('listclass') }}" class="test_"><i class="icon-puzzle"></i><span>xem danh sách sv</span> </a>
@@ -78,7 +84,7 @@
                     {{--</li>--}}
 
                     <li class="nav-parent">
-                        <a href="{{ URL::to('newclass') }}" class="test_"><i class="icon-puzzle"></i><span>Phản hồi từ sinh viên </span> </a>
+                        {{--<a href="{{ URL::to('newclass') }}" class="test_"><i class="icon-puzzle"></i><span>Phản hồi từ sinh viên </span> </a>--}}
                     </li>
 
                     <li class="nav-parent">
@@ -97,6 +103,9 @@
                     </li>
                     <li class="nav-parent">
                         <a href="{{URL::to('phongDaoTao.vi_pham_quyche')}}"><i class="icon-screen-desktop"></i><span>Xem DS Vi Pham QC thi </span> </a>
+                    </li>
+                    <li class="nav-parent">
+                        <a href="{{URL::to('phongDaoTao.canh_bao_hv')}}"><i class="icon-screen-desktop"></i><span>Cảnh Báo Học Vụ </span> </a>
                     </li>
 
                 @endif
@@ -126,7 +135,7 @@
                         <a href="{{URL::to('newclass')}}"><i class="icon-screen-desktop"></i><span>import sv khen thưởng </span> </a>
                     </li>
                     <li class="nav-parent">
-                        <a href="{{URL::to('doanvien')}}"><i class="icon-screen-desktop"></i><span>khen thưởng </span> </a>
+                        <a href="{{URL::to('doanVien.vi_pham')}}"><i class="icon-screen-desktop"></i><span> DS Vi Pham Doan </span> </a>
                     </li>
                     <li class="nav-parent">
                         <a href="{{URL::to('doanVien.khen_thuong')}}"><i class="icon-screen-desktop"></i><span>Khen thuong doan vien </span> </a>
@@ -166,9 +175,9 @@
 
                 @endif
 
-                <li class="nav-parent">
-                    <a href="{{URL::to('adstudents')}}"><i class="icon-bulb"></i><span> Thống kê </span> </a>
-                </li>
+                {{--<li class="nav-parent">--}}
+                    {{--<a href="{{URL::to('adstudents')}}"><i class="icon-bulb"></i><span> Thống kê </span> </a>--}}
+                {{--</li>--}}
 
             </ul>
 

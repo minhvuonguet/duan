@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Co_Van_Hoc_Tap;
+use App\Models\Feedback;
 use App\Models\P_Cong_Tac_SV;
 use App\Models\P_Dao_Tao;
 use App\Models\P_Doan;
@@ -24,7 +25,10 @@ use App\Models\User_Point;
 use Illuminate\Support\Facades\DB;
 use App\Models\Form_Diem;
 use App\Models\Hoc_Ky;
+
+
 use Illuminate\Support\Facades\Input;
+
 
 class StudentsControler extends Controller {
     public function ViewUser(Request $request) {
@@ -91,26 +95,27 @@ class StudentsControler extends Controller {
         $data_khcn = P_Khoa_Hoc_CN::where('mssv', '=', Auth::user()->mssv)->get();
         $dataTerm = Form_Diem::where('ma_hk','=',  $id_hk)->get();
 
-
-        echo $data_covan;
-        echo $data_daotao;
-        echo $data_ctsv;
-        echo $data_doan;
-        echo $data_khoa;
-        echo $data_khcn;
-
-
+//
+//        echo $data_covan;
+//        echo $data_daotao;
+//        echo $data_ctsv;
+//        echo $data_doan;
+//        echo $data_khoa;
+//        echo $data_khcn;
+//
+//
 
 
         //  echo $data;
         return View('students.diem')->with([
-            'covan'=>$data_covan[0],
-            'daotao'=>$data_daotao[0],
-            'ctsv'=>$data_ctsv[0],
-            'doan'=>$data_doan[0],
-            'khoa'=>$data_khoa[0],
-            'khcn'=>$data_khcn[0],
-            'terms'=>$dataTerm[0]
+            'term_present' => $term_present ,
+            'covan'=>$data_covan,
+            'daotao'=>$data_daotao,
+            'ctsv'=>$data_ctsv,
+            'doan'=>$data_doan,
+            'khoa'=>$data_khoa,
+            'khcn'=>$data_khcn,
+            'terms'=>$dataTerm
         ]);
     //    return View('students.diem');
     }
@@ -173,6 +178,31 @@ class StudentsControler extends Controller {
         $student->birthday = $birthday;
         $student->save();
 
+    }
+
+    public function fbd ($mssv, $noidung, $diemtru) {
+
+        return View('students.feedback')->with([
+            'mssv' => $mssv,
+            'noidung' =>$noidung,
+            'diemtru'=>$diemtru
+        ]);
+    }
+
+    public function send_feedback (Request $request) {
+
+        $mssv = $request->mssv;
+        $noidung = $request->noidung;
+        $diemtru = $request->diemtru;
+        $lydo = $request->lydo;
+
+        $student = new Feedback();
+        $student->mssv = $mssv;
+        $student->noidung = $noidung;
+        $student->diemtru = $diemtru;
+        $student->lydo = $lydo;
+
+        $student->save();
 
 
     }

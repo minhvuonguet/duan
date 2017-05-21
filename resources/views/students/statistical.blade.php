@@ -1,4 +1,4 @@
-@extends('layouts.sinh_vien')
+@extends('layouts.admin')
 @section('content')
     <form>
         <table class="table table-bordered">

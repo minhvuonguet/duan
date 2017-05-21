@@ -37,14 +37,14 @@ class AdminControler extends Controller {
     public function getLogin() {
         return view('admin.login');
     }
-    
-    public function postLogin(Request $request){ 
+
+    public function postLogin(Request $request){
 
         if (Auth::attempt([ 'username' => $request->username, 'password' => $request->password,'id_role'=>2 ]) ||
             Auth::attempt([ 'username' => $request->username, 'password' => $request->password,'id_role'=>4 ]) ||
             Auth::attempt([ 'username' => $request->username, 'password' => $request->password,'id_role'=>1 ]) ) {
             $this->use_ = new User();
-            return redirect()->route('listdiem');
+            return redirect()->route('newclass');
 
         } else if (Auth::attempt([ 'username' => $request->username, 'password' => $request->password,'id_role'=>3 ])) {
             $this->use_ = new User();
@@ -84,7 +84,7 @@ class AdminControler extends Controller {
         $ma_hk = Hoc_Ky::where('term_present','=',  '1')->get();
         $id_hk = $ma_hk[0]->id_hoc_ky;
         $form_diem = Form_Diem::where('ma_hk','=',  $id_hk)->get();
-        
+
         $Form = new Form_Diem();
         switch ($chu_de){
             case 'tong_hoc_tap' :
@@ -278,7 +278,7 @@ class AdminControler extends Controller {
         $classname = $request->clasname;
         $sinh_vien= new Sinh_Vien();
 
-        echo ($request);
+        
         if($request->type_file == 'list_class'){
 
             Excel::load($request->fileExcels, function($reader){
@@ -291,7 +291,6 @@ class AdminControler extends Controller {
                 $point_base = $form_diem[0]->tong_hoc_tap + $form_diem[0]->tong_chap_hanh + $form_diem[0]->tong_pham_chat;
 
                 foreach ($results as $key=>$value) {
-                    echo $value;
                     if( isset($value->mssv)){
 
                         if($value != null && $value->id != null) {
@@ -299,7 +298,7 @@ class AdminControler extends Controller {
                             $exitStudent = Sinh_Vien::find($value->mssv);
 
                             if($exitStudent) {
-                                echo $exitStudent;
+
                                 $this->isErr = true;
                                 break;
                             } else {
@@ -310,7 +309,7 @@ class AdminControler extends Controller {
                                 $sinh_vien_new->office = 'Sinh Viên';
                                 $sinh_vien_new->birthday = $value->birthday;
                                 $sinh_vien_new->class = $value->class;
-                                echo $sinh_vien_new;
+
                                 $sinh_vien_new->save();
 
 
@@ -344,50 +343,50 @@ class AdminControler extends Controller {
 
                 }
             });
-//            $sinhvien = Sinh_Vien::all();
-//            $diem = Points::all();
-//            $listClass = [];
-//            for($i = 0; $i < count($sinhvien); $i++){
-//                $sinhvien[$i]->point = 0;
-//                for($j = 0; $j < count($diem)-1 ; $j++) {
-//                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
-//                        $sinhvien[$i]->point = $diem[$j]->point_total;
-//                    }
-//                }
-//
-//                if( $sinhvien[$i]->mssv != 0 &&
-//                    $sinhvien[$i]->mssv != 1 &&
-//                    $sinhvien[$i]->mssv != 2 &&
-//                    $sinhvien[$i]->mssv != 3 &&
-//                    $sinhvien[$i]->mssv != 4 &&
-//                    $sinhvien[$i]->mssv != 5 &&
-//                    $sinhvien[$i]->mssv != 6 &&
-//                    $sinhvien[$i]->mssv != 7
-//                ){
-//                    $listClass[$i] = $sinhvien[$i]->class;
-//
-//                }
-//
-//            }
-//            $listClass = array_unique($listClass);
-//
-//            if($this->isErr) {
-//                return View('admin.listclass')->with([
-//                    'list_sinh_vien' =>$sinhvien,
-//                    'list_diem_ren_luyen' =>$diem,
-//                    'list_class' =>$listClass,
-//                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
-//                    'flash_level' =>'danger'
-//                ]);
-//            } else {
-//                return View('admin.listclass')->with([
-//                    'list_sinh_vien' =>$sinhvien,
-//                    'list_diem_ren_luyen' =>$diem,
-//                    'list_class' =>$listClass,
-//                    'flash_message'=>'Thêm mới thành công',
-//                    'flash_level' =>'success'
-//                ]);
-//            }
+            $sinhvien = Sinh_Vien::all();
+            $diem = Points::all();
+            $listClass = [];
+            for($i = 0; $i < count($sinhvien); $i++){
+                $sinhvien[$i]->point = 0;
+                for($j = 0; $j < count($diem)-1 ; $j++) {
+                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                        $sinhvien[$i]->point = $diem[$j]->point_total;
+                    }
+                }
+
+                if( $sinhvien[$i]->mssv != 0 &&
+                    $sinhvien[$i]->mssv != 1 &&
+                    $sinhvien[$i]->mssv != 2 &&
+                    $sinhvien[$i]->mssv != 3 &&
+                    $sinhvien[$i]->mssv != 4 &&
+                    $sinhvien[$i]->mssv != 5 &&
+                    $sinhvien[$i]->mssv != 6 &&
+                    $sinhvien[$i]->mssv != 7
+                ){
+                    $listClass[$i] = $sinhvien[$i]->class;
+
+                }
+
+            }
+            $listClass = array_unique($listClass);
+
+            if($this->isErr) {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                    'flash_level' =>'danger'
+                ]);
+            } else {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Thêm mới thành công',
+                    'flash_level' =>'success'
+                ]);
+            }
 
 
         }
@@ -441,6 +440,53 @@ class AdminControler extends Controller {
                     }
                 }
             });
+
+
+            $sinhvien = Sinh_Vien::all();
+            $diem = Points::all();
+            $listClass = [];
+            for($i = 0; $i < count($sinhvien); $i++){
+                $sinhvien[$i]->point = 0;
+                for($j = 0; $j < count($diem)-1 ; $j++) {
+                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                        $sinhvien[$i]->point = $diem[$j]->point_total;
+                    }
+                }
+
+                if( $sinhvien[$i]->mssv != 0 &&
+                    $sinhvien[$i]->mssv != 1 &&
+                    $sinhvien[$i]->mssv != 2 &&
+                    $sinhvien[$i]->mssv != 3 &&
+                    $sinhvien[$i]->mssv != 4 &&
+                    $sinhvien[$i]->mssv != 5 &&
+                    $sinhvien[$i]->mssv != 6 &&
+                    $sinhvien[$i]->mssv != 7
+                ){
+                    $listClass[$i] = $sinhvien[$i]->class;
+
+                }
+
+            }
+            $listClass = array_unique($listClass);
+
+            if($this->isErr) {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                    'flash_level' =>'danger'
+                ]);
+            } else {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Thêm mới thành công',
+                    'flash_level' =>'success'
+                ]);
+            }
+
         }
            // nghien cuu khoa hoc
     else if($request->type_file == 'list_nghien_cuu_khoa_hoc') {
@@ -490,6 +536,51 @@ class AdminControler extends Controller {
                     }
                 }
             });
+
+        $sinhvien = Sinh_Vien::all();
+        $diem = Points::all();
+        $listClass = [];
+        for($i = 0; $i < count($sinhvien); $i++){
+            $sinhvien[$i]->point = 0;
+            for($j = 0; $j < count($diem)-1 ; $j++) {
+                if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                    $sinhvien[$i]->point = $diem[$j]->point_total;
+                }
+            }
+
+            if( $sinhvien[$i]->mssv != 0 &&
+                $sinhvien[$i]->mssv != 1 &&
+                $sinhvien[$i]->mssv != 2 &&
+                $sinhvien[$i]->mssv != 3 &&
+                $sinhvien[$i]->mssv != 4 &&
+                $sinhvien[$i]->mssv != 5 &&
+                $sinhvien[$i]->mssv != 6 &&
+                $sinhvien[$i]->mssv != 7
+            ){
+                $listClass[$i] = $sinhvien[$i]->class;
+
+            }
+
+        }
+        $listClass = array_unique($listClass);
+
+        if($this->isErr) {
+            return View('admin.listclass')->with([
+                'list_sinh_vien' =>$sinhvien,
+                'list_diem_ren_luyen' =>$diem,
+                'list_class' =>$listClass,
+                'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                'flash_level' =>'danger'
+            ]);
+        } else {
+            return View('admin.listclass')->with([
+                'list_sinh_vien' =>$sinhvien,
+                'list_diem_ren_luyen' =>$diem,
+                'list_class' =>$listClass,
+                'flash_message'=>'Thêm mới thành công',
+                'flash_level' =>'success'
+            ]);
+        }
         }
 
         // khen thuong
@@ -520,6 +611,51 @@ class AdminControler extends Controller {
                     }
                 }
             });
+
+            $sinhvien = Sinh_Vien::all();
+            $diem = Points::all();
+            $listClass = [];
+            for($i = 0; $i < count($sinhvien); $i++){
+                $sinhvien[$i]->point = 0;
+                for($j = 0; $j < count($diem)-1 ; $j++) {
+                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                        $sinhvien[$i]->point = $diem[$j]->point_total;
+                    }
+                }
+
+                if( $sinhvien[$i]->mssv != 0 &&
+                    $sinhvien[$i]->mssv != 1 &&
+                    $sinhvien[$i]->mssv != 2 &&
+                    $sinhvien[$i]->mssv != 3 &&
+                    $sinhvien[$i]->mssv != 4 &&
+                    $sinhvien[$i]->mssv != 5 &&
+                    $sinhvien[$i]->mssv != 6 &&
+                    $sinhvien[$i]->mssv != 7
+                ){
+                    $listClass[$i] = $sinhvien[$i]->class;
+
+                }
+
+            }
+            $listClass = array_unique($listClass);
+
+            if($this->isErr) {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                    'flash_level' =>'danger'
+                ]);
+            } else {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Thêm mới thành công',
+                    'flash_level' =>'success'
+                ]);
+            }
         }
 
 
@@ -579,6 +715,51 @@ class AdminControler extends Controller {
                 }
                 //            }
             });
+
+            $sinhvien = Sinh_Vien::all();
+            $diem = Points::all();
+            $listClass = [];
+            for($i = 0; $i < count($sinhvien); $i++){
+                $sinhvien[$i]->point = 0;
+                for($j = 0; $j < count($diem)-1 ; $j++) {
+                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                        $sinhvien[$i]->point = $diem[$j]->point_total;
+                    }
+                }
+
+                if( $sinhvien[$i]->mssv != 0 &&
+                    $sinhvien[$i]->mssv != 1 &&
+                    $sinhvien[$i]->mssv != 2 &&
+                    $sinhvien[$i]->mssv != 3 &&
+                    $sinhvien[$i]->mssv != 4 &&
+                    $sinhvien[$i]->mssv != 5 &&
+                    $sinhvien[$i]->mssv != 6 &&
+                    $sinhvien[$i]->mssv != 7
+                ){
+                    $listClass[$i] = $sinhvien[$i]->class;
+
+                }
+
+            }
+            $listClass = array_unique($listClass);
+
+            if($this->isErr) {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                    'flash_level' =>'danger'
+                ]);
+            } else {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Thêm mới thành công',
+                    'flash_level' =>'success'
+                ]);
+            }
         }
 
 
@@ -633,6 +814,51 @@ class AdminControler extends Controller {
                 }
 
             });
+
+            $sinhvien = Sinh_Vien::all();
+            $diem = Points::all();
+            $listClass = [];
+            for($i = 0; $i < count($sinhvien); $i++){
+                $sinhvien[$i]->point = 0;
+                for($j = 0; $j < count($diem)-1 ; $j++) {
+                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                        $sinhvien[$i]->point = $diem[$j]->point_total;
+                    }
+                }
+
+                if( $sinhvien[$i]->mssv != 0 &&
+                    $sinhvien[$i]->mssv != 1 &&
+                    $sinhvien[$i]->mssv != 2 &&
+                    $sinhvien[$i]->mssv != 3 &&
+                    $sinhvien[$i]->mssv != 4 &&
+                    $sinhvien[$i]->mssv != 5 &&
+                    $sinhvien[$i]->mssv != 6 &&
+                    $sinhvien[$i]->mssv != 7
+                ){
+                    $listClass[$i] = $sinhvien[$i]->class;
+
+                }
+
+            }
+            $listClass = array_unique($listClass);
+
+            if($this->isErr) {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                    'flash_level' =>'danger'
+                ]);
+            } else {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Thêm mới thành công',
+                    'flash_level' =>'success'
+                ]);
+            }
         }
 
 
@@ -692,6 +918,51 @@ class AdminControler extends Controller {
 
                 }
             });
+
+            $sinhvien = Sinh_Vien::all();
+            $diem = Points::all();
+            $listClass = [];
+            for($i = 0; $i < count($sinhvien); $i++){
+                $sinhvien[$i]->point = 0;
+                for($j = 0; $j < count($diem)-1 ; $j++) {
+                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                        $sinhvien[$i]->point = $diem[$j]->point_total;
+                    }
+                }
+
+                if( $sinhvien[$i]->mssv != 0 &&
+                    $sinhvien[$i]->mssv != 1 &&
+                    $sinhvien[$i]->mssv != 2 &&
+                    $sinhvien[$i]->mssv != 3 &&
+                    $sinhvien[$i]->mssv != 4 &&
+                    $sinhvien[$i]->mssv != 5 &&
+                    $sinhvien[$i]->mssv != 6 &&
+                    $sinhvien[$i]->mssv != 7
+                ){
+                    $listClass[$i] = $sinhvien[$i]->class;
+
+                }
+
+            }
+            $listClass = array_unique($listClass);
+
+            if($this->isErr) {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                    'flash_level' =>'danger'
+                ]);
+            } else {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Thêm mới thành công',
+                    'flash_level' =>'success'
+                ]);
+            }
         }
 
         //khen_thuong_doan
@@ -752,6 +1023,51 @@ class AdminControler extends Controller {
 
                 }
             });
+
+            $sinhvien = Sinh_Vien::all();
+            $diem = Points::all();
+            $listClass = [];
+            for($i = 0; $i < count($sinhvien); $i++){
+                $sinhvien[$i]->point = 0;
+                for($j = 0; $j < count($diem)-1 ; $j++) {
+                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                        $sinhvien[$i]->point = $diem[$j]->point_total;
+                    }
+                }
+
+                if( $sinhvien[$i]->mssv != 0 &&
+                    $sinhvien[$i]->mssv != 1 &&
+                    $sinhvien[$i]->mssv != 2 &&
+                    $sinhvien[$i]->mssv != 3 &&
+                    $sinhvien[$i]->mssv != 4 &&
+                    $sinhvien[$i]->mssv != 5 &&
+                    $sinhvien[$i]->mssv != 6 &&
+                    $sinhvien[$i]->mssv != 7
+                ){
+                    $listClass[$i] = $sinhvien[$i]->class;
+
+                }
+
+            }
+            $listClass = array_unique($listClass);
+
+            if($this->isErr) {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                    'flash_level' =>'danger'
+                ]);
+            } else {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Thêm mới thành công',
+                    'flash_level' =>'success'
+                ]);
+            }
         }
 
 
@@ -808,6 +1124,51 @@ class AdminControler extends Controller {
 
                 }
             });
+
+            $sinhvien = Sinh_Vien::all();
+            $diem = Points::all();
+            $listClass = [];
+            for($i = 0; $i < count($sinhvien); $i++){
+                $sinhvien[$i]->point = 0;
+                for($j = 0; $j < count($diem)-1 ; $j++) {
+                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                        $sinhvien[$i]->point = $diem[$j]->point_total;
+                    }
+                }
+
+                if( $sinhvien[$i]->mssv != 0 &&
+                    $sinhvien[$i]->mssv != 1 &&
+                    $sinhvien[$i]->mssv != 2 &&
+                    $sinhvien[$i]->mssv != 3 &&
+                    $sinhvien[$i]->mssv != 4 &&
+                    $sinhvien[$i]->mssv != 5 &&
+                    $sinhvien[$i]->mssv != 6 &&
+                    $sinhvien[$i]->mssv != 7
+                ){
+                    $listClass[$i] = $sinhvien[$i]->class;
+
+                }
+
+            }
+            $listClass = array_unique($listClass);
+
+            if($this->isErr) {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                    'flash_level' =>'danger'
+                ]);
+            } else {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Thêm mới thành công',
+                    'flash_level' =>'success'
+                ]);
+            }
         }
 
         // sv vi pham sh doan
@@ -862,6 +1223,51 @@ class AdminControler extends Controller {
 
                 }
             });
+
+            $sinhvien = Sinh_Vien::all();
+            $diem = Points::all();
+            $listClass = [];
+            for($i = 0; $i < count($sinhvien); $i++){
+                $sinhvien[$i]->point = 0;
+                for($j = 0; $j < count($diem)-1 ; $j++) {
+                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                        $sinhvien[$i]->point = $diem[$j]->point_total;
+                    }
+                }
+
+                if( $sinhvien[$i]->mssv != 0 &&
+                    $sinhvien[$i]->mssv != 1 &&
+                    $sinhvien[$i]->mssv != 2 &&
+                    $sinhvien[$i]->mssv != 3 &&
+                    $sinhvien[$i]->mssv != 4 &&
+                    $sinhvien[$i]->mssv != 5 &&
+                    $sinhvien[$i]->mssv != 6 &&
+                    $sinhvien[$i]->mssv != 7
+                ){
+                    $listClass[$i] = $sinhvien[$i]->class;
+
+                }
+
+            }
+            $listClass = array_unique($listClass);
+
+            if($this->isErr) {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                    'flash_level' =>'danger'
+                ]);
+            } else {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Thêm mới thành công',
+                    'flash_level' =>'success'
+                ]);
+            }
         }
 
         // co van hoc tap update sinh vien  vi pham sh cua  lop
@@ -915,6 +1321,51 @@ class AdminControler extends Controller {
 
                 }
             });
+
+            $sinhvien = Sinh_Vien::all();
+            $diem = Points::all();
+            $listClass = [];
+            for($i = 0; $i < count($sinhvien); $i++){
+                $sinhvien[$i]->point = 0;
+                for($j = 0; $j < count($diem)-1 ; $j++) {
+                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                        $sinhvien[$i]->point = $diem[$j]->point_total;
+                    }
+                }
+
+                if( $sinhvien[$i]->mssv != 0 &&
+                    $sinhvien[$i]->mssv != 1 &&
+                    $sinhvien[$i]->mssv != 2 &&
+                    $sinhvien[$i]->mssv != 3 &&
+                    $sinhvien[$i]->mssv != 4 &&
+                    $sinhvien[$i]->mssv != 5 &&
+                    $sinhvien[$i]->mssv != 6 &&
+                    $sinhvien[$i]->mssv != 7
+                ){
+                    $listClass[$i] = $sinhvien[$i]->class;
+
+                }
+
+            }
+            $listClass = array_unique($listClass);
+
+            if($this->isErr) {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                    'flash_level' =>'danger'
+                ]);
+            } else {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Thêm mới thành công',
+                    'flash_level' =>'success'
+                ]);
+            }
         }
 
 
@@ -970,6 +1421,51 @@ class AdminControler extends Controller {
 
                 }
             });
+
+            $sinhvien = Sinh_Vien::all();
+            $diem = Points::all();
+            $listClass = [];
+            for($i = 0; $i < count($sinhvien); $i++){
+                $sinhvien[$i]->point = 0;
+                for($j = 0; $j < count($diem)-1 ; $j++) {
+                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                        $sinhvien[$i]->point = $diem[$j]->point_total;
+                    }
+                }
+
+                if( $sinhvien[$i]->mssv != 0 &&
+                    $sinhvien[$i]->mssv != 1 &&
+                    $sinhvien[$i]->mssv != 2 &&
+                    $sinhvien[$i]->mssv != 3 &&
+                    $sinhvien[$i]->mssv != 4 &&
+                    $sinhvien[$i]->mssv != 5 &&
+                    $sinhvien[$i]->mssv != 6 &&
+                    $sinhvien[$i]->mssv != 7
+                ){
+                    $listClass[$i] = $sinhvien[$i]->class;
+
+                }
+
+            }
+            $listClass = array_unique($listClass);
+
+            if($this->isErr) {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                    'flash_level' =>'danger'
+                ]);
+            } else {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Thêm mới thành công',
+                    'flash_level' =>'success'
+                ]);
+            }
         }
 
         // danh sach sinh vien nop hoc phi cham
@@ -1023,6 +1519,51 @@ class AdminControler extends Controller {
 
                 }
             });
+
+            $sinhvien = Sinh_Vien::all();
+            $diem = Points::all();
+            $listClass = [];
+            for($i = 0; $i < count($sinhvien); $i++){
+                $sinhvien[$i]->point = 0;
+                for($j = 0; $j < count($diem)-1 ; $j++) {
+                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                        $sinhvien[$i]->point = $diem[$j]->point_total;
+                    }
+                }
+
+                if( $sinhvien[$i]->mssv != 0 &&
+                    $sinhvien[$i]->mssv != 1 &&
+                    $sinhvien[$i]->mssv != 2 &&
+                    $sinhvien[$i]->mssv != 3 &&
+                    $sinhvien[$i]->mssv != 4 &&
+                    $sinhvien[$i]->mssv != 5 &&
+                    $sinhvien[$i]->mssv != 6 &&
+                    $sinhvien[$i]->mssv != 7
+                ){
+                    $listClass[$i] = $sinhvien[$i]->class;
+
+                }
+
+            }
+            $listClass = array_unique($listClass);
+
+            if($this->isErr) {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                    'flash_level' =>'danger'
+                ]);
+            } else {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Thêm mới thành công',
+                    'flash_level' =>'success'
+                ]);
+            }
         }
 
 // sinh vien vi pham sh  cap khoa
@@ -1072,6 +1613,51 @@ class AdminControler extends Controller {
 
                 }
             });
+
+            $sinhvien = Sinh_Vien::all();
+            $diem = Points::all();
+            $listClass = [];
+            for($i = 0; $i < count($sinhvien); $i++){
+                $sinhvien[$i]->point = 0;
+                for($j = 0; $j < count($diem)-1 ; $j++) {
+                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                        $sinhvien[$i]->point = $diem[$j]->point_total;
+                    }
+                }
+
+                if( $sinhvien[$i]->mssv != 0 &&
+                    $sinhvien[$i]->mssv != 1 &&
+                    $sinhvien[$i]->mssv != 2 &&
+                    $sinhvien[$i]->mssv != 3 &&
+                    $sinhvien[$i]->mssv != 4 &&
+                    $sinhvien[$i]->mssv != 5 &&
+                    $sinhvien[$i]->mssv != 6 &&
+                    $sinhvien[$i]->mssv != 7
+                ){
+                    $listClass[$i] = $sinhvien[$i]->class;
+
+                }
+
+            }
+            $listClass = array_unique($listClass);
+
+            if($this->isErr) {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                    'flash_level' =>'danger'
+                ]);
+            } else {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Thêm mới thành công',
+                    'flash_level' =>'success'
+                ]);
+            }
         }
 
         // danh sach can bo lop
@@ -1127,6 +1713,51 @@ class AdminControler extends Controller {
                     }
                 }
             });
+
+            $sinhvien = Sinh_Vien::all();
+            $diem = Points::all();
+            $listClass = [];
+            for($i = 0; $i < count($sinhvien); $i++){
+                $sinhvien[$i]->point = 0;
+                for($j = 0; $j < count($diem)-1 ; $j++) {
+                    if($diem[$j]->mssv == $sinhvien[$i]->mssv){
+                        $sinhvien[$i]->point = $diem[$j]->point_total;
+                    }
+                }
+
+                if( $sinhvien[$i]->mssv != 0 &&
+                    $sinhvien[$i]->mssv != 1 &&
+                    $sinhvien[$i]->mssv != 2 &&
+                    $sinhvien[$i]->mssv != 3 &&
+                    $sinhvien[$i]->mssv != 4 &&
+                    $sinhvien[$i]->mssv != 5 &&
+                    $sinhvien[$i]->mssv != 6 &&
+                    $sinhvien[$i]->mssv != 7
+                ){
+                    $listClass[$i] = $sinhvien[$i]->class;
+
+                }
+
+            }
+            $listClass = array_unique($listClass);
+
+            if($this->isErr) {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
+                    'flash_level' =>'danger'
+                ]);
+            } else {
+                return View('admin.listclass')->with([
+                    'list_sinh_vien' =>$sinhvien,
+                    'list_diem_ren_luyen' =>$diem,
+                    'list_class' =>$listClass,
+                    'flash_message'=>'Thêm mới thành công',
+                    'flash_level' =>'success'
+                ]);
+            }
         }
 
 //        $sinhvien = Sinh_Vien::all();

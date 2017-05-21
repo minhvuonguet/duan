@@ -8,14 +8,14 @@
         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
         <span class="tong_sinh_vien "> Tổng số sinh viên trong danh sách này: {{count($list_sinh_vien)}} </span>
     </div>
-    <select>
+    {{--<select>--}}
         {{--*/  $stt = 1 /*--}}
-        <option> Tất cả </option>
-        @foreach($list_class as $list)
-            <option>{{$list}}</option>
+        {{--<option> Tất cả </option>--}}
+        {{--@foreach($list_class as $list)--}}
+            {{--<option>{{$list}}</option>--}}
             {{--*/ $stt++ /*--}}
-        @endforeach
-    </select>
+        {{--@endforeach--}}
+    {{--</select>--}}
     <table class="table table-bordered table-sinhvien">
         <tr>
             <th class="col-md-1"> STT </th>
@@ -23,22 +23,29 @@
             <th class="col-md-3"> Họ Têm</th>
             <th class="col-md-1"> Lớp </th>
             <th class="col-md-2"> Ngày Sinh</th>
+            <th class="col-md-2"> Canh Bao </th>
+
+
 
 
         </tr>
         {{--*/  $dem = 1 /*--}}
         @foreach($list_sinh_vien as $sinh_vien)
+            @if($sinh_vien->canh_bao_hv != '')
+                <tr >
+                    <td>{{$dem}}</td>
+                    <td>{{$sinh_vien->mssv}}</td>
+                    <td >{{$sinh_vien->fullname}} </td>
+                    <td >{{$sinh_vien->class}} </td>
+                    <td >{{$sinh_vien->birthday}} </td>
+                    <td >{{$sinh_vien->canh_bao_hv}} </td>
 
-            <tr >
-                <td>{{$dem}}</td>
-                <td>{{$sinh_vien->mssv}}</td>
-                <td >{{$sinh_vien->fullname}} </td>
-                <td >{{$sinh_vien->class}} </td>
-                <td >{{$sinh_vien->birthday}} </td>
 
 
+                </tr>
+            @endif
 
-            </tr>
+
             {{--*/ $dem++ /*--}}
 
         @endforeach
@@ -75,6 +82,7 @@
                                     '<td>' + value.fullname + '</td>' +
                                     '<td>' + value.class + '</td>' +
                                     '<td>' + value.birthday + '</td>' +
+                                    '<td>' + value.canh_bao_hv + '</td>' +
 
 
                                     '</tr>' );

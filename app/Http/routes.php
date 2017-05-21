@@ -11,11 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('Employee.indexStudents');
-
-});
-
+//Route::get('/', ['as' => 'home', 'uses' => 'HomeController@gotoHome']);
+//
+//Route::get('home', ['as' => 'home', 'uses' => 'HomeController@gotoHome']);
 
 Route::get('/ctsv', function () {
     return view('');
@@ -31,13 +29,16 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/login', ['as' => 'login', 'uses' => 'AdminControler@getLogin']);
     Route::post('/postLogin', ['as' => 'postLogin', 'uses' => 'AdminControler@postLogin']);
-    Route::get('ViewUser', ['as' => 'ViewUser', 'uses' => 'AdminControler@ViewUser']);
+
     Route::get('sendmail', ['as' => 'sendmail', 'uses' => 'AdminControler@sendmail']);
     Route::post('/message/send', ['uses' => 'FrontController@addFeedback', 'as' => 'front.fb']);
 
 
     Route::group(['middleware' => 'auth'], function () {
      //   Route::get('/', ['as' => '/', 'uses' => 'AdminControler@ViewUser']);
+        Route::get('ViewUser', ['as' => 'ViewUser', 'uses' => 'AdminControler@ViewUser']);
+
+
         Route::get('list', ['as' => 'list', 'uses' => 'AdminControler@listUser']);
         Route::get('logout', ['as' => 'logout', 'uses' => 'AdminControler@getLogout']);
         Route::get('newterm', ['as' => 'newterm', 'uses' => 'AdminControler@newterm']);
@@ -56,13 +57,16 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('dangvien', ['as'=>'dangvien', 'uses'=>'VPDoanController@dangvien']);
 
-        Route::get('doanvien', ['as'=>'doanvien', 'uses'=>'VPDoanController@demo']);
+        Route::get('doanvien', ['as'=>'doanvien', 'uses'=>'VPDoanController@khen_thuong']);
 
         Route::get('doanVien.khen_thuong', ['as'=>'doanVien.khen_thuong', 'uses'=>'VPDoanController@khen_thuong']);
+        Route::get('doanVien.vi_pham', ['as'=>'doanVien.vi_pham', 'uses'=>'VPDoanController@vi_pham']);
 
         Route::get('coVanHocTap.listclass', ['as' => 'coVanHocTap.listclass', 'uses' => 'covanController@listclass']);
 
         Route::get('phongDaoTao.vi_pham_quyche', ['as' => 'phongDaoTao.vi_pham_quyche', 'uses' => 'DaoTaoController@vi_pham_quyche']);
+
+        Route::get('phongDaoTao.canh_bao_hv', ['as' => 'phongDaoTao.canh_bao_hv', 'uses' => 'DaoTaoController@canh_bao_hv']);
 
         Route::get('phongkhcn.listclass', ['as' => 'phongkhcn.listclass', 'uses' => 'PhongkhcnController@listclass']);
 
@@ -85,12 +89,16 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('tinhdiem', ['as' => 'tinhdiem', 'uses' => 'CacularPoint@tinhdiem']);
         Route::get('listdiem',['as' => 'listdiem', 'uses' => 'CacularPoint@listdiem']);
         Route::get('resetpoint',['as' => 'resetpoint', 'uses' => 'CacularPoint@resetpoint']);
+        Route::get('checkImport', ['as' => 'checkImport', 'uses' => 'CacularPoint@checkImport']);
 
         // sinh vien
         Route::get('sv_detail/{id}',['as' => 'sv_detail', 'uses' => 'StudentsControler@sv_detail']);
         Route::post('delete_student/{id}',['as' => 'delete_student', 'uses' => 'StudentsControler@delete_student']);
         Route::post('change_students',['as' => 'change_students', 'uses' => 'StudentsControler@change_students']);
         Route::post('new_student',['as' => 'new_student', 'uses' => 'StudentsControler@new_student']);
+
+        Route::get('fbd/{mssv}/{point}/{noidung}',['as' => 'fbd', 'uses' => 'StudentsControler@fbd']);
+        Route::post('send_feedback',['as' => 'send_feedback', 'uses' => 'StudentsControler@send_feedback']);
 
         //Dao tao || Admin
         Route::get('newclass', ['as' => 'newclass', 'uses' => 'AdminControler@newclass']);

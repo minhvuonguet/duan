@@ -16,9 +16,9 @@ class CreateFeedbackTable extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('mssv');
-            $table->string('comment');
-            $table->string('note');
-            $table->integer('status');
+            $table->string('noidung');
+            $table->string('diemtru');
+            $table->integer('lydo');
 
             $table->timestamps();
         });
