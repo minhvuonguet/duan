@@ -3,7 +3,7 @@
 @section('content')
 
         <form action="send_feedback" method="post" class="col-md-12">
-            {{csrf_field()}}
+            {{--{{csrf_field()}}--}}
             <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <div class="form-group">
                     <label for="mssv" class="col-sm-4 control-label">Mã sinh viên</label>
