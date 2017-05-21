@@ -1,6 +1,11 @@
 @extends('layouts.admin')
 @section('title',' List Admin')
 @section('content')
+    <style>
+        #editModal {
+            display: flow-root;
+        }
+    </style>
     <div>
         {{--<form >--}}
             {{csrf_field()}}
@@ -22,11 +27,11 @@
                             <td class="point">{{$value->point_co_van_hoc_tap}}</td>
                             <td>{{$value->note}}</td>
                             <td>
-                                <a href="{{ URL::to('fbd/'.$value->mssv . '/' .$value->point_co_van_hoc_tap .'/'.$value->note) }}">
+
                                     <i class="glyphicon glyphicon-pencil" id="{{$value->mssv}}" data_point="{{$value->point_co_van_hoc_tap}}" data1 = "{{$value}}" data-toggle="modal" data-target="#myModal">
 
                                     </i>
-                                </a>
+
                             </td>
                         </tr>
                         {{--*/ $dem++ /*--}}
@@ -41,7 +46,7 @@
                             <td class="point">{{$value->point_dao_tao}}</td>
                             <td>{{$value->note}}</td>
                             <td>
-                                <a href="{{ URL::to('fbd/' . $value->mssv . '/' .$value->point_dao_tao +'/' . $value->note) }}"><i class="glyphicon glyphicon-pencil" id="{{$value->mssv}}"  data_point="{{$value->point_dao_tao}}"  data1 = "{{$value}}" data-toggle="modal" data-target="#myModal"></i></a>
+                                <i class="glyphicon glyphicon-pencil" id="{{$value->mssv}}"  data_point="{{$value->point_dao_tao}}"  data1 = "{{$value}}" data-toggle="modal" data-target="#myModal"></i>
                             </td>
                         </tr>
                         {{--*/ $dem++ /*--}}
@@ -56,7 +61,7 @@
                             <td class="point">{{$value->point_cong_tac_sv}}</td>
                             <td>{{$value->note}}</td>
                             <td>
-                                <a href="{{ URL::to('fbd/' . $value->mssv . '/' . $value->point_cong_tac_sv  . '/'.$value->note) }}"><i class="glyphicon glyphicon-pencil" id="{{$value->mssv}}" data_point="{{$value->point_cong_tac_sv}}" data1 = "{{$value}}" data-toggle="modal" data-target="#myModal"></i></a>
+                               <i class="glyphicon glyphicon-pencil" id="{{$value->mssv}}" data_point="{{$value->point_cong_tac_sv}}" data1 = "{{$value}}" data-toggle="modal" data-target="#myModal"></i>
                             </td>
                         </tr>
                         {{--*/ $dem++ /*--}}
@@ -72,7 +77,7 @@
                             <td class="point">{{$value->point_doan}}</td>
                             <td>{{$value->note}}</td>
                             <td>
-                                <a href="{{ URL::to('fbd/'.$value->mssv .'/' .$value->point_doan .'/'.$value->note) }}"><i class="glyphicon glyphicon-pencil" id="{{$value->mssv}}" data_point="{{$value->point_doan}}"  data1 = "{{$value}}" data-toggle="modal" data-target="#myModal"></i></a>
+                               <i class="glyphicon glyphicon-pencil" id="{{$value->mssv}}" data_point="{{$value->point_doan}}"  data1 = "{{$value}}" data-toggle="modal" data-target="#myModal"></i>
                             </td>
                         </tr>
                         {{--*/ $dem++ /*--}}
@@ -87,7 +92,7 @@
                             <td class="point">{{$value->point_khoa}}</td>
                             <td>{{$value->note}}</td>
                             <td>
-                                <a href="{{ URL::to('fbd/' . $value->mssv .'/' .$value->point_khoa .'/'.$value->note) }}"><i class="glyphicon glyphicon-pencil" id="{{$value->mssv}}" data_point="{{$value->point_khoa}}"   data1 = "{{$value}}" data-toggle="modal" data-target="#myModal"></i></a>
+                                <i class="glyphicon glyphicon-pencil" id="{{$value->mssv}}" data_point="{{$value->point_khoa}}"   data1 = "{{$value}}" data-toggle="modal" data-target="#myModal"></i>
                             </td>
                         </tr>
                         {{--*/ $dem++ /*--}}
@@ -102,7 +107,7 @@
                             <td class="point">{{$value->point_khoa_hoc_cn}}</td>
                             <td>{{$value->note}}</td>
                             <td>
-                                <a href="{{ URL::to('fbd/' . $value->mssv .'/' .$value->point_khoa_hoc_cn .'/'.$value->note) }}"><i class="glyphicon glyphicon-pencil" id="{{$value->mssv}}"  data_point="{{$value->point_khoa_hoc_cn}}" data1 = "{{$value}}" data-toggle="modal" data-target="#myModal"></i></a>
+                                <i class="glyphicon glyphicon-pencil" id="{{$value->mssv}}"  data_point="{{$value->point_khoa_hoc_cn}}" data1 = "{{$value}}" data-toggle="modal" data-target="#myModal"></i>
                             </td>
                         </tr>
                         {{--*/ $dem++ /*--}}
@@ -113,7 +118,66 @@
         {{--</form>--}}
     </div>
     <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
 
+            <!-- Modal content-->
+            <div class="modal-content" id="editModal">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Sửa thông tin sinh viên</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="send_feedback" class="col-md-12">
+                        {{--{{csrf_field()}}--}}
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                        <div class="form-group">
+                            <label for="mssv" class="col-sm-4 control-label">Mã sinh viên</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="mssv" placeholder="Mã sinh viên" name="mssv">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="noidung" class="col-sm-4 control-label">Nội dung</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="noidung" name="noidung" >
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="diemtru" class="col-sm-4 control-label">  Điểm trừ </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="diemtru" name="diemtru"  >
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lydo" class="col-sm-4 control-label">Lý do</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control" rows="3" name="lydo" id="lydo"></textarea>
+                            </div>
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <div class="form-group">
+                                <div class="col-md-4"></div>
+                                <div class="col-sm-8">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                                    <button type="submit" class="btn btn-primary send_feedback" data-dismiss="modal">Gửi phản hồi</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 @stop
 @section('script_')
     @parent
@@ -137,29 +201,30 @@
 
             });
 
-//            $('.send_feedback').click(function(){
-//                var mssv = $('#editModal #mssv').val();
-//                var noidung = $('#editModal #noidung').val();
-//                var diemtru = $('#editModal #diemtru').val();
-//                var lydo = $('#editModal #lydo').val();
-//
-//                console.log(mssv);
-//                console.log(noidung);
-//                console.log(diemtru);
-//                console.log(lydo);
-//                $.ajax({
-//                    headers: {
-//                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//                    },
-//                    url: 'send_feedback',
-//                    type: 'post',
-//                    dataType: 'json',
-//
-//                    success: function(data){
-//                        console.log(data);
-//                    }
-//                });
-//            });
+            $('.send_feedback').click(function(){
+                var mssv = $('#editModal #mssv').val();
+                var noidung = $('#editModal #noidung').val();
+                var diemtru = $('#editModal #diemtru').val();
+                var lydo = $('#editModal #lydo').val();
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '{{ URL::to('send_feedback') }}',
+                    type: 'post',
+                    dataType: 'json',
+                    data : {
+                        mssv : mssv,
+                        noidung : noidung,
+                        diemtru : diemtru,
+                        lydo : lydo
+                    },
+                    success: function(data){
+                        console.log(data);
+                    }
+                });
+            });
         });
     </script>
 @stop

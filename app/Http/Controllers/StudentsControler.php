@@ -204,7 +204,7 @@ class StudentsControler extends Controller {
 
         $student->save();
 
-
+        return ('oke');
     }
 
 }
