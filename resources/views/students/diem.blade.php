@@ -5,18 +5,39 @@
         #editModal {
             display: flow-root;
         }
+        table.table-bordered {
+            margin-top : 20px
+        }
+        .select_hoc_ky {
+            width : 500px;
+        }
+        .Term-div {
+            padding-top : 70px;
+        }
+        .col-md-8, editModal label {
+            margin-top: 20px;
+        }
     </style>
-    <div>
+    <div class="Term-div">
         {{--<form >--}}
             {{csrf_field()}}
             <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-
-            <select name="hoc_ky" class="form-control select_hoc_ky" >
+            <div class="col-md-2 div-term">
+                <h4> Chọn học kỳ </h4>
+            </div>
+            <select name="hoc_ky" class="form-control select_hoc_ky col-md-8" >
                 @foreach($term_present as $term)
                     <option value="{{$term->id_hoc_ky}}" data="{{$term->note}}" > {{$term->note}} </option>
                 @endforeach
             </select>
-            <table class="table">
+            <table class="table table-bordered col-md-12">
+                <tr>
+                    <td> STT </td>
+                    <td> Mssv</td>
+                    <td> Điểm  </td>
+                    <td> Lý do  </td>
+                    <td> Phản hồi </td>
+                </tr>
                 {{--*/  $dem = 1 /*--}}
                 @if(isset($covan) )
 
@@ -134,21 +155,21 @@
                         <div class="form-group">
                             <label for="mssv" class="col-sm-4 control-label">Mã sinh viên</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="mssv" placeholder="Mã sinh viên" name="mssv">
+                                <input type="text" class="form-control" id="mssv" placeholder="Mã sinh viên" name="mssv" disabled>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="noidung" class="col-sm-4 control-label">Nội dung</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="noidung" name="noidung" >
+                                <input type="text" class="form-control" id="noidung" name="noidung" disabled >
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="diemtru" class="col-sm-4 control-label">  Điểm trừ </label>
+                            <label for="diemtru" class="col-sm-4 control-label">  Điểm </label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="diemtru" name="diemtru"  >
+                                <input type="text" class="form-control" id="diemtru" name="diemtru" disabled >
                             </div>
                         </div>
 
@@ -200,13 +221,17 @@
                 $('#editModal #diemtru').val(diemtru);
 
             });
+            $('.chooseTerm').click(function(){
+                $(this).children().prop('checked', true);
+            });
+
 
             $('.send_feedback').click(function(){
                 var mssv = $('#editModal #mssv').val();
                 var noidung = $('#editModal #noidung').val();
                 var diemtru = $('#editModal #diemtru').val();
                 var lydo = $('#editModal #lydo').val();
-
+                console.log(lydo);
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

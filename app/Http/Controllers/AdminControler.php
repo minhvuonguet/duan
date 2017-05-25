@@ -6,6 +6,7 @@
  * Time: 20:32
  */
 namespace App\Http\Controllers;
+use App\Models\Feedback;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 //use Illuminate\Support\Facades\Auth;
@@ -2144,4 +2145,11 @@ class AdminControler extends Controller {
             return $id_delete;
         }
     }
+    public function feedback_students () {
+        $feedback = Feedback::all();
+        return View('admin.feedback_students')->with([
+            'datas'=>$feedback
+        ]);
+    }
+
 }

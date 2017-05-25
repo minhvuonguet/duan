@@ -194,17 +194,46 @@ class StudentsControler extends Controller {
         $mssv = $request->mssv;
         $noidung = $request->noidung;
         $diemtru = $request->diemtru;
+        $lop = Sinh_Vien::where('mssv', '=', $mssv)->get();
+
         $lydo = $request->lydo;
 
         $student = new Feedback();
         $student->mssv = $mssv;
+        $student->classes = $lop[0]->class;
         $student->noidung = $noidung;
         $student->diemtru = $diemtru;
         $student->lydo = $lydo;
 
         $student->save();
 
-        return ('oke');
+        return ( $lydo );
+    }
+    public function pending_feedback (Request $request) {
+        $mssv = Input::Get('mssv');
+        $lydo = Input::Get('lydo');
+
+        $feedback = Feedback::where([
+            ['mssv','=', $mssv ],
+            ['lydo', '=', $lydo]
+        ])->get();
+        $feedback[0]->action = 'Đang xử lý';
+        $feedback[0]->save();
+
+        return $feedback[0];
+    }
+    public function done_feedback (Request $request) {
+        $mssv = Input::Get('mssv');
+        $lydo = Input::Get('lydo');
+
+        $feedback = Feedback::where([
+            ['mssv','=', $mssv ],
+            ['lydo', '=', $lydo]
+        ])->get();
+        $feedback[0]->action = 'Đã xử lý';
+        $feedback[0]->save();
+
+        return $feedback[0];
     }
 
 }

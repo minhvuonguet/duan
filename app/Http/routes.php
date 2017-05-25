@@ -103,6 +103,10 @@ Route::group(['middleware' => ['web']], function () {
         //Dao tao || Admin
         Route::get('newclass', ['as' => 'newclass', 'uses' => 'AdminControler@newclass']);
 
+        // ctsv
+        Route::get('feedback_students',  ['as' => 'feedback_students', 'uses' => 'AdminControler@feedback_students']);
+        Route::post('pending_feedback', ['as' => 'pending_feedback', 'uses' => 'StudentsControler@pending_feedback']);
+        Route::post('done_feedback', ['as' => 'done_feedback', 'uses' => 'StudentsControler@done_feedback']);
     });
 
 });

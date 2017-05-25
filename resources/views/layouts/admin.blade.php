@@ -84,7 +84,7 @@
                     {{--</li>--}}
 
                     <li class="nav-parent">
-                        {{--<a href="{{ URL::to('newclass') }}" class="test_"><i class="icon-puzzle"></i><span>Phản hồi từ sinh viên </span> </a>--}}
+                        <a href="{{ URL::to('feedback_students') }}" class="test_"><i class="icon-puzzle"></i><span>Phản hồi từ sinh viên </span> </a>
                     </li>
 
                     <li class="nav-parent">
