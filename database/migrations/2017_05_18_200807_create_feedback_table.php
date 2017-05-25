@@ -19,7 +19,7 @@ class CreateFeedbackTable extends Migration
             $table->string('classes');
             $table->string('noidung');
             $table->string('diemtru');
-            $table->string('action');
+            $table->int('action');
             $table->string('lydo');
 
             $table->timestamps();

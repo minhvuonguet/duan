@@ -217,7 +217,7 @@ class StudentsControler extends Controller {
             ['mssv','=', $mssv ],
             ['lydo', '=', $lydo]
         ])->get();
-        $feedback[0]->action = 'Đang xử lý';
+        $feedback[0]->action = 0;
         $feedback[0]->save();
 
         return $feedback[0];
@@ -230,7 +230,7 @@ class StudentsControler extends Controller {
             ['mssv','=', $mssv ],
             ['lydo', '=', $lydo]
         ])->get();
-        $feedback[0]->action = 'Đã xử lý';
+        $feedback[0]->action = 1;
         $feedback[0]->save();
 
         return $feedback[0];

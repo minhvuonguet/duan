@@ -13,7 +13,7 @@
     <div>
         <input type="hidden" name="_token" value="{!! csrf_token() !!}">
         <h1> Phản hồi từ sinh viên</h1>
-        <table class="table">
+        <table class="table table-bordered">
             {{--*/  $dem = 1 /*--}}
             <tr>
                 <td> STT </td>
@@ -34,14 +34,19 @@
                     <td> {{$data->diemtru}}</td>
                     <td> {{$data->lydo}}</td>
                     <td class="chooseTerm-pending " data-feedback="{{$data->lydo}}" data-mssv="{{$data->mssv}}">
-                        {{--@if($data->action == "Đang xử lý")--}}
-                            {{--<input type="radio" name="{{$dem}}" id="inlineRadio3" checked="true">--}}
-                        {{--@else--}}
+                        @if($data->action == 0 )
+                            <input type="radio" name="{{$dem}}" id="inlineRadio3" checked="true">
+                        @else
                             <input type="radio" name="{{$dem}}" id="inlineRadio3">
-                        {{--@endif--}}
+                        @endif
+
                     </td>
                     <td class="chooseTerm-success" data-feedback="{{$data->lydo}}" data-mssv="{{$data->mssv}}">
-                        <input type="radio" name="{{$dem}}" id="inlineRadio3">
+                        @if($data->action == 1 )
+                            <input type="radio" name="{{$dem}}" id="inlineRadio3" checked="true">
+                        @else
+                            <input type="radio" name="{{$dem}}" id="inlineRadio3">
+                        @endif
                     </td>
                 </tr>
                 {{--*/ $dem++ /*--}}
