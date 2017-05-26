@@ -72,11 +72,27 @@ class UserTableSeeder extends Seeder
         ]);
 
         User::create([
-            'username'=>'covank58cc',
-            'password'=>Hash::make('covank58cc'),
-            'email'=>'covank58cc@gmail.com',
+            'username'=>'covank59ca',
+            'password'=>Hash::make('covank59ca'),
+            'email'=>'covank59ca@gmail.com',
             'mssv' => 7,
             'avatar' => 7,
+            'id_role'=>4,
+        ]);
+        User::create([
+            'username'=>'covank59cb',
+            'password'=>Hash::make('covank59cb'),
+            'email'=>'covank59cb@gmail.com',
+            'mssv' => 8,
+            'avatar' => 8,
+            'id_role'=>4,
+        ]);
+        User::create([
+            'username'=>'covank59clc',
+            'password'=>Hash::make('covank59clc'),
+            'email'=>'covank59clc@gmail.com',
+            'mssv' => 9,
+            'avatar' => 9,
             'id_role'=>4,
         ]);
 //        User::create([

@@ -98,7 +98,7 @@ class vanphongkhoa extends Controller  {
 
         return View('admin.vanPhongKhoa.xem_diem')->with([
             'list_sinh_vien' =>$sinhvien,
-            'list_sinh_vien' =>$diem_hoc_tap,
+            // 'list_sinh_vien' =>$diem_hoc_tap,
             'list_diem_ren_luyen' =>$diem,
             'list_class' =>$listClass
         ]);
@@ -131,7 +131,11 @@ class vanphongkhoa extends Controller  {
     
     // xem danh sach  vi pham  cua  khoa
     public function vi_pham() {
-        $sinhvien = Sinh_Vien::all();
+        // $sinhvien = Sinh_Vien::all();
+        $sinhvien = DB::table('sinh_vien')
+        ->join('p_khoa','sinh_vien.mssv','=','p_khoa.mssv')
+        ->select('sinh_vien.*','p_khoa.vi_pham_sh_khoa')
+        ->get();
         $diem = Points::all();
         $vi_pham_khoa = P_Khoa::all();
         $listClass = [];
@@ -157,7 +161,7 @@ class vanphongkhoa extends Controller  {
 
         return View('admin.vanPhongKhoa.vi_pham')->with([
             'list_sinh_vien' =>$sinhvien,
-            'list_sinh_vien' =>$vi_pham_khoa,
+            // 'list_sinh_vien' =>$vi_pham_khoa,
             'list_diem_ren_luyen' =>$diem,
             'list_class' =>$listClass
         ]);

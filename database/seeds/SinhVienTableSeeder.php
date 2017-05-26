@@ -58,16 +58,30 @@ class SinhVienTableSeeder extends Seeder
         Sinh_Vien::create([
           'mssv' => 6,
           'fullname' => 'Cố vấn học tập k59CC',
-          'class' => 'Cố vấn học tập',
+          'class' => 'K59CC',
           'office' => 'Cố vấn học tập',
           'email' => 'covanhoctap@gmail.com',
         ]);
         Sinh_Vien::create([
           'mssv' => 7,
-          'fullname' => 'Cố vấn học tập k58CC',
-          'class' => 'Cố vấn học tập',
+          'fullname' => 'Cố vấn học tập k59CA',
+          'class' => 'K59CA',
           'office' => 'Cố vấn học tập',
-          'email' => 'covanhoctap@gmail.com',
+          'email' => 'covanhoctapk59CA@gmail.com',
+        ]);
+        Sinh_Vien::create([
+          'mssv' => 8,
+          'fullname' => 'Cố vấn học tập k59CB',
+          'class' => 'K59CB',
+          'office' => 'Cố vấn học tập',
+          'email' => 'covanhoctapk59CB@gmail.com',
+        ]);
+        Sinh_Vien::create([
+          'mssv' => 9,
+          'fullname' => 'Cố vấn học tập k59CLC',
+          'class' => 'K59CLC',
+          'office' => 'Cố vấn học tập',
+          'email' => 'covanhoctapk59CLC@gmail.com',
         ]);
 //        Sinh_Vien::create([
 //          'mssv' => 13000000,

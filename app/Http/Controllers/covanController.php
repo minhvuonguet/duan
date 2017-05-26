@@ -8,7 +8,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Auth;
+use Auth;
 use App\User;
 use Illuminate\Support\Facades\Mail;
 use Excel,Input,File;
@@ -42,6 +43,8 @@ class covanController extends Controller  {
 //  danh sach sinh vien
 
     public function listclass() {
+        // $covanhoctap= Sinh_Vien::where('mssv','=',Auth::user()->mssv)->get();
+        // $sinhvien = Sinh_Vien::where('class','=',$covanhoctap)->get();
         $sinhvien = Sinh_Vien::all();
         $diem = Points::all();
         $listClass = [];
