@@ -1,5 +1,12 @@
 @extends('layouts.admin')
+@section('title',' List Admin')
 @section('content')
+    <style>
+        .main-content {
+            top: -15px;
+            position: relative;
+        }
+    </style>
     <form>
         <table class="table table-bordered">
             <tr>

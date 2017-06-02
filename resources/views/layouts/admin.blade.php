@@ -33,7 +33,7 @@
                     {{--@if(Auth::user()->image)--}}
                         {{--<img src="public/uploads/admin_img/{{Auth::user()->image}}" class="img-responsive img-circle" alt="friend 8">--}}
                     {{--@else--}}
-                        <img src="public/assets/Admin/images/default.png" class="img-responsive img-circle" alt="friend 8">
+                        <img  src="{!! url('public/assets/Admin/images/default.png') !!}" class="img-responsive img-circle" alt="friend 8">
                     {{--@endif--}}
                 </div>
                 <h4>
@@ -119,9 +119,9 @@
                     <li class="nav-parent">
                         <a href="{{URL::to('phongkhcn.listclass')}}"><i class="icon-screen-desktop"></i><span>  sinh viên đạt giải </span> </a>
                     </li>
-                    <li class="nav-parent">
-                        <a href="{{URL::to('phongkhcn.listclass')}}"><i class="icon-screen-desktop"></i><span> Xem Danh Sách </span> </a>
-                    </li>
+                    {{--<li class="nav-parent">--}}
+                        {{--<a href="{{URL::to('phongkhcn.listclass')}}"><i class="icon-screen-desktop"></i><span> Xem Danh Sách </span> </a>--}}
+                    {{--</li>--}}
 
                 @endif
 
@@ -187,16 +187,70 @@
 
     <div class="main-content">
         <!-- BEGIN TOPBAR -->
-        <div class="topbar">
+        {{--<div class="topbar">--}}
 
+            {{--<div class="header-right">--}}
+                {{--<ul class="header-menu nav navbar-nav">--}}
+                    {{--<li class="dropdown" id="user-header">--}}
+
+                    {{--</li>--}}
+                    {{--<li class="logout_Admin">--}}
+                        {{--{{Auth::user()->username}}--}}
+                        {{--<a href="{{ URL::to('logout') }}"><i class="icon-logout"></i><span>Logout</span></a>--}}
+                    {{--</li>--}}
+                {{--</ul>--}}
+            {{--</div>--}}
+            {{--<!-- header-right -->--}}
+        {{--</div>--}}
+        <div class="topbar">
+            <div class="header-left">
+                <div class="topnav">
+                    <a class="menutoggle" href="#" data-toggle="sidebar-collapsed"><span class="menu__handle"><span>Menu</span></span></a>
+
+                </div>
+            </div>
             <div class="header-right">
                 <ul class="header-menu nav navbar-nav">
-                    <li class="dropdown" id="user-header">
-
+                    <!-- BEGIN USER DROPDOWN -->
+                    <li class="dropdown" id="notifications-header">
+                        <a href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <i class="icon-bell"></i>
+                            <span class="badge badge-danger badge-header">0</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="dropdown-header clearfix">
+                                <p class="pull-left">Thông báo</p>
+                            </li>
+                            <li>
+                                <ul class="dropdown-menu-list withScroll mCustomScrollbar _mCS_3 mCS-autoHide mCS_no_scrollbar" data-height="220" style="height: 220px;"><div id="mCSB_3" class="mCustomScrollBox mCS-dark-thick mCSB_vertical mCSB_inside" style="max-height: 220px;" tabindex="0"><div id="mCSB_3_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y" style="position:relative; top:0; left:0;" dir="ltr">
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-star p-r-10 f-18 c-orange"></i>
+                                            Không có thông báo nào gần đây
+                                            {{--<span class="dropdown-time">Just now</span>--}}
+                                        </a>
+                                    </li>
+                                    </div><div id="mCSB_3_scrollbar_vertical" class="mCSB_scrollTools mCSB_3_scrollbar mCS-dark-thick mCSB_scrollTools_vertical" style="display: none;"><div class="mCSB_draggerContainer"><div id="mCSB_3_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 30px; top: 0px; display: block; height: 141px; max-height: 210px;"><div class="mCSB_dragger_bar" style="line-height: 30px;"></div></div><div class="mCSB_draggerRail"></div></div></div></div>
+                                </ul>
+                            </li>
+                            <li class="dropdown-footer clearfix">
+                                <a href="#" class="pull-left">Xem tất cả thông báo</a>
+                                <a href="#" class="pull-right">
+                                    <i class="icon-settings"></i>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
-                    <li class="logout_Admin">
-                        {{--{{Auth::user()->username}}--}}
-                        <a href="{{ URL::to('logout') }}"><i class="icon-logout"></i><span>Logout</span></a>
+                    <li class="dropdown" id="user-header">
+                        <a href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="true">
+                            <img  src="{!! url('public/assets/Admin/images/default.png') !!}" alt="user image">
+                            <span class="username">Chào bạn, {{Auth::user()->username}} </span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ URL::to('logout') }}"><i class="icon-logout"></i><span>Đăng xuất</span></a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>

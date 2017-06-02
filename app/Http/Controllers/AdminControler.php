@@ -200,7 +200,7 @@ class AdminControler extends Controller {
             $id_hk = $ma_hk[0]->id_hoc_ky;
             $data = Form_Diem::where('ma_hk','=',  $id_hk)->get();
 
-            echo $data[0]->tong_hoc_tap;
+
             return View('Employee.mau_diem')->With([
                 'term_present' => $term_present,
                 'tong_hoc_tap' => $data[0]->tong_hoc_tap,
@@ -278,8 +278,6 @@ class AdminControler extends Controller {
 
         $classname = $request->clasname;
         $sinh_vien= new Sinh_Vien();
-
-        
         if($request->type_file == 'list_class'){
 
             Excel::load($request->fileExcels, function($reader){
@@ -345,6 +343,7 @@ class AdminControler extends Controller {
                 }
             });
             $sinhvien = Sinh_Vien::all();
+            $user = User::all();
             $diem = Points::all();
             $listClass = [];
             for($i = 0; $i < count($sinhvien); $i++){
@@ -354,7 +353,11 @@ class AdminControler extends Controller {
                         $sinhvien[$i]->point = $diem[$j]->point_total;
                     }
                 }
-
+                for($k = 0; $k < count($user)-1 ; $k++) {
+                    if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                        $sinhvien[$i]->id_role = $user[$k]->id_role;
+                    }
+                }
                 if( $sinhvien[$i]->mssv != 0 &&
                     $sinhvien[$i]->mssv != 1 &&
                     $sinhvien[$i]->mssv != 2 &&
@@ -444,6 +447,7 @@ class AdminControler extends Controller {
 
 
             $sinhvien = Sinh_Vien::all();
+            $user = User::all();
             $diem = Points::all();
             $listClass = [];
             for($i = 0; $i < count($sinhvien); $i++){
@@ -453,7 +457,11 @@ class AdminControler extends Controller {
                         $sinhvien[$i]->point = $diem[$j]->point_total;
                     }
                 }
-
+                for($k = 0; $k < count($user)-1 ; $k++) {
+                    if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                        $sinhvien[$i]->id_role = $user[$k]->id_role;
+                    }
+                }
                 if( $sinhvien[$i]->mssv != 0 &&
                     $sinhvien[$i]->mssv != 1 &&
                     $sinhvien[$i]->mssv != 2 &&
@@ -491,23 +499,22 @@ class AdminControler extends Controller {
         }
            // nghien cuu khoa hoc
     else if($request->type_file == 'list_nghien_cuu_khoa_hoc') {
-            echo ($request->type_file );
+
             Excel::load($request->fileExcels, function($reader){
                 $results = $reader->all();
 
                 foreach ($results as $key=>$value) {
-
-
                     $p_khoa_hoc_cn = new P_Khoa_Hoc_CN();
                     $form_diem = Form_Diem::all();
                     $diem_cong = $form_diem[0]->cong_nckh;
                     //   $Note  = "de tai: " + $value->de_tai + "giai thuong: " + $value->giai_thuong;
+                    echo $value->note;
                     $p_khoa_hoc_cn::updateOrCreate(
                         [ 'mssv'=> $value->mssv, ],
                         [
                             'point_khoa_hoc_cn'=> $diem_cong,
 
-                            'note' => $value-> note || '',
+                            'note' => $value->note,
 
                         ]
                     );
@@ -537,51 +544,7 @@ class AdminControler extends Controller {
                     }
                 }
             });
-
-        $sinhvien = Sinh_Vien::all();
-        $diem = Points::all();
-        $listClass = [];
-        for($i = 0; $i < count($sinhvien); $i++){
-            $sinhvien[$i]->point = 0;
-            for($j = 0; $j < count($diem)-1 ; $j++) {
-                if($diem[$j]->mssv == $sinhvien[$i]->mssv){
-                    $sinhvien[$i]->point = $diem[$j]->point_total;
-                }
-            }
-
-            if( $sinhvien[$i]->mssv != 0 &&
-                $sinhvien[$i]->mssv != 1 &&
-                $sinhvien[$i]->mssv != 2 &&
-                $sinhvien[$i]->mssv != 3 &&
-                $sinhvien[$i]->mssv != 4 &&
-                $sinhvien[$i]->mssv != 5 &&
-                $sinhvien[$i]->mssv != 6 &&
-                $sinhvien[$i]->mssv != 7
-            ){
-                $listClass[$i] = $sinhvien[$i]->class;
-
-            }
-
-        }
-        $listClass = array_unique($listClass);
-
-        if($this->isErr) {
-            return View('admin.listclass')->with([
-                'list_sinh_vien' =>$sinhvien,
-                'list_diem_ren_luyen' =>$diem,
-                'list_class' =>$listClass,
-                'flash_message'=>'Có Lỗi xảy ra, vui lòng kiểm tra lại',
-                'flash_level' =>'danger'
-            ]);
-        } else {
-            return View('admin.listclass')->with([
-                'list_sinh_vien' =>$sinhvien,
-                'list_diem_ren_luyen' =>$diem,
-                'list_class' =>$listClass,
-                'flash_message'=>'Thêm mới thành công',
-                'flash_level' =>'success'
-            ]);
-        }
+        return redirect()->route('phongkhcn.listclass');
         }
 
         // khen thuong
@@ -614,6 +577,7 @@ class AdminControler extends Controller {
             });
 
             $sinhvien = Sinh_Vien::all();
+            $user = User::all();
             $diem = Points::all();
             $listClass = [];
             for($i = 0; $i < count($sinhvien); $i++){
@@ -623,7 +587,11 @@ class AdminControler extends Controller {
                         $sinhvien[$i]->point = $diem[$j]->point_total;
                     }
                 }
-
+                for($k = 0; $k < count($user)-1 ; $k++) {
+                    if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                        $sinhvien[$i]->id_role = $user[$k]->id_role;
+                    }
+                }
                 if( $sinhvien[$i]->mssv != 0 &&
                     $sinhvien[$i]->mssv != 1 &&
                     $sinhvien[$i]->mssv != 2 &&
@@ -718,6 +686,7 @@ class AdminControler extends Controller {
             });
 
             $sinhvien = Sinh_Vien::all();
+            $user = User::all();
             $diem = Points::all();
             $listClass = [];
             for($i = 0; $i < count($sinhvien); $i++){
@@ -727,7 +696,11 @@ class AdminControler extends Controller {
                         $sinhvien[$i]->point = $diem[$j]->point_total;
                     }
                 }
-
+                for($k = 0; $k < count($user)-1 ; $k++) {
+                    if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                        $sinhvien[$i]->id_role = $user[$k]->id_role;
+                    }
+                }
                 if( $sinhvien[$i]->mssv != 0 &&
                     $sinhvien[$i]->mssv != 1 &&
                     $sinhvien[$i]->mssv != 2 &&
@@ -817,6 +790,7 @@ class AdminControler extends Controller {
             });
 
             $sinhvien = Sinh_Vien::all();
+            $user = User::all();
             $diem = Points::all();
             $listClass = [];
             for($i = 0; $i < count($sinhvien); $i++){
@@ -826,7 +800,11 @@ class AdminControler extends Controller {
                         $sinhvien[$i]->point = $diem[$j]->point_total;
                     }
                 }
-
+                for($k = 0; $k < count($user)-1 ; $k++) {
+                    if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                        $sinhvien[$i]->id_role = $user[$k]->id_role;
+                    }
+                }
                 if( $sinhvien[$i]->mssv != 0 &&
                     $sinhvien[$i]->mssv != 1 &&
                     $sinhvien[$i]->mssv != 2 &&
@@ -921,6 +899,7 @@ class AdminControler extends Controller {
             });
 
             $sinhvien = Sinh_Vien::all();
+            $user = User::all();
             $diem = Points::all();
             $listClass = [];
             for($i = 0; $i < count($sinhvien); $i++){
@@ -930,7 +909,11 @@ class AdminControler extends Controller {
                         $sinhvien[$i]->point = $diem[$j]->point_total;
                     }
                 }
-
+                for($k = 0; $k < count($user)-1 ; $k++) {
+                    if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                        $sinhvien[$i]->id_role = $user[$k]->id_role;
+                    }
+                }
                 if( $sinhvien[$i]->mssv != 0 &&
                     $sinhvien[$i]->mssv != 1 &&
                     $sinhvien[$i]->mssv != 2 &&
@@ -1026,6 +1009,7 @@ class AdminControler extends Controller {
             });
 
             $sinhvien = Sinh_Vien::all();
+            $user = User::all();
             $diem = Points::all();
             $listClass = [];
             for($i = 0; $i < count($sinhvien); $i++){
@@ -1035,7 +1019,11 @@ class AdminControler extends Controller {
                         $sinhvien[$i]->point = $diem[$j]->point_total;
                     }
                 }
-
+                for($k = 0; $k < count($user)-1 ; $k++) {
+                    if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                        $sinhvien[$i]->id_role = $user[$k]->id_role;
+                    }
+                }
                 if( $sinhvien[$i]->mssv != 0 &&
                     $sinhvien[$i]->mssv != 1 &&
                     $sinhvien[$i]->mssv != 2 &&
@@ -1127,6 +1115,7 @@ class AdminControler extends Controller {
             });
 
             $sinhvien = Sinh_Vien::all();
+            $user = User::all();
             $diem = Points::all();
             $listClass = [];
             for($i = 0; $i < count($sinhvien); $i++){
@@ -1136,7 +1125,11 @@ class AdminControler extends Controller {
                         $sinhvien[$i]->point = $diem[$j]->point_total;
                     }
                 }
-
+                for($k = 0; $k < count($user)-1 ; $k++) {
+                    if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                        $sinhvien[$i]->id_role = $user[$k]->id_role;
+                    }
+                }
                 if( $sinhvien[$i]->mssv != 0 &&
                     $sinhvien[$i]->mssv != 1 &&
                     $sinhvien[$i]->mssv != 2 &&
@@ -1226,6 +1219,7 @@ class AdminControler extends Controller {
             });
 
             $sinhvien = Sinh_Vien::all();
+            $user = User::all();
             $diem = Points::all();
             $listClass = [];
             for($i = 0; $i < count($sinhvien); $i++){
@@ -1235,7 +1229,11 @@ class AdminControler extends Controller {
                         $sinhvien[$i]->point = $diem[$j]->point_total;
                     }
                 }
-
+                for($k = 0; $k < count($user)-1 ; $k++) {
+                    if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                        $sinhvien[$i]->id_role = $user[$k]->id_role;
+                    }
+                }
                 if( $sinhvien[$i]->mssv != 0 &&
                     $sinhvien[$i]->mssv != 1 &&
                     $sinhvien[$i]->mssv != 2 &&
@@ -1324,6 +1322,7 @@ class AdminControler extends Controller {
             });
 
             $sinhvien = Sinh_Vien::all();
+            $user = User::all();
             $diem = Points::all();
             $listClass = [];
             for($i = 0; $i < count($sinhvien); $i++){
@@ -1333,7 +1332,11 @@ class AdminControler extends Controller {
                         $sinhvien[$i]->point = $diem[$j]->point_total;
                     }
                 }
-
+                for($k = 0; $k < count($user)-1 ; $k++) {
+                    if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                        $sinhvien[$i]->id_role = $user[$k]->id_role;
+                    }
+                }
                 if( $sinhvien[$i]->mssv != 0 &&
                     $sinhvien[$i]->mssv != 1 &&
                     $sinhvien[$i]->mssv != 2 &&
@@ -1424,6 +1427,7 @@ class AdminControler extends Controller {
             });
 
             $sinhvien = Sinh_Vien::all();
+            $user = User::all();
             $diem = Points::all();
             $listClass = [];
             for($i = 0; $i < count($sinhvien); $i++){
@@ -1433,7 +1437,11 @@ class AdminControler extends Controller {
                         $sinhvien[$i]->point = $diem[$j]->point_total;
                     }
                 }
-
+                for($k = 0; $k < count($user)-1 ; $k++) {
+                    if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                        $sinhvien[$i]->id_role = $user[$k]->id_role;
+                    }
+                }
                 if( $sinhvien[$i]->mssv != 0 &&
                     $sinhvien[$i]->mssv != 1 &&
                     $sinhvien[$i]->mssv != 2 &&
@@ -1522,6 +1530,7 @@ class AdminControler extends Controller {
             });
 
             $sinhvien = Sinh_Vien::all();
+            $user = User::all();
             $diem = Points::all();
             $listClass = [];
             for($i = 0; $i < count($sinhvien); $i++){
@@ -1531,7 +1540,11 @@ class AdminControler extends Controller {
                         $sinhvien[$i]->point = $diem[$j]->point_total;
                     }
                 }
-
+                for($k = 0; $k < count($user)-1 ; $k++) {
+                    if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                        $sinhvien[$i]->id_role = $user[$k]->id_role;
+                    }
+                }
                 if( $sinhvien[$i]->mssv != 0 &&
                     $sinhvien[$i]->mssv != 1 &&
                     $sinhvien[$i]->mssv != 2 &&
@@ -1616,6 +1629,7 @@ class AdminControler extends Controller {
             });
 
             $sinhvien = Sinh_Vien::all();
+            $user = User::all();
             $diem = Points::all();
             $listClass = [];
             for($i = 0; $i < count($sinhvien); $i++){
@@ -1625,7 +1639,11 @@ class AdminControler extends Controller {
                         $sinhvien[$i]->point = $diem[$j]->point_total;
                     }
                 }
-
+                for($k = 0; $k < count($user)-1 ; $k++) {
+                    if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                        $sinhvien[$i]->id_role = $user[$k]->id_role;
+                    }
+                }
                 if( $sinhvien[$i]->mssv != 0 &&
                     $sinhvien[$i]->mssv != 1 &&
                     $sinhvien[$i]->mssv != 2 &&
@@ -1692,7 +1710,7 @@ class AdminControler extends Controller {
                     $newPoint = Points::where('mssv','=',  $id)->get();
                     if($newPoint) { // nếu tìm thấy mã số sinh viên, thì tìm xem có mã học kỳ không
                         $term = Hoc_Ky::where('term_present','=',  '1')->get();
-                        echo $term;
+
                         if($term[0]->id_hoc_ky == $newPoint[0]->id_hoc_ky) { // nếu có thì update. đm
 
                             $Point = new Points();
@@ -1716,6 +1734,7 @@ class AdminControler extends Controller {
             });
 
             $sinhvien = Sinh_Vien::all();
+            $user = User::all();
             $diem = Points::all();
             $listClass = [];
             for($i = 0; $i < count($sinhvien); $i++){
@@ -1725,7 +1744,11 @@ class AdminControler extends Controller {
                         $sinhvien[$i]->point = $diem[$j]->point_total;
                     }
                 }
-
+                for($k = 0; $k < count($user)-1 ; $k++) {
+                    if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                        $sinhvien[$i]->id_role = $user[$k]->id_role;
+                    }
+                }
                 if( $sinhvien[$i]->mssv != 0 &&
                     $sinhvien[$i]->mssv != 1 &&
                     $sinhvien[$i]->mssv != 2 &&
@@ -1811,6 +1834,7 @@ class AdminControler extends Controller {
 
     public function listclass() {
         $sinhvien = Sinh_Vien::all();
+        $user = User::all();
         $diem = Points::all();
         $listClass = [];
         for($i = 0; $i < count($sinhvien); $i++){
@@ -1820,7 +1844,11 @@ class AdminControler extends Controller {
                     $sinhvien[$i]->point = $diem[$j]->point_total;
                 }
             }
-
+            for($k = 0; $k < count($user)-1 ; $k++) {
+                if($sinhvien[$i]->mssv == $user[$k]->mssv){
+                    $sinhvien[$i]->id_role = $user[$k]->id_role;
+                }
+            }
             if( $sinhvien[$i]->mssv != 0 &&
                 $sinhvien[$i]->mssv != 1 &&
                 $sinhvien[$i]->mssv != 2 &&
@@ -1836,8 +1864,6 @@ class AdminControler extends Controller {
 
         }
         $listClass = array_unique($listClass);
-
-
         return View('admin.listclass')->with([
             'list_sinh_vien' =>$sinhvien,
             'list_diem_ren_luyen' =>$diem,

@@ -8,11 +8,19 @@
        .addBgr-done {
            background-color: blue;
        }
+        .main-content {
+            top: -15px;
+            position: relative;
+        }
+        h1 {
+            margin-top: 50px;
+            color : #2196F3;
+        }
     </style>
 
     <div>
         <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-        <h1> Phản hồi từ sinh viên</h1>
+        <h1 class="text-center"> Phản hồi từ sinh viên</h1>
         <table class="table table-bordered">
             {{--*/  $dem = 1 /*--}}
             <tr>

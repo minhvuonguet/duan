@@ -11,35 +11,54 @@
 <body>
 <div class="container">
     <div class="row">
+        <div class="header-login col-md-12">
+            <div class="logo col-md-5 row">
+                    <div class="img-lg col-md-4 row">
+                        <img src="{!! url('public/assets/Admin/images/logo.png') !!}" alt="Logo UET">
+                    </div>
+                    <div class="name-uet col-md-8">
+                        <p>ĐẠI HỌC CÔNG NGHỆ - ĐHQG HN </p>
+                        <p> University of Engineering and Technology </p>
+                    </div>
+                </div>
+            <div class="name-login col-md-7">
+                <h3 class="text-center"> HỆ THỐNG QUẢN LÝ ĐIỂM RÈN LUYỆN SINH VIÊN</h3>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="notice-uet col-md-7 row">
+                <h5> Thông báo </h5>
+                <ul>
+                    <li> Không có thông báo</li>
+                </ul>
+            </div>
+            <div class="form-login-uet col-md-5">
+                <form action='postLogin' method="post" id="form_login_admin" name="form_login_admin" class="form-horizontal">
+                    {!! csrf_field() !!}
+                    <h4 class="text-center"> ĐĂNG NHẬP </h4>
+                    <input type="hidden" name="_token" value="{!! csrf_token() !!}">
+                    <div class="form-group input_user col-md-12">
+                        <label for="username" class="col-md-10"> Tên đăng nhập </label>
+                        <div class="col-md-12">
+                            <input type="text" name="username" id="username" class="form-control" placeholder="UserName" value="{{old('username')}}">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="password" class="col-md-12"> Mật khẩu </label>
+                        <div class="col-md-12">
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Password" value="">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <div class="col-md-12 ">
+                            <button type="submit" class="btn btn-primary pull-right"> Đăng nhập </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
 
-        <form action='postLogin' method="post" id="form_login_admin" name="form_login_admin" class="form-horizontal">
-            {!! csrf_field() !!}
-            <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-                <div class="form-group input_user ">
-                <label for="username" class="col-lg-offset-1 col-sm-3 control-label"> Username </label>
-                <div class="col-sm-7">
-                    <input type="text" name="username" id="username" class="form-control" placeholder="UserName" value="{{old('username')}}">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="password" class="col-lg-offset-1 col-sm-3 control-label"> Password </label>
-                <div class="col-sm-7">
-                    <input type="password" name="password" id="password" class="form-control" placeholder="Password" value="">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-lg-offset-4 col-sm-7">
-                    <label>
-                        <input type="checkbox"> Remember password
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-4 col-sm-9">
-                    <button type="submit" class="btn btn-primary"> Login </button>
-                </div>
-            </div>
-        </form>
+        </div>
+
         <div class="error_login">
             @if ( $errors->any() )
                 <ul class="form_error">

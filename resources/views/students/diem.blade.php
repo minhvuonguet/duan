@@ -14,8 +14,12 @@
         .Term-div {
             padding-top : 70px;
         }
-        .col-md-8, editModal label {
+        .col-md-8, #editModal label {
             margin-top: 20px;
+        }
+        .main-content {
+            top: -15px;
+            position: relative;
         }
     </style>
     <div class="Term-div">

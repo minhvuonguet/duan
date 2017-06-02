@@ -1,13 +1,18 @@
 @extends('layouts.admin')
 @section('title',' List Admin')
 @section('content')
-
-        <h1> Danh sách sinh viên </h1>
-        <div>
-            Lọc theo lớp
-            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-            <span class="tong_sinh_vien "> Tổng số sinh viên trong danh sách này: {{count($list_sinh_vien)}} </span>
-        </div>
+    <style>
+        h1 {
+            color : #2196F3;
+            margin: 50px 0;
+        }
+    </style>
+        <h1 class="text-center"> Danh sách sinh viên </h1>
+        {{--<div>--}}
+            {{--Lọc theo lớp--}}
+            {{--<input type="hidden" name="_token" value="{{ csrf_token() }}" />--}}
+            {{--<span class="tong_sinh_vien "> Tổng số sinh viên trong danh sách này: {{count($list_sinh_vien)}} </span>--}}
+        {{--</div>--}}
         {{--<select>--}}
             {{--*/  $stt = 1 /*--}}
             {{--<option> Tất cả </option>--}}

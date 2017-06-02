@@ -18,10 +18,14 @@
     position: fixed;
     top : 0
 }
-
+.main-content {
+    top: 0;
+    position: absolute;
+}
 .main-content .page-content {
     overflow: scroll;
     position: absolute;
+
 }
 body {
     /*overflow: hidden;*/
@@ -62,4 +66,28 @@ span.glyphicon:hover {
 }
 .modal-content form {
     padding : 20px;
+}
+.header-login {
+    padding-top: 30px;
+    border-bottom: 1px solid #918e8e;
+    padding-bottom: 20px;
+}
+.notice-uet {
+    margin-top: 30px;
+}
+.notice-uet h5 {
+    font-weight: 700;
+    color : #2196F3;
+}
+.topbar .header-right .header-menu .username {
+    max-width: 400px;
+}
+#user-header a span.username {
+    color : #2196F3;
+}
+.topbar {
+    border-bottom : 1px solid #2196F3;
+}
+.topbar .header-right .header-menu .badge-header {
+    top : 8px
 }

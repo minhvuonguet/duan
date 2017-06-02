@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 @section('title',' List Admin')
 @section('content')
-
         <form method="post" action="send_feedback" class="col-md-12">
             {{--{{csrf_field()}}--}}
             <input type="hidden" name="_token" value="{{ csrf_token() }}" />

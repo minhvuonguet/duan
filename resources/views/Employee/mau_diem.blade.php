@@ -15,8 +15,19 @@
             color : #2196F3
         }
         .select_hoc_ky option {
-
             font-size: 18px;
+        }
+        label {
+            font-size: 18px;
+            font-weight: 600;
+            top : 20px;
+            position: absolute;
+            text-align: right;
+            color : #2196F3;
+        }
+        table .action{
+            display: flex;
+            margin: 0px auto;
         }
     </style>
     <h2 class="text-center term_present">
@@ -30,22 +41,27 @@
 
 
 
-    <form>
+    <form class="form-horizontal">
         {{csrf_field()}}
         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-
-        <select name="hoc_ky" class="form-control select_hoc_ky " >
-            @foreach($term_present as $term)
-                <option value="{{$term->id_hoc_ky}}" data="{{$term->note}}" > {{$term->note}} </option>
-            @endforeach
-        </select>
-
+        <div class="col-md-12 form-group">
+            <div class="col-md-2 ">
+                <label for="selectTerm"> Chọn học kỳ </label>
+            </div>
+            <div class="col-md-8">
+                <select name="hoc_ky" class="form-control select_hoc_ky " id="selectTerm" >
+                    @foreach($term_present as $term)
+                        <option value="{{$term->id_hoc_ky}}" data="{{$term->note}}" > {{$term->note}} </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
 
         <table class="table table-bordered">
             <tr>
                 <th class="col-md-9"> Nội dung đánh giá </th>
                 <th class="col-md-1"> Điểm cộng/trừ </th>
-                <th> <span class="glyphicon glyphicon-cog col-md-2"> </span> </th>
+                <th class="col-md-2 action"> Sửa/Lưu </th>
             </tr>
             <tr>
                 <td  class="col-md-9"> <strong> 1. Ý thức học tập </strong> </td>
@@ -315,7 +331,7 @@
             $('.glyphicon-pencil').click(function(){
                 diem = $(this).parent().siblings().eq(1).text().trim();
                 chu_de = $(this).parent().siblings().eq(1).attr('class');
-            $(this).parent().siblings().eq(1).html(" <input value='"+ diem +"' class='tong_hoc_tap '>");
+            $(this).parent().siblings().eq(1).html(" <input value='"+ diem +"' class='tong_hoc_tap ' style='width: 50px'>");
             });
             $('.changeID').click( function () {
                 var id = $('.tong_hoc_tap').val();

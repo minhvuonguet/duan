@@ -10,8 +10,12 @@
             font-size:18px;
             color : #2196F3;
         }
+        h1 {
+            margin-top: 50px;
+            color : #2196F3;
+        }
     </style>
-        <h1> Danh sách sinh viên </h1>
+        <h1 class="text-center"> Danh sách sinh viên </h1>
         <div class="form-group">
             <div class="form-group col-md-12">
                 <label for="fillter" class="col-md-2"> Lọc theo lớp</label>
@@ -75,7 +79,7 @@
                     $sinh_vien->mssv != 4 &&
                     $sinh_vien->mssv != 5 &&
                     $sinh_vien->mssv != 6 &&
-                    $sinh_vien->mssv != 7
+                    $sinh_vien->id_role !=4
                 )
                 <tr class="{{$sinh_vien->mssv}}">
                     <td>{{$dem}}</td>
@@ -85,7 +89,7 @@
                     <td >{{$sinh_vien->chuc_vu}} </td>
                     <td >{{$sinh_vien->birthday}} </td>
                     <td >{{$sinh_vien->email}} </td>
-                    <td> {{$sinh_vien->point}} </td>
+                    <td> {{$sinh_vien->point}}</td>
                     <td>
                         <i class="glyphicon glyphicon-pencil" id="{{$sinh_vien->mssv}}" data1 = "{{$sinh_vien}}" data-toggle="modal" data-target="#myModal"></i>
                         <i class="glyphicon glyphicon-trash" id="{{$sinh_vien->mssv}}"></i>
@@ -377,6 +381,7 @@
                         var length = 0;
                         $.map(data.list_sinh_vien, function (value, index) {
                             length++;
+                            console.log(value);
                             table.append(
                                 '<tr>' +
                                     '<td>' + index  + '</td>' +

@@ -41,8 +41,7 @@ class CacularPoint extends Controller
         $data_khoa = P_Khoa::all();
         $data_khcn = P_Khoa_Hoc_CN::all();
         $dataTerm = Form_Diem::all();
-        if(count ($data_covan) > 0 && count ($data_daotao) > 0 && count ($data_ctsv) > 0 &&
-            count ($data_doan) > 0 && count ($data_khoa) > 0 && count ($data_khcn) > 0){
+
             if ($current_term[0]->is_caculator ==  $current_term[0]->is_reset ) {
                 for ($i = 0; $i < count($currentPoint); $i++) {
 
@@ -71,16 +70,17 @@ class CacularPoint extends Controller
             } else {
                 echo "Bạn phải reset lại điểm rèn luyện trước khi tính lại điểm";
             }
-        } else {
-            $current_term = Hoc_Ky::where('term_present', '=', '1')->get();
-            $currentPoint = Points::where('id_hoc_ky', '=', $current_term[0]->id_hoc_ky)->get();
-
-            return View ('admin.tinhdiem')->with([
-                'flash_message' =>'Các phòng chưa nhập đủ danh sách',
-                'flash_level'=>'danger',
-                'current_term'=>$current_term[0],
-            ]);
-        }
+//        }
+//        else {
+//            $current_term = Hoc_Ky::where('term_present', '=', '1')->get();
+//            $currentPoint = Points::where('id_hoc_ky', '=', $current_term[0]->id_hoc_ky)->get();
+//
+//            return View ('admin.tinhdiem')->with([
+//                'flash_message' =>'Các phòng chưa nhập đủ danh sách',
+//                'flash_level'=>'danger',
+//                'current_term'=>$current_term[0],
+//            ]);
+//        }
 
 
     }
